@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.test.ui.theme.TestTheme
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.Alignment
@@ -25,6 +26,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import com.example.test.R
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.ui.res.painterResource
@@ -42,7 +44,18 @@ class MainActivity : ComponentActivity() {
                     //     name = "Android",
                     //     modifier = Modifier.padding(innerPadding)
                     // )
-                    TalkCats(modifier=Modifier.padding(innerPadding))
+                    // TalkCats(modifier=Modifier.padding(innerPadding))
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(-40.dp)
+                    ) {
+                        // TalkCatsのUI
+                        TalkCats(modifier=Modifier.padding(top = 5.dp))
+                        LevelList(modifier = Modifier) // LevelListのUI
+                    }
                 }
 
 
@@ -63,7 +76,8 @@ class MainActivity : ComponentActivity() {
 fun TalkCats(modifier:Modifier=Modifier){
     Row(modifier=modifier
         .fillMaxWidth()
-        .padding(10.dp)
+        .padding(top=10.dp,start=10.dp,end=10.dp)
+        .height(190.dp)
         ){
     Box(modifier
         .weight(1f)
@@ -88,7 +102,7 @@ fun TalkCats(modifier:Modifier=Modifier){
             Text("ごはん")
         }
     }
-    Spacer(modifier = Modifier.width(20.dp))
+    Spacer(modifier = Modifier.width(20.dp).height(50.dp))
     Box(modifier
         .weight(1f)
         .fillMaxWidth()){
@@ -114,6 +128,12 @@ fun TalkCats(modifier:Modifier=Modifier){
     }
     
         }
+}
+
+@Composable
+fun LevelList(modifier:Modifier=Modifier){
+    Text("hohe")
+
 }
 
 @Preview(showBackground = true)
