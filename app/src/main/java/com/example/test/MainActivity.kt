@@ -21,6 +21,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,19 +54,24 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun TalkCats(modifier:Modifier=Modifier){
-    Row(modifier.fillMaxWidth()){
+    Row(modifier=modifier
+        .fillMaxWidth()
+        .padding(40.dp)
+        ){
     Box(modifier
-        .fillMaxWidth(0.5f)
-        .background(color=Color(0x99F9D981),shape=RoundedCornerShape(topStart=8.dp,bottomEnd=8.dp)),
+        .weight(1f)
+        .background(color=Color(0x99F9D981),shape=RoundedCornerShape(topStart=8.dp,bottomEnd=8.dp,topEnd=8.dp,bottomStart=8.dp))
+        .padding(24.dp),
         contentAlignment = Alignment.Center
         ){
             Text("ごはん")
         }
-    Spacer(modifier.weight(1f))
+    Spacer(modifier = Modifier.width(50.dp))
     Box(modifier
-        .fillMaxWidth(0.5f)
-        .background(color=Color(0x99F9D981),shape=RoundedCornerShape(topStart=8.dp,bottomEnd=8.dp)),
-        contentAlignment = Alignment.Center
+        .weight(1f)
+        .background(color=Color(0x99F9D981),shape=RoundedCornerShape(topStart=8.dp,bottomEnd=8.dp,topEnd=8.dp,bottomStart=8.dp))
+        .padding(24.dp)
+        ,contentAlignment = Alignment.Center
         ){
             Text("...。")
         }
