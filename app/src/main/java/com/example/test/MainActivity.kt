@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
 fun TalkCats(modifier:Modifier=Modifier){
     Row(modifier=modifier
         .fillMaxWidth()
-        .padding(40.dp)
+        .padding(10.dp)
         ){
     Box(modifier
         .weight(1f)
@@ -73,13 +73,15 @@ fun TalkCats(modifier:Modifier=Modifier){
                 painter = painterResource(id = R.drawable.workcat),
                 contentDescription = "working cat",
                 modifier = Modifier
-                    .size(80.dp),
+                    .offset(y=(-70).dp)
+                    .size(200.dp),
                 contentScale = ContentScale.Fit
             )
         Box(modifier
         .background(color=Color(0x99F9D981),shape=RoundedCornerShape(topStart=8.dp,bottomEnd=8.dp,topEnd=8.dp,bottomStart=8.dp))
         .padding(24.dp)
-        .width(60.dp)
+        .width(90.dp)
+        .height(20.dp)
         .align(Alignment.Center),
         contentAlignment = Alignment.Center
         ){
@@ -94,13 +96,15 @@ fun TalkCats(modifier:Modifier=Modifier){
                 painter = painterResource(id = R.drawable.sleepcat),
                 contentDescription = "sleeping cat",
                 modifier = Modifier
-                    .size(80.dp),
+                    .offset(y=(-70).dp)
+                    .size(200.dp),
                 contentScale = ContentScale.Fit
             )
         Box(modifier
         .background(color=Color(0x99F9D981),shape=RoundedCornerShape(topStart=8.dp,bottomEnd=8.dp,topEnd=8.dp,bottomStart=8.dp))
         .padding(24.dp)
-        .width(60.dp)
+        .width(90.dp)
+        .height(20.dp)
         .align(Alignment.Center)
         ,contentAlignment = Alignment.Center
         ){
