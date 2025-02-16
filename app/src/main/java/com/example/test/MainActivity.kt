@@ -67,7 +67,6 @@ fun TalkCats(modifier:Modifier=Modifier){
         ){
     Box(modifier
         .weight(1f)
-        .padding(end = 20.dp)
         .fillMaxWidth()
         ){
         Image(
@@ -90,7 +89,6 @@ fun TalkCats(modifier:Modifier=Modifier){
     Spacer(modifier = Modifier.width(20.dp))
     Box(modifier
         .weight(1f)
-        .padding(end = 20.dp)
         .fillMaxWidth()){
         Image(
                 painter = painterResource(id = R.drawable.sleepcat),
