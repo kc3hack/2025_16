@@ -23,6 +23,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import com.example.test.R
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,21 +67,50 @@ fun TalkCats(modifier:Modifier=Modifier){
         ){
     Box(modifier
         .weight(1f)
+        .padding(end = 20.dp)
+        .fillMaxWidth()
+        ){
+        Image(
+                painter = painterResource(id = R.drawable.workcat),
+                contentDescription = "working cat",
+                modifier = Modifier
+                    .size(80.dp),
+                contentScale = ContentScale.Fit
+            )
+        Box(modifier
         .background(color=Color(0x99F9D981),shape=RoundedCornerShape(topStart=8.dp,bottomEnd=8.dp,topEnd=8.dp,bottomStart=8.dp))
-        .padding(24.dp),
+        .padding(24.dp)
+        .width(60.dp)
+        .align(Alignment.Center),
         contentAlignment = Alignment.Center
         ){
             Text("ごはん")
         }
-    Spacer(modifier = Modifier.width(50.dp))
+    }
+    Spacer(modifier = Modifier.width(20.dp))
     Box(modifier
         .weight(1f)
+        .padding(end = 20.dp)
+        .fillMaxWidth()){
+        Image(
+                painter = painterResource(id = R.drawable.sleepcat),
+                contentDescription = "sleeping cat",
+                modifier = Modifier
+                    .size(80.dp),
+                contentScale = ContentScale.Fit
+            )
+        Box(modifier
         .background(color=Color(0x99F9D981),shape=RoundedCornerShape(topStart=8.dp,bottomEnd=8.dp,topEnd=8.dp,bottomStart=8.dp))
         .padding(24.dp)
+        .width(60.dp)
+        .align(Alignment.Center)
         ,contentAlignment = Alignment.Center
         ){
+            
             Text("...。")
         }
+    }
+    
         }
 }
 
