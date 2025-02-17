@@ -31,6 +31,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -283,11 +284,51 @@ fun MakeGraph(modifier: Modifier = Modifier, sleepTime: Float) {
                                 modifier =
                                         Modifier.height(26.dp)
                                                 .background(
-                                                        if (isEnough) Color(0x4036C2E1)
+                                                        if (isEnough) Color(0xA036C2E1)
                                                         else Color(0xFFFF842D)
                                                 )
                                                 .width(boxWidth.dp)
-                        ) { Text("${sleepTime.toInt()}") }
+                        ) {
+                                Text(
+                                        text = "${sleepTime.toInt()}",
+                                        style =
+                                                TextStyle(
+                                                        color = Color(0xFFFFFFFF),
+                                                        fontWeight = FontWeight.Light,
+                                                        fontSize = 25.sp
+                                                ),
+                                        modifier =
+                                                Modifier.align(Alignment.CenterEnd)
+                                                        .then(
+                                                                if (isEnough)
+                                                                        Modifier.align(
+                                                                                        Alignment
+                                                                                                .CenterEnd
+                                                                                )
+                                                                                .padding(
+                                                                                        // top =
+                                                                                        // 1.dp,
+                                                                                        // bottom =
+                                                                                        //
+                                                                                        // 1.dp,
+                                                                                        end = 5.dp
+                                                                                )
+                                                                else
+                                                                        Modifier.align(
+                                                                                        Alignment
+                                                                                                .CenterStart
+                                                                                )
+                                                                                .padding(
+                                                                                        // top =
+                                                                                        // 1.dp,
+                                                                                        // bottom =
+                                                                                        //
+                                                                                        // 1.dp,
+                                                                                        start = 5.dp
+                                                                                )
+                                                        )
+                                )
+                        }
                 }
         }
 }
