@@ -250,7 +250,7 @@ fun LevelCounter(
 
 @Composable
 fun SleepInfo(modifier: Modifier = Modifier) {
-        val sleepTime: Float = 8.toFloat()
+        val sleepTime: Float = 10.toFloat()
         Column(
                 modifier = Modifier.fillMaxWidth().padding(2.dp),
                 verticalArrangement = Arrangement.spacedBy(0.dp)
@@ -259,7 +259,7 @@ fun SleepInfo(modifier: Modifier = Modifier) {
 
 @Composable
 fun MakeGraph(modifier: Modifier = Modifier, sleepTime: Float) {
-        val maxValue = 15.toFloat()
+        val maxValue = 10.toFloat()
 
         val (isEnough, graphNumber) =
                 when {
