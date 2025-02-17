@@ -32,6 +32,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import androidx.compose.material3.LinearProgressIndicator
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -123,7 +128,7 @@ fun TalkCats(modifier:Modifier=Modifier){
         ,contentAlignment = Alignment.Center
         ){
             
-            Text("...。")
+            Text("・・・。")
         }
     }
     
@@ -132,8 +137,66 @@ fun TalkCats(modifier:Modifier=Modifier){
 
 @Composable
 fun LevelList(modifier:Modifier=Modifier){
-    Text("hohe")
+    val workLevel = 1
+    val workTime = 1
+    val workExpBar = 0.4.toFloat()
+    val sleepLevel = 1
+    val sleepTime = 1
+    val sleepExpBar = 0.5.toFloat()
+    Box(modifier=Modifier
+            .background(color=Color(0x99F9D981),shape=RoundedCornerShape(topStart=8.dp,bottomEnd=8.dp,topEnd=8.dp,bottomStart=8.dp))
+            .fillMaxWidth(0.97f)
+            .padding(top = 2.dp,bottom = 8.dp)
+        ){
+            Column(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(0.dp)){
+                LevelCounter(modifier=Modifier.padding(0.dp), "Work",workLevel,workTime,workExpBar)
+                LevelCounter(modifier=Modifier.padding(0.dp),"Sleep",sleepLevel,sleepTime,sleepExpBar)
+            }
+        }
 
+}
+
+@Composable
+fun LevelCounter(modifier:Modifier = Modifier,name:String,level:Int,time:Int,expBar:Float){
+    val imageId = when (name){
+        "Work" -> R.drawable.workcat
+        "Sleep" -> R.drawable.sleepcat
+        else -> {R.drawable.workcat}
+    }
+    Row(modifier=modifier
+        .fillMaxWidth()
+        .padding(top=10.dp,start=10.dp,end=10.dp)){
+            Image(
+                painter = painterResource(id = imageId),
+                contentDescription = "$name cat",
+                modifier = Modifier
+                   .size(35.dp)
+                   .offset(x=(-7).dp,y=5.dp),
+                contentScale = ContentScale.Fit
+            ) 
+            Column(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(2.dp),
+                        verticalArrangement = Arrangement.spacedBy(0.dp)){
+                            Text(
+                            text = buildAnnotatedString {
+                            pushStyle(SpanStyle(fontSize = 17.sp, fontWeight = FontWeight.Bold, color = Color(0xFF171D1B)))
+                            append("${name}/Level.${level}・")
+                            pop()
+                            pushStyle(SpanStyle(fontSize = 13.sp, color = Color(0xFF3F4946)))
+                            append("あと${time}時間でレベルアップ!")
+                             // 直前の `pushStyle` を解除
+                            
+        })
+            Spacer(modifier = Modifier.height(10.dp))
+            LinearProgressIndicator(progress = expBar,color=Color(0xFF006B5F),trackColor=Color(0xFFDAE5E1),modifier=Modifier.height(4.dp).width(300.dp))
+                        }
+        
+    }
 }
 
 @Preview(showBackground = true)
