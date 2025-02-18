@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.LinearProgressIndicator
@@ -252,11 +253,33 @@ fun LevelCounter(
 @Composable
 fun SleepInfo(modifier: Modifier = Modifier) {
         val sleepTime: Float = (5).toFloat()
-
+        val sleepCount = String.format("%.1f", sleepTime)
         Column(
                 modifier = Modifier.fillMaxWidth().padding(2.dp),
-                verticalArrangement = Arrangement.spacedBy(0.dp)
-        ) { MakeGraph(modifier = Modifier, sleepTime) }
+                verticalArrangement = Arrangement.spacedBy(0.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+        ) { MakeGraph(modifier = Modifier, sleepTime)
+            Box(Modifier.background(
+                                        color = Color(0x99F9D981),
+                                        shape =
+                                                RoundedCornerShape(
+                                                        topStart = 8.dp,
+                                                        bottomEnd = 8.dp,
+                                                        topEnd = 8.dp,
+                                                        bottomStart = 8.dp
+                                                )
+                                )
+                                .fillMaxWidth(0.97f)
+                                .padding(top = 8.dp, bottom = 8.dp)
+                                .align(Alignment.CenterHorizontally)
+                                ){
+                                        Column(Modifier.fillMaxWidth(),horizontalAlignment = Alignment.CenterHorizontally){
+                        if (sleepTime<0) {Text("必要睡眠時間: ${sleepCount}時間")} else {Text("必要睡眠時間: 0時間")}
+                        Text(text="おめでとう！この調子でねこたちに貢ぎ続けましょう！",style=TextStyle(
+                                                                fontWeight = FontWeight.Light,
+                                                                fontSize = 15.sp))}
+                        
+            }}
 }
 
 @Composable
@@ -279,7 +302,7 @@ fun MakeGraph(modifier: Modifier = Modifier, sleepTime: Float) {
                 Box(
                         modifier =
                                 Modifier.fillMaxWidth()
-                                        .height(200.dp)
+                                        .height(120.dp)
                                         .padding(top = 30.dp)
                                         .offset(x = boxOffset),
                 ) {
