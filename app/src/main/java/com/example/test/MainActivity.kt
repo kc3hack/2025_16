@@ -337,6 +337,21 @@ fun MakeGraph(modifier: Modifier = Modifier, sleepTime: Float) {
                                 }
                         }
                 }
+                Box(modifier=Modifier.fillMaxWidth().offset(
+                                                x =
+                                                        ((LocalConfiguration.current
+                                                                .screenWidthDp
+                                                                .dp / 2)-1.dp),y = 17.dp
+
+                                        )){
+                Box(
+                        modifier =
+                                Modifier.width(2.dp)
+                                        .height(60.dp)
+                                        .background(color = Color(0xFFDAE5E1))
+                                        .padding(top = 40.dp)
+                                        
+                ) {}}
                 Spacer(modifier = Modifier.height(200.dp))
                 Divider(
                         color = Color(0xFFDAE5E1),
