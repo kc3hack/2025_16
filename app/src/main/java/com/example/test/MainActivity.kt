@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Divider
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -278,8 +279,8 @@ fun MakeGraph(modifier: Modifier = Modifier, sleepTime: Float) {
                 Box(
                         modifier =
                                 Modifier.fillMaxWidth()
-                                        .height(300.dp)
-                                        .padding(top = 40.dp)
+                                        .height(200.dp)
+                                        .padding(top = 30.dp)
                                         .offset(x = boxOffset),
                 ) {
                         Box(
@@ -336,6 +337,12 @@ fun MakeGraph(modifier: Modifier = Modifier, sleepTime: Float) {
                                 }
                         }
                 }
+                Spacer(modifier = Modifier.height(200.dp))
+                Divider(
+                        color = Color(0xFFDAE5E1),
+                        thickness = 2.dp,
+                        modifier = Modifier.padding(top = 73.dp, start = 25.dp, end = 25.dp)
+                )
         }
 }
 
