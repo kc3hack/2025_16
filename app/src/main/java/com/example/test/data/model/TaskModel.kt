@@ -8,7 +8,7 @@ import java.util.Date
 data class TaskModel(
     @PrimaryKey(autoGenerate = true) val id: Int = 0, // 自動採番
     val title: String,         // 作業名
-    val type: Int,             // 予定タイプ
+    val type: ScheduleType,             // 予定タイプ
     val startTime: Date,       // 開始時刻（TypeConverterが必要）
     val endTime: Date,         // 終了時刻（TypeConverterが必要）
     val intervalTime: Int,     // 作業の区切る時間
