@@ -251,7 +251,7 @@ fun LevelCounter(
 
 @Composable
 fun SleepInfo(modifier: Modifier = Modifier) {
-        val sleepTime: Float = (2.5).toFloat()
+        val sleepTime: Float = (5).toFloat()
 
         Column(
                 modifier = Modifier.fillMaxWidth().padding(2.dp),
@@ -352,12 +352,33 @@ fun MakeGraph(modifier: Modifier = Modifier, sleepTime: Float) {
                                         .padding(top = 40.dp)
                                         
                 ) {}}
-                Spacer(modifier = Modifier.height(200.dp))
                 Divider(
                         color = Color(0xFFDAE5E1),
                         thickness = 2.dp,
                         modifier = Modifier.padding(top = 73.dp, start = 25.dp, end = 25.dp)
                 )
+                
+                Row(modifier=Modifier.fillMaxWidth().padding(top=75.dp),horizontalArrangement = Arrangement.Center){
+                        
+                        Text(text="-5",style=TextStyle(color = Color(0xFFDAE5E1),
+                                                                fontWeight = FontWeight.Light,
+                                                                fontSize = 17.sp))
+                        Spacer(modifier=Modifier.width(175.dp))
+                        Text(text="5",style=TextStyle(color = Color(0xFFDAE5E1),
+                                                                fontWeight = FontWeight.Light,
+                                                                fontSize = 17.sp))
+                        
+                }
+                Row(modifier=Modifier.fillMaxWidth()){
+                        Text(text="不足",style=TextStyle(color = Color(0xFFFF842D),
+                                                                fontWeight = FontWeight.Light,
+                                                                fontSize = 25.sp))
+                        Text(text="睡眠状況",style=TextStyle(     fontWeight = FontWeight.Light,
+                                                                fontSize = 25.sp))
+                        Text(text="順調",style=TextStyle(color = Color(0xA036C2E1),
+                                                                fontWeight = FontWeight.Light,
+                                                                fontSize = 25.sp))}
+
         }
 }
 
