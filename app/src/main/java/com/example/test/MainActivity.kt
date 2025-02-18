@@ -369,15 +369,17 @@ fun MakeGraph(modifier: Modifier = Modifier, sleepTime: Float) {
                                                                 fontSize = 17.sp))
                         
                 }
-                Row(modifier=Modifier.fillMaxWidth()){
+                Row(modifier=Modifier.fillMaxWidth().padding(top=80.dp),horizontalArrangement = Arrangement.SpaceEvenly){
                         Text(text="不足",style=TextStyle(color = Color(0xFFFF842D),
                                                                 fontWeight = FontWeight.Light,
-                                                                fontSize = 25.sp))
+                                                                fontSize = 18.sp))
+                        Spacer(Modifier.width(80.dp))
                         Text(text="睡眠状況",style=TextStyle(     fontWeight = FontWeight.Light,
-                                                                fontSize = 25.sp))
+                                                       fontSize = 20.sp))
+                        Spacer(Modifier.width(80.dp))         
                         Text(text="順調",style=TextStyle(color = Color(0xA036C2E1),
                                                                 fontWeight = FontWeight.Light,
-                                                                fontSize = 25.sp))}
+                                                                fontSize = 18.sp))}
 
         }
 }
