@@ -250,7 +250,8 @@ fun LevelCounter(
 
 @Composable
 fun SleepInfo(modifier: Modifier = Modifier) {
-        val sleepTime: Float = 10.toFloat()
+        val sleepTime: Float = (2.5).toFloat()
+
         Column(
                 modifier = Modifier.fillMaxWidth().padding(2.dp),
                 verticalArrangement = Arrangement.spacedBy(0.dp)
@@ -267,6 +268,7 @@ fun MakeGraph(modifier: Modifier = Modifier, sleepTime: Float) {
                         sleepTime < 0 -> false to (abs(sleepTime) / maxValue)
                         else -> true to 0f
                 }
+        val sleepCount = String.format("%.1f", sleepTime)
         val boxWidth = (if (graphNumber > 1) 180 else (graphNumber * 180)).toInt()
         val boxOffset =
                 (if (isEnough) ((LocalConfiguration.current.screenWidthDp.dp / 2))
@@ -289,45 +291,49 @@ fun MakeGraph(modifier: Modifier = Modifier, sleepTime: Float) {
                                                 )
                                                 .width(boxWidth.dp)
                         ) {
-                                Text(
-                                        text = "${sleepTime.toInt()}",
-                                        style =
-                                                TextStyle(
-                                                        color = Color(0xFFFFFFFF),
-                                                        fontWeight = FontWeight.Light,
-                                                        fontSize = 25.sp
-                                                ),
-                                        modifier =
-                                                Modifier.align(Alignment.CenterEnd)
-                                                        .then(
-                                                                if (isEnough)
-                                                                        Modifier.align(
-                                                                                        Alignment
-                                                                                                .CenterEnd
-                                                                                )
-                                                                                .padding(
-                                                                                        // top =
-                                                                                        // 1.dp,
-                                                                                        // bottom =
-                                                                                        //
-                                                                                        // 1.dp,
-                                                                                        end = 5.dp
-                                                                                )
-                                                                else
-                                                                        Modifier.align(
-                                                                                        Alignment
-                                                                                                .CenterStart
-                                                                                )
-                                                                                .padding(
-                                                                                        // top =
-                                                                                        // 1.dp,
-                                                                                        // bottom =
-                                                                                        //
-                                                                                        // 1.dp,
-                                                                                        start = 5.dp
-                                                                                )
-                                                        )
-                                )
+                                if (sleepTime >= (2.2).toFloat()) {
+                                        Text(
+                                                text = "${sleepCount}",
+                                                style =
+                                                        TextStyle(
+                                                                color = Color(0xFFFFFFFF),
+                                                                fontWeight = FontWeight.Light,
+                                                                fontSize = 25.sp
+                                                        ),
+                                                modifier =
+                                                        Modifier.align(Alignment.CenterEnd)
+                                                                .then(
+                                                                        if (isEnough)
+                                                                                Modifier.align(
+                                                                                                Alignment
+                                                                                                        .CenterEnd
+                                                                                        )
+                                                                                        .padding(
+                                                                                                // top =
+                                                                                                // 1.dp,
+                                                                                                // bottom =
+                                                                                                //
+                                                                                                // 1.dp,
+                                                                                                end =
+                                                                                                        5.dp
+                                                                                        )
+                                                                        else
+                                                                                Modifier.align(
+                                                                                                Alignment
+                                                                                                        .CenterStart
+                                                                                        )
+                                                                                        .padding(
+                                                                                                // top =
+                                                                                                // 1.dp,
+                                                                                                // bottom =
+                                                                                                //
+                                                                                                // 1.dp,
+                                                                                                start =
+                                                                                                        5.dp
+                                                                                        )
+                                                                )
+                                        )
+                                }
                         }
                 }
         }
