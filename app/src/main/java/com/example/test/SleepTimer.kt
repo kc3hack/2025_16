@@ -126,69 +126,92 @@ fun SleepTimer(onNavigateBack: () -> Unit) {
     ) {
         Text(text = "This is the second screen.")
 
-        Text(text = "おはようございます",fontWeight = FontWeight.Bold,
-            style = TextStyle(fontSize  = 32.sp,),
-            modifier = Modifier.padding(top=40.dp)
+        Text(
+            text = "おはようございます", fontWeight = FontWeight.Bold,
+            style = TextStyle(fontSize = 32.sp,),
+            modifier = Modifier.padding(top = 40.dp)
         )
         CurrentTime()
 
-        Box(modifier = Modifier.fillMaxWidth()
-        ){
-        Image(
-            painter = painterResource(id = R.drawable.sleepywhitecat),
-            contentDescription = "My Image",
-            modifier = Modifier
-                .size(width = 390.dp, height = 390.dp)
-                .offset(y = (-90).dp) //画像の位置
-
-        )
-
-        Box( modifier = Modifier
-            .size(width = 158.dp,height = 36.dp)
-            .offset( x = 110.dp, y = 220.dp)
-            .zIndex(1f)
-            .clip(RoundedCornerShape(8.dp))
-            .background(color = Color(0xFFF9D981).copy(alpha = 0.6f))
-            ,contentAlignment = Alignment.Center
+        Box(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
-                text = "ねむ",
-                fontSize = 12.sp,
-                modifier = Modifier.offset()
-                    .zIndex(1f)
-            )
-        }}
-        Box(modifier = Modifier
-            .size(width = 291.dp, height = 34.dp)
-            .offset(y = (-90).dp)
-            .clip(RectangleShape)
-            .background(color = Color(0xFF9B9999).copy(alpha = 0.37f))
-        ){
-            LevelCounter(name= "Sleep", level = 1, time = 5, expBar = 0.5f)
-        }
+            Image(
+                painter = painterResource(id = R.drawable.sleepywhitecat),
+                contentDescription = "My Image",
+                modifier = Modifier
+                    .size(width = 390.dp, height = 390.dp)
+                    .offset(y = (-90).dp) //画像の位置
 
-        Text(text = "現在の睡眠貯金",
+            )
+
+            Box(
+                modifier = Modifier
+                    .size(width = 158.dp, height = 36.dp)
+                    .offset(x = 110.dp, y = 220.dp)
+                    .zIndex(1f)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(color = Color(0xFFF9D981).copy(alpha = 0.6f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "ねむ",
+                    fontSize = 12.sp,
+                    modifier = Modifier.offset()
+                        .zIndex(1f)
+                )
+            }
+        }
+        Box(
+            modifier = Modifier
+                .size(width = 291.dp, height = 34.dp)
+                .offset(y = (-90).dp)
+                .clip(RectangleShape)
+                .background(color = Color(0xFF9B9999).copy(alpha = 0.37f))
+        ) {
+            LevelCounter(name = "Sleep", level = 1, time = 5, expBar = 0.5f)
+        }
+}
+
+        Column(modifier = Modifier.fillMaxWidth()
+            .offset(y=585.dp)){
+        Text(
+            text = "現在の睡眠貯金",
+            textAlign = TextAlign.Left,
             fontWeight = FontWeight.Bold,
             style = TextStyle(fontSize = 20.sp),
-            textAlign = TextAlign.Left),
+            modifier = Modifier
+                .padding(start = 20.dp)
+        )
 
 
-        Text(text = "+03:00",
-                fontWeight = FontWeight.ExtraLight,
-                style = TextStyle(fontSize = 48.sp,
-                    color = Color(0xFF49DF0D),
-                    fontFamily = FontFamily(Font(R.font.inter_24pt_extralight )) )
-            )
-        Text(text = "睡眠貯金が2時間から3時間になりました",fontWeight = FontWeight.Bold,
-            style = TextStyle(fontSize = 20.sp))
-        Text(text = "すばらしい、理想的な睡眠時間です",fontWeight = FontWeight.Bold,
-            style = TextStyle(fontSize = 20.sp))
+
+        Text(
+            text = "+03:00",
+            fontWeight = FontWeight.ExtraLight,
+            style = TextStyle(fontSize = 48.sp),
+            color = Color(0xFF49DF0D),
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            fontFamily = FontFamily(Font(R.font.inter_24pt_extralight))
+
+        )
+        Text(
+            text = "睡眠貯金が2時間から3時間になりました", fontWeight = FontWeight.Bold,
+            style = TextStyle(fontSize = 20.sp),
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+        Text(
+            text = "すばらしい、理想的な睡眠時間です", fontWeight = FontWeight.Bold,
+            style = TextStyle(fontSize = 20.sp),
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+
+        )
 
 
         Button(onClick = onNavigateBack) {
             Text(text = "Go back")
-
-        }}}
+            }
+        }}
 
 
 @Preview(showBackground = true)
