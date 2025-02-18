@@ -7,7 +7,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.material3.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
@@ -23,6 +27,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             TestTheme {
                 val navController = rememberNavController() // NavControllerの取得
+                val screenState = remember { mutableStateOf(ScreenState.First) }
                 NavHost(navController = navController, startDestination = "home") { // 最初の画面設定
                     composable("home") {
                         HomeScreen(navController) // HomeScreenを表示
@@ -32,7 +37,10 @@ class MainActivity : ComponentActivity() {
                             navController.popBackStack() // 戻るボタンの機能
                         })
                     }
+
                 }
+                Surface() {
+                    BottomAppBarExample(screenState)}
             }
         }
     }
