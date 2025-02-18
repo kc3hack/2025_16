@@ -277,7 +277,7 @@ fun SleepInfo(modifier: Modifier = Modifier) {
                         if (sleepTime<0) {Text("必要睡眠時間: ${sleepCount}時間")} else {Text("必要睡眠時間: 0時間")}
                         Text(text="おめでとう！この調子でねこたちに貢ぎ続けましょう！",style=TextStyle(
                                                                 fontWeight = FontWeight.Light,
-                                                                fontSize = 15.sp))}
+                                                                fontSize = 13.sp))}
                         
             }}
 }
