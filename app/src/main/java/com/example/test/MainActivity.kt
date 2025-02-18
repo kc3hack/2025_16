@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.test.data.db.DatabaseManager
+import com.example.test.data.model.ScheduleType
 import com.example.test.data.model.TaskModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,7 +47,7 @@ class MainActivity : ComponentActivity() {
             val task = TaskModel(
                 title = "空き時間",
                 id = -1,
-                type = 0,
+                type = ScheduleType.NON_DEADLINED_ASSIGNMENT,
                 startTime = Date(),
                 endTime = Date(),
                 intervalTime = 15,
@@ -56,7 +57,8 @@ class MainActivity : ComponentActivity() {
             )
 
             // データを挿入
-            val taskId = tasksDao.insert(task)
+            tasksDao.insert(task)
+            val taskId = task.id
 
             // ID で取得
             if (taskId is Int) {
