@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -62,12 +63,27 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.fontResource
 import androidx.compose.ui.zIndex
+import androidx. compose. ui. unit. LayoutDirection
+import androidx. compose. ui. graphics. PathFillType
+import android. graphics. drawable. shapes. Shape
+import android. util. Size
 import com.example.test.R
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlinx.coroutines.delay
 import java.util.Calendar
+import kotlin. io. path. Path
+import kotlin.io.path.moveTo
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.platform.LocalDensity
+
+
 
 val inFFamily = FontFamily(
     Font(R.font.inter_24pt_medium),
@@ -103,8 +119,8 @@ fun LevelCounter(modifier:Modifier = Modifier,name:String,level:Int,time:Int,exp
             Spacer(modifier = Modifier.height(2.dp))
             LinearProgressIndicator(progress = expBar,color=Color(0xFF006B5F),trackColor=Color(0xFFDAE5E1),
                 modifier=Modifier
-                .height(4.dp)
-                .width(300.dp)
+                    .height(4.dp)
+                    .width(300.dp)
             )
         }
     }
@@ -143,23 +159,25 @@ fun ScreenSwitcher() {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { screenState.value = ScreenState.Second },
-                containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
-                modifier = Modifier.offset(y = 50.dp)
-                    .padding(bottom = 20.dp)
+                containerColor = Color(0xFF735BF2),
+                elevation = FloatingActionButtonDefaults.elevation(12.dp),
+                modifier = Modifier
+                    .offset(y = 60.dp)
                     .clip(CircleShape)
             ) {
-                Icon(Icons.Filled.Add, "Localized description")
+                Icon(Icons.Filled.Add,
+                    tint = Color.White,
+                    contentDescription = "Localized description")
             }
         },
         floatingActionButtonPosition = FabPosition.Center,
         content = { innerPadding ->
             Box(modifier = Modifier.padding(innerPadding)) {
                 when (screenState.value) {
-                    ScreenState.First -> SleepTimer { screenState.value = ScreenState.First }
-                    ScreenState.Second -> WatchScreen  { screenState.value = ScreenState.Second }
-                    ScreenState.Third -> CalendarScreen   { screenState.value = ScreenState.Third }
-                    ScreenState.Forth -> Cats  { screenState.value = ScreenState.Forth}
+                    ScreenState.First -> SleepTimer /*ページ名いれる。一番左のアイコンがFirst*/ { screenState.value = ScreenState.First }
+                    ScreenState.Second -> WatchScreen /*ページ名*/  { screenState.value = ScreenState.Second }
+                    ScreenState.Third -> CalendarScreen  /*ページ名*/  { screenState.value = ScreenState.Third }
+                    ScreenState.Forth -> Cats /*ページ名*/  { screenState.value = ScreenState.Forth}
                 }
             }
         }
@@ -169,29 +187,39 @@ fun ScreenSwitcher() {
 @Composable
 fun BottomAppBarExample(screenState: MutableState<ScreenState>) {
     BottomAppBar(
+        modifier = Modifier.height(76.dp),
         actions = {
-            IconButton(onClick = { screenState.value = ScreenState.First }) {
+            IconButton(onClick = { screenState.value = ScreenState.First },
+            modifier=Modifier
+                .padding(start = 5.dp)) {
                 Icon(
-                    Icons.Outlined.Home,
+                    Icons.Filled.Home,
                     contentDescription = "Localized description"
                 )
             }
             IconButton(onClick = { screenState.value = ScreenState.Second //
-            }) {
+            },
+            modifier=Modifier
+                .offset(x = 10.dp)
+                ) {
                 Icon(
                     Icons.Filled.DateRange,
                     contentDescription = "Localized description",
                     )
             }
             IconButton(onClick = { screenState.value = ScreenState.Third //
-            }) {
+            },
+                modifier=Modifier
+                    .offset(x = 150.dp)) {
                 Icon(
                     Icons.Filled.Notifications,
                     contentDescription = "Localized description",
                     )
             }
             IconButton(onClick = { screenState.value = ScreenState.Forth //
-            }) {
+            },
+            modifier = Modifier
+                .offset(x = 155.dp)) {
                 Icon(
                     Icons.Filled.Person,
                     contentDescription = "Localized description",
@@ -200,17 +228,19 @@ fun BottomAppBarExample(screenState: MutableState<ScreenState>) {
                   }
         )
 }
+
+
+
 @Composable
 fun SleepTimer(onNavigateBack: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "This is the second screen.")
 
         Text(
             text = "おはようございます", fontWeight = FontWeight.Bold,
             style = TextStyle(fontSize = 32.sp,),
-            modifier = Modifier.padding(top = 40.dp)
+            modifier = Modifier.padding(top = 25.dp)
         )
         CurrentTime()
         Box(
@@ -228,7 +258,7 @@ fun SleepTimer(onNavigateBack: () -> Unit) {
             Box(
                 modifier = Modifier
                     .size(width = 158.dp, height = 36.dp)
-                    .offset(x = 110.dp, y = 220.dp)
+                    .offset(x = 100.dp, y = 220.dp)
                     .zIndex(1f)
                     .clip(RoundedCornerShape(8.dp))
                     .background(color = Color(0xFFF9D981).copy(alpha = 0.6f)),
@@ -237,7 +267,8 @@ fun SleepTimer(onNavigateBack: () -> Unit) {
                 Text(
                     text = "ねむ",
                     fontSize = 12.sp,
-                    modifier = Modifier.offset()
+                    modifier = Modifier
+                        .offset()
                         .zIndex(1f)
                 )
             }
@@ -245,21 +276,22 @@ fun SleepTimer(onNavigateBack: () -> Unit) {
         Box(
             modifier = Modifier
                 .size(width = 291.dp, height = 34.dp)
-                .offset(y = (-90).dp)
+                .offset(y = (-110).dp)
                 .clip(RectangleShape)
                 .background(color = Color(0xFF9B9999).copy(alpha = 0.37f))
         ) {
             LevelCounter(name = "Sleep", level = 1, time = 5, expBar = 0.5f)
         }
 }
-        Column(modifier = Modifier.fillMaxWidth()
-            .offset(y=585.dp)
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .offset(y = 535.dp)
         ) {
             Text(
                 text = "現在の睡眠貯金",
                 textAlign = TextAlign.Left,
                 fontWeight = FontWeight.Bold,
-                style = TextStyle(fontSize = 20.sp),
+                style = TextStyle(fontSize = 18.sp),
                 modifier = Modifier
                     .padding(start = 20.dp)
             )
@@ -274,12 +306,12 @@ fun SleepTimer(onNavigateBack: () -> Unit) {
             )
             Text(
                 text = "睡眠貯金が2時間から3時間になりました", fontWeight = FontWeight.Bold,
-                style = TextStyle(fontSize = 20.sp),
+                style = TextStyle(fontSize = 18.sp),
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             Text(
                 text = "すばらしい、理想的な睡眠時間です", fontWeight = FontWeight.Bold,
-                style = TextStyle(fontSize = 20.sp),
+                style = TextStyle(fontSize = 18.sp),
                 modifier = Modifier.align(Alignment.CenterHorizontally)
 
             )

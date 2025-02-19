@@ -124,10 +124,6 @@ fun MyApp() {
 
 @Composable
 fun CustomBottomBar() {
-    val density = LocalDensity.current
-    val cutoutRadius = with(density){ 36.dp.toPx() }
-    val height = with(density){ 56.dp.toPx() }
-    val cutoutTop = height - (cutoutRadius * 2)
     Box(
         modifier = Modifier
             .fillMaxWidth()
