@@ -10,12 +10,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -23,25 +24,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun ToDoBox(
+fun ToDoSleep(
         modifier: Modifier = Modifier,
         beginTime: String,
         endTime: String,
-        taskName: String,
-        description: String
 ) {
-    Box(Modifier.fillMaxWidth()) {
-        Row(Modifier.padding(top = 10.dp)) {
+    Box(Modifier.fillMaxWidth(0.97f).clip(
+        RoundedCornerShape(10.dp)
+    ).background(color = Color(0x80C0F6FF)).padding(vertical = 10.dp)) {
+        Row(Modifier.padding(top = 0.dp)) {
             FloatingActionButton(
                     onClick = { println("clicked!") },
                     elevation = FloatingActionButtonDefaults.elevation(0.dp),
-                    modifier = Modifier.background(color = Color.White)
+                    modifier = Modifier.background(color = Color.Transparent),
+                    containerColor = Color.Transparent
             ) {
-                Canvas(
-                        modifier = Modifier.size(60.dp).background(color = Color(0xFFFFFFFF))
-                ) { // 描画領域のサイズを指定
-                    drawRect(color = Color.White, size = size, blendMode = BlendMode.SrcOver)
-
+                Canvas(modifier = Modifier.size(60.dp)) { // 描画領域のサイズを指定
                     drawCircle(
                             color = Color(0xFFDFDFDF), // 円の色
                             radius = 30.toFloat(), // 円の半径、描画領域の半分のサイズ
@@ -56,12 +54,12 @@ fun ToDoBox(
                 )
                 Spacer(Modifier.height(3.dp))
                 Text(
-                        text = "${taskName}",
+                        text = "Sleep with cats",
                         style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
                 )
                 Spacer(Modifier.height(3.dp))
                 Text(
-                        text = "${description}",
+                        text = "ねこたちと今日はもう寝よう",
                         style =
                                 TextStyle(
                                         color = Color(0xFF8F9BB3),

@@ -3,6 +3,7 @@ package com.example.test.ui.theme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -53,6 +54,8 @@ fun ToDoList(modifier: Modifier = Modifier) {
             )
         }
         ToDoBox(Modifier, "10:00", "13:00", "KC3HACK meeting", "meeting with teammates")
+        Spacer(Modifier.padding(top = 10.dp))
+        ToDoSleep(Modifier, "22:00", "7:00")
     }
 }
 
