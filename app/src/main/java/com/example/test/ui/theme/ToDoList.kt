@@ -52,7 +52,7 @@ fun ToDoList(modifier: Modifier = Modifier) {
                                     .clip(RoundedCornerShape(8.dp))
             )
         }
-        ToDoBox(Modifier)
+        ToDoBox(Modifier, "10:00", "13:00", "KC3HACK meeting", "meeting with teammates")
     }
 }
 

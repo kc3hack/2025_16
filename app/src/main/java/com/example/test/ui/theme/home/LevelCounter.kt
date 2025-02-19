@@ -67,7 +67,7 @@ fun LevelCounter(
                                                 pop()
                                                 pushStyle(
                                                         SpanStyle(
-                                                                fontSize = 13.sp,
+                                                                fontSize = 12.sp,
                                                                 color = Color(0xFF3F4946)
                                                         )
                                                 )
