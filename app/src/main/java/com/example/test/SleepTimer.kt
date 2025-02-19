@@ -29,7 +29,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.FloatingActionButton
@@ -67,7 +66,6 @@ import androidx. compose. ui. unit. LayoutDirection
 import androidx. compose. ui. graphics. PathFillType
 import android. graphics. drawable. shapes. Shape
 import android. util. Size
-import com.example.test.R
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -85,10 +83,12 @@ import androidx.compose.ui.platform.LocalDensity
 
 
 
-val inFFamily = FontFamily(
+public val inFFamily = FontFamily(
     Font(R.font.inter_24pt_medium),
-    Font(R.font.inter_24pt_extralight,FontWeight.ExtraLight)
+    Font(R.font.inter_24pt_extralight,FontWeight.ExtraLight),
+    Font(R.font.inter_24pt_semibold,FontWeight.SemiBold)
 )
+
 
 @Composable
 fun LevelCounter(modifier:Modifier = Modifier,name:String,level:Int,time:Int,expBar:Float){
@@ -176,7 +176,7 @@ fun ScreenSwitcher() {
                 when (screenState.value) {
                     ScreenState.First -> SleepTimer /*ページ名いれる。一番左のアイコンがFirst*/ { screenState.value = ScreenState.First }
                     ScreenState.Second -> WatchScreen /*ページ名*/  { screenState.value = ScreenState.Second }
-                    ScreenState.Third -> CalendarScreen  /*ページ名*/  { screenState.value = ScreenState.Third }
+                    ScreenState.Third -> AlarmScreen  /*ページ名*/  { screenState.value = ScreenState.Third }
                     ScreenState.Forth -> Cats /*ページ名*/  { screenState.value = ScreenState.Forth}
                 }
             }
@@ -350,7 +350,7 @@ fun SecondScreenPreview(){SleepTimer(onNavigateBack = {})
 }
 @Preview(showBackground = true)
 @Composable
-fun CalendarScreenPreview() {
+fun AlarmPreview() { AlarmScreen (onSwitch = {})
     val screenState = remember { mutableStateOf(ScreenState.Third) }
 
 }
