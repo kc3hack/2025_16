@@ -53,7 +53,11 @@ fun ToDoList(modifier: Modifier = Modifier) {
                                     .clip(RoundedCornerShape(8.dp))
             )
         }
-        ToDoBox(Modifier, "10:00", "13:00", "KC3HACK meeting", "meeting with teammates")
+        val tasks= arrayOf(arrayOf("10:00","13:00","KC3HACK meeting","meeting with teammates"),arrayOf("10:00","13:00","KC3HACK meeting","meeting with teammates"))
+        tasks.forEach { task ->
+            ToDoBox(Modifier,task[0],task[1],task[2],task[3] )
+        }
+
         Spacer(Modifier.padding(top = 10.dp))
         ToDoSleep(Modifier, "22:00", "7:00")
     }
