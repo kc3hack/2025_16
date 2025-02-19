@@ -26,11 +26,6 @@ class MainActivity : ComponentActivity() {
                 setContent {
                         TestTheme {
                                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                                        // Greeting(
-                                        //     name = "Android",
-                                        //     modifier = Modifier.padding(innerPadding)
-                                        // )
-                                        // TalkCats(modifier=Modifier.padding(innerPadding))
                                         Column(
                                                 modifier =
                                                         Modifier.fillMaxSize()
@@ -50,37 +45,22 @@ class MainActivity : ComponentActivity() {
         }
 }
 
-// @Composable
-// fun Greeting(name: String, modifier: Modifier = Modifier) {
-//     Text(
-//         text = "Hello $name!",
-//         modifier = modifier
-//     )
-// }
-
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    TestTheme {
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            // Greeting(
-            //     name = "Android",
-            //     modifier = Modifier.padding(innerPadding)
-            // )
-            // TalkCats(modifier=Modifier.padding(innerPadding))
-            Column(
-                modifier =
-                Modifier.fillMaxSize()
-                    .padding(innerPadding),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(-40.dp)
-            ) {
-                // TalkCatsのUI
-                TalkCats(modifier = Modifier.padding(top = 5.dp))
-                LevelList(modifier = Modifier) // LevelListのUI
-                Spacer(modifier = Modifier.height(80.dp))
-                SleepInfo(modifier = Modifier)
-            }
+        TestTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                        Column(
+                                modifier = Modifier.fillMaxSize().padding(innerPadding),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(-40.dp)
+                        ) {
+                                // TalkCatsのUI
+                                TalkCats(modifier = Modifier.padding(top = 5.dp))
+                                LevelList(modifier = Modifier) // LevelListのUI
+                                Spacer(modifier = Modifier.height(80.dp))
+                                SleepInfo(modifier = Modifier)
+                        }
+                }
         }
-    }
 }
