@@ -16,7 +16,7 @@ class ScheduleCalculation() {
     /**
      * 現在時刻(嘘)
      */
-    private val currentTime = Date(2025 - 1900, 1, 16, 12, 0)
+    private val currentTime = Date()
     /**
      * 空き時間のid
      */

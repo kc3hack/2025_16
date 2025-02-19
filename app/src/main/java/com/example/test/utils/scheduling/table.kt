@@ -7,8 +7,9 @@ class Table {
      * スケジュールのリストのフィールド  
      * このリストは TaskModel オブジェクトを保持するために使用されます。
      */
-    val scheduleList: MutableList<TaskModel> = mutableListOf()
-    val scheduleCalculation = ScheduleCalculation()
+    private var scheduleList: MutableList<TaskModel> = mutableListOf()
+    private var scheduleCalculation = ScheduleCalculation()
+    private var taskTimeLine: List<TaskTime> = mutableListOf()
 
     /**
      * スケジュールを追加するメソッド  
@@ -17,6 +18,11 @@ class Table {
     fun addSchedules(schedules: List<TaskModel>) {
         scheduleList.addAll(schedules)
     }
+
+    fun setSchedules(schedules: List<TaskModel>) {
+        this.scheduleList = schedules.toMutableList()
+    }
+
 
     /**
      * スケジュールを削除するメソッド  
@@ -35,7 +41,7 @@ class Table {
     }
 
     fun getTaskTimeLine(): List<TaskTime> {
-        return scheduleCalculation.getTasks()
+        return taskTimeLine
     }
 
     /**
@@ -44,7 +50,8 @@ class Table {
      *
      * ここでは例として、calculate() メソッドで何らかの処理を行い、結果のリストを返す実装とします。
      */
-    fun calculateSchedule(): List<TaskTime> {
-        return scheduleCalculation.updateTaskTimeList(scheduleList)
+    fun calculateTimeLine(): List<TaskTime> {
+        this.taskTimeLine = scheduleCalculation.updateTaskTimeList(scheduleList)
+        return this.taskTimeLine
     }
 }
