@@ -135,73 +135,71 @@ fun getCurrentTime(): String {
     return sdf.format(Date())}
 @Composable
 fun ScreenSwitcher() {
-    var screenState by remember { mutableStateOf(ScreenState.First) }
-    when (screenState) {
-        ScreenState.First -> WatchScreen { screenState = ScreenState.First }
-        ScreenState.Second -> SleepTimer { screenState = ScreenState.Second }
-        ScreenState.Third -> CalendarScreen  { screenState = ScreenState.Third }
-        ScreenState.Forth -> Cats  { screenState = ScreenState.Forth }
-    }
-    }
-@Composable
-fun BottomAppBarExample(screenState: MutableState<ScreenState>) {
-        Scaffold(
-            bottomBar = {
-                BottomAppBar(
-                    actions = {
-                        IconButton(onClick = { screenState.value = ScreenState.First }) {
-                            Icon(
-                                Icons.Outlined.Check,
-                                contentDescription = "Localized description"
-                            )
-                        }
-                        IconButton(onClick = { screenState.value = ScreenState.Second //
-                        }) {
-                            Icon(
-                                Icons.Filled.DateRange,
-                                contentDescription = "Localized description",
-                            )
-                        }
-                        IconButton(onClick = { screenState.value = ScreenState.Third //
-                        }) {
-                            Icon(
-                                Icons.Filled.Notifications,
-                                contentDescription = "Localized description",
-                            )
-                        }
-                        IconButton(onClick = { screenState.value = ScreenState.Forth //
-                        }) {
-                            Icon(
-                                Icons.Filled.Person,
-                                contentDescription = "Localized description",
-                            )
-                        }
-                    },
-                    floatingActionButton = {
-                        FloatingActionButton(
-                            onClick = { screenState.value = ScreenState.Second  },
-                            containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                            elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
-                            ) {
-                            Icon(Icons.Filled.Add, "Localized description")
-                        }
-
-                    }
-                )
-            },floatingActionButtonPosition = FabPosition.Center,
-            content = { innerPadding ->
-                Box(modifier = Modifier.padding(innerPadding)) {
-                    when (screenState.value) {
-                        ScreenState.First -> SleepTimer { screenState.value = ScreenState.First }
-                        ScreenState.Second -> WatchScreen  { screenState.value = ScreenState.Second }
-                        ScreenState.Third -> CalendarScreen   { screenState.value = ScreenState.Third }
-                        ScreenState.Forth -> Cats  { screenState.value = ScreenState.Forth}
-                    }
+    val screenState = remember { mutableStateOf(ScreenState.First) }
+    Scaffold (
+        bottomBar = {
+            BottomAppBarExample(screenState = screenState)
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { screenState.value = ScreenState.Second },
+                containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+                elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
+                modifier = Modifier.offset(y = 50.dp)
+                    .padding(bottom = 20.dp)
+                    .clip(CircleShape)
+            ) {
+                Icon(Icons.Filled.Add, "Localized description")
+            }
+        },
+        floatingActionButtonPosition = FabPosition.Center,
+        content = { innerPadding ->
+            Box(modifier = Modifier.padding(innerPadding)) {
+                when (screenState.value) {
+                    ScreenState.First -> SleepTimer { screenState.value = ScreenState.First }
+                    ScreenState.Second -> WatchScreen  { screenState.value = ScreenState.Second }
+                    ScreenState.Third -> CalendarScreen   { screenState.value = ScreenState.Third }
+                    ScreenState.Forth -> Cats  { screenState.value = ScreenState.Forth}
                 }
             }
+        }
+    )
+}
 
+@Composable
+fun BottomAppBarExample(screenState: MutableState<ScreenState>) {
+    BottomAppBar(
+        actions = {
+            IconButton(onClick = { screenState.value = ScreenState.First }) {
+                Icon(
+                    Icons.Outlined.Home,
+                    contentDescription = "Localized description"
+                )
+            }
+            IconButton(onClick = { screenState.value = ScreenState.Second //
+            }) {
+                Icon(
+                    Icons.Filled.DateRange,
+                    contentDescription = "Localized description",
+                    )
+            }
+            IconButton(onClick = { screenState.value = ScreenState.Third //
+            }) {
+                Icon(
+                    Icons.Filled.Notifications,
+                    contentDescription = "Localized description",
+                    )
+            }
+            IconButton(onClick = { screenState.value = ScreenState.Forth //
+            }) {
+                Icon(
+                    Icons.Filled.Person,
+                    contentDescription = "Localized description",
+                    )
+            }
+                  }
         )
-    }
+}
 @Composable
 fun SleepTimer(onNavigateBack: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize(),
@@ -316,17 +314,17 @@ enum class ScreenState {
 @Composable
 fun SecondScreenPreview(){SleepTimer(onNavigateBack = {})
     val screenState = remember { mutableStateOf(ScreenState.First) }
-    BottomAppBarExample(screenState)
+    ScreenSwitcher()
 }
 @Preview(showBackground = true)
 @Composable
 fun CalendarScreenPreview() {
     val screenState = remember { mutableStateOf(ScreenState.Third) }
-    BottomAppBarExample(screenState)
+
 }
 @Preview(showBackground = true)
 @Composable
 fun CatsScreenPreview() {
     val screenState = remember { mutableStateOf(ScreenState.Forth) }
-    BottomAppBarExample(screenState)
+
 }

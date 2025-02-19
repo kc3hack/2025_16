@@ -67,42 +67,123 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlinx.coroutines.delay
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.*
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathFillType
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.Density
+import androidx. compose. ui. platform. LocalDensity
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.graphics.drawscope.DrawScope
+
 
 @Composable
-    fun FirstScreen(onSwitch: () -> Unit) {
-        Column(
+fun MyApp() {
+    Scaffold(
+        bottomBar = {
+            CustomBottomBar()
+        }
+    ) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(it)) {
+            Text(text = "hello")// メインコンテンツをここに配置
+        }
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+                .fillMaxSize(),
+            contentAlignment = Alignment.BottomCenter
         ) {
-            Text(text = "First Screen")
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = onSwitch) {
-                Text("Switch to Second Screen")
+            FloatingActionButton(
+                onClick = { /*TODO*/ },
+                modifier = Modifier
+                    .offset(y = (-20).dp) // 必要に応じて調整
+                    .clip(CircleShape)
+                    .background(Color.White) // 背景色を指定
+            ) {
+                Text("FAB")
             }
         }
     }
+}
 
-    @Composable
-    fun SecondScreen(onSwitch: () -> Unit) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(text = "Second Screen")
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = onSwitch) {
-                Text("Switch to First Screen")
-            }
-        }
+@Composable
+fun CustomBottomBar() {
+    val density = LocalDensity.current
+    val cutoutRadius = with(density){ 36.dp.toPx() }
+    val height = with(density){ 56.dp.toPx() }
+    val cutoutTop = height - (cutoutRadius * 2)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .background(Color.Gray)
+            .clip(BarShape),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text = "わーい"
+        )// BottomAppBarのコンテンツをここに追加
     }
+}
 
 
+val BarShape = object : Shape {
+    override fun createOutline(
+        size: Size,
+        layoutDirection: LayoutDirection,
+        density: androidx.compose.ui.unit.Density
+    ): Outline {
+        val cutoutRadius = with(density){ 36.dp.toPx() }
+        val cutoutTop = size.height - cutoutRadius * 2
+
+        val path = Path().apply {
+            moveTo(0f, size.height)
+            lineTo(size.width / 2 - cutoutRadius, size.height)
+            arcTo(
+                Rect(
+                    left = size.width / 2 - cutoutRadius,
+                    top = cutoutTop,
+                    right = size.width / 2 + cutoutRadius,
+                    bottom = size.height
+                ),
+                180f,
+                -180f,
+                false
+            )
+            lineTo(size.width, size.height)
+            lineTo(size.width, 0f)
+            lineTo(0f, 0f)
+            close()
+            fillType = PathFillType.EvenOdd
+        }
+
+        return Outline.Generic(path)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun Preview() {
+MyApp()
+    CustomBottomBar()
+
+
+}
 
 
 
