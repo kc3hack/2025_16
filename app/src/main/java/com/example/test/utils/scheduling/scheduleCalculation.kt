@@ -1,7 +1,6 @@
 package com.example.test.utils.scheduleing
 
 import com.example.test.data.model.*
-import com.example.test.utils.scheduleing.SettingData
 import java.util.Date
 import java.util.Locale
 
