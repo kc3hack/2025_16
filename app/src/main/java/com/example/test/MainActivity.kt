@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.test.ui.theme.TestTheme
+import com.example.test.ui.theme.*
 import com.example.test.ui.theme.home.*
 
 class MainActivity : ComponentActivity() {
@@ -38,6 +38,7 @@ class MainActivity : ComponentActivity() {
                                                 LevelList(modifier = Modifier) // LevelListのUI
                                                 Spacer(modifier = Modifier.height(80.dp))
                                                 SleepInfo(modifier = Modifier)
+                                                ToDoList(modifier=Modifier)
                                         }
                                 }
                         }
@@ -60,6 +61,7 @@ fun GreetingPreview() {
                                 LevelList(modifier = Modifier) // LevelListのUI
                                 Spacer(modifier = Modifier.height(80.dp))
                                 SleepInfo(modifier = Modifier)
+                                ToDoList(modifier=Modifier)
                         }
                 }
         }
