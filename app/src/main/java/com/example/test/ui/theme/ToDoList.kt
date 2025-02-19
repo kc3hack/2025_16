@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.test.ui.theme.*
 import java.time.format.TextStyle
 
 @Composable
@@ -51,6 +52,7 @@ fun ToDoList(modifier: Modifier = Modifier) {
                                     .clip(RoundedCornerShape(8.dp))
             )
         }
+        ToDoBox(Modifier)
     }
 }
 
