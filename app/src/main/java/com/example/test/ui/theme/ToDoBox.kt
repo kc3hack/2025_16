@@ -30,7 +30,7 @@ fun ToDoBox(
         taskName: String,
         description: String
 ) {
-    Box(Modifier.fillMaxWidth()) {
+    Box(Modifier.fillMaxWidth().height(75.dp)) {
         Row(Modifier.padding(top = 10.dp)) {
             FloatingActionButton(
                     onClick = { println("clicked!") },

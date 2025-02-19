@@ -31,7 +31,7 @@ fun ToDoSleep(
 ) {
     Box(Modifier.fillMaxWidth(0.97f).clip(
         RoundedCornerShape(10.dp)
-    ).background(color = Color(0x80C0F6FF)).padding(vertical = 10.dp)) {
+    ).background(color = Color(0x80C0F6FF)).padding(vertical = 10.dp).height(75.dp)) {
         Row(Modifier.padding(top = 0.dp)) {
             FloatingActionButton(
                     onClick = { println("clicked!") },
