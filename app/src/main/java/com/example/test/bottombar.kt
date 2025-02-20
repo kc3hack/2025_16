@@ -85,7 +85,7 @@ fun ScreenSwitcher() {
                                     screenState.value = ScreenState.First
                                 }
                         ScreenState.Second ->
-                                WatchScreen /*ページ名*/ { screenState.value = ScreenState.Second }
+                                SleepTimer /*ページ名*/ { screenState.value = ScreenState.Second }
                         ScreenState.Third ->
                                 CalendarScreen /*ページ名*/ { screenState.value = ScreenState.Third }
                         ScreenState.Forth -> Cats /*ページ名*/ { screenState.value = ScreenState.Forth }
