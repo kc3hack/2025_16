@@ -27,28 +27,33 @@ class MainActivity : ComponentActivity() {
                 enableEdgeToEdge()
                 setContent {
                         TestTheme {
-                                Scaffold(
-                                        modifier =
-                                                Modifier.fillMaxSize()
-                                                        .background(color = Color.White)
-                                ) { innerPadding ->
-                                        Column(
-                                                modifier =
-                                                        Modifier.fillMaxSize()
-                                                                .padding(innerPadding)
-                                                                .background(color = Color.White),
-                                                horizontalAlignment = Alignment.CenterHorizontally,
-                                                verticalArrangement = Arrangement.spacedBy(-40.dp)
-                                        ) {
-                                                // TalkCatsのUI
-                                                TalkCats(modifier = Modifier.padding(top = 5.dp))
-                                                LevelList(modifier = Modifier) // LevelListのUI
-                                                Spacer(modifier = Modifier.height(80.dp))
-                                                SleepInfo(modifier = Modifier)
-                                                ToDoList(modifier = Modifier)
-                                        }
-                                }
+
+                                HomeScreen(Modifier)
                         }
+                }
+        }
+}
+
+@Composable fun HomeScreen(modifier: Modifier = Modifier) {
+        Scaffold(
+                modifier =
+                Modifier.fillMaxSize()
+                        .background(color = Color.White)
+        ) { innerPadding ->
+                Column(
+                        modifier =
+                        Modifier.fillMaxSize()
+                                .padding(innerPadding)
+                                .background(color = Color.White),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(-40.dp)
+                ) {
+                        // TalkCatsのUI
+                        TalkCats(modifier = Modifier.padding(top = 5.dp))
+                        LevelList(modifier = Modifier) // LevelListのUI
+                        Spacer(modifier = Modifier.height(80.dp))
+                        SleepInfo(modifier = Modifier)
+                        ToDoList(modifier = Modifier)
                 }
         }
 }
