@@ -28,12 +28,21 @@ class ScheduleCalculation() {
     /**
      * Date型のフォーマット
      */
-    val dateFormatToDay = java.text.SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())// 日付部分を文字列（例："2025/02/17"）として取得する用
-    val dateFormat = java.text.SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.getDefault())// 日付と時間を組み合わせるよう
+    private val dateFormatToDay = java.text.SimpleDateFormat("yyyy/MM/dd", Locale.getDefault())// 日付部分を文字列（例："2025/02/17"）として取得する用
+    private val dateFormat = java.text.SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.getDefault())// 日付と時間を組み合わせるよう
+    /**
+     * 前日寝た時間を把握するための値
+     */
+    var lastSleepTime:Date = currentTime
+    /**
+     * 予定の睡眠負債を管理する為の値
+     */
+    var sleepDebt:Int = 0
+
     /**
      * 指定した時刻のTaskTimeを二分探索で調べ、その番号を返す
      */
-    fun findTaskByTime(time: Date, priority: Int /* 0が前、1が後 */): Int {
+    private fun findTaskByTime(time: Date, priority: Int /* 0が前、1が後 */): Int {
         if (tasks.isEmpty()) {
             return -1 // あるいは例外を投げる等の処理
         }
@@ -71,7 +80,7 @@ class ScheduleCalculation() {
      * tasksから、期間を指定して抽出
      * その際、タスクの間であっても強制的に切る
      */
-    fun getTasksWithinPeriod(startTime: Date, endTime: Date): List<TaskTime> {
+    private fun getTasksWithinPeriod(startTime: Date, endTime: Date): List<TaskTime> {
         val startIndex = findTaskByTime(startTime,0)
         val endIndex = findTaskByTime(endTime,1)
         if (startIndex == -1 || endIndex == -1 || startIndex > endIndex) {
@@ -106,7 +115,7 @@ class ScheduleCalculation() {
     /**
      * タスクを登録する際、idが-1のTaskを分断し、間にtaskが入るようにする。
      */
-    fun addTasks(task: TaskTime): Boolean {
+    private fun addTasks(task: TaskTime): Boolean {
         val startIndex = findTaskByTime(task.startTime,0)
         val endIndex = findTaskByTime(task.endTime,1)
         if(startIndex==-1||endIndex==-1){
@@ -136,7 +145,7 @@ class ScheduleCalculation() {
     /**
      * 固定のタスクを入れる
      */
-    fun setFixedTask() {
+    private fun setFixedTask() {
         for (schedule in scheduleList) {
             if (schedule.type == ScheduleType.FIXED_TASK) {
                 addTasks(TaskTime(schedule.id, schedule.startTime, schedule.endTime))
@@ -149,7 +158,7 @@ class ScheduleCalculation() {
      * 睡眠と干渉しない時間にまずタスクを入れる。
      * 
      */
-    fun setSleepTimeAndAssignment() {
+    private fun setSleepTimeAndAssignment() {
         var assignments = scheduleList
             .filter { it.type == ScheduleType.DEADLINED_ASSIGNMENT }
             .sortedBy { it.endTime }
@@ -167,8 +176,8 @@ class ScheduleCalculation() {
         // println("Free Time Sum: ${freeTimeSum / (1000 * 60)}分")
 
         for (i in 0 until SettingData().scheduleRange) {
-            val dayStartTime = Date(currentTime.time + i * 24 * 60 * 60 * 1000)
-            assignments = setAssignmentInNoom(currentTime,assignments.toMutableList())
+            val dayStartTime = this.lastSleepTime
+            assignments = setAssignmentInNoom(dayStartTime,assignments.toMutableList())
             assignments = setSleepTask(dayStartTime, assignments.toMutableList())
         }
     }
@@ -177,7 +186,7 @@ class ScheduleCalculation() {
     /**
      * 寝ない時間帯にタスクを入れる
      */
-    fun setAssignmentInNoom(startTime: Date, assignments: MutableList<TaskModel>): MutableList<TaskModel> {
+    private fun setAssignmentInNoom(startTime: Date, assignments: MutableList<TaskModel>): MutableList<TaskModel> {
         val sleepStartTime = SettingData().sleepStartTime // "HH:mm" 形式（例："22:00"）の文字列
     
         val formattedStartDay = dateFormatToDay.format(startTime)
@@ -202,7 +211,7 @@ class ScheduleCalculation() {
     /**
      * 次の日までのタスクがある場合、それを終了してから寝る。
      */
-    fun setSleepTask(startTime: Date, assignments: MutableList<TaskModel>): MutableList<TaskModel> {
+    private fun setSleepTask(startTime: Date, assignments: MutableList<TaskModel>): MutableList<TaskModel> {
         val nextDay = Date(startTime.time + 24 * 60 * 60 * 1000)
         var dayTasks = assignments.filter { it.endTime.before(nextDay) }
         if (dayTasks.isEmpty()) {
@@ -228,28 +237,34 @@ class ScheduleCalculation() {
         }
     }
 
+    /**
+     * 寝る時間を追加する(夜の時間で最も長く取れるタイミングに寝る)
+     */
     fun addSleep(startTime: Date) {
-        // println("addSleep")
-        // println(startTime)
-    
+        val settingData = SettingData() // 一度だけインスタンスを作成
+
         val nextDay = Date(startTime.time + 24 * 60 * 60 * 1000)
-        val sleepStartTime = dateFormat.parse("${dateFormatToDay.format(startTime)} ${SettingData().sleepStartTime}")
-        val sleepEndTime = dateFormat.parse("${dateFormatToDay.format(nextDay)} ${SettingData().sleepEndTime}")
-    
-        // println("Sleep Start Time: $sleepStartTime")
-        // println("Sleep End Time: $sleepEndTime")
-    
+        val sleepStartTime = dateFormat.parse("${dateFormatToDay.format(startTime)} ${settingData.sleepStartTime}")
+        val sleepEndTime = dateFormat.parse("${dateFormatToDay.format(nextDay)} ${settingData.sleepEndTime}")
+
         val sleepTimeTasks = getTasksWithinPeriod(sleepStartTime, sleepEndTime)
         val longestFreeTime = sleepTimeTasks.filter { it.id == -1 }
             .maxByOrNull { it.endTime.time - it.startTime.time }
-    
-        longestFreeTime?.let {
-        val sleepDuration = SettingData().sleepDuration * 60 * 1000
-        val sleepEndTimeAdjusted = Date(it.startTime.time + sleepDuration)
-        addTasks(TaskTime(sleepTimeId, it.startTime, sleepEndTimeAdjusted.coerceAtMost(sleepEndTime)))
+
+        if (longestFreeTime != null) {
+            val sleepDuration = (settingData.sleepDuration + this.sleepDebt) * 60 * 1000
+            val sleepEndTimeAdjusted = Date(longestFreeTime.startTime.time + sleepDuration)
+
+            this.lastSleepTime = sleepEndTimeAdjusted.coerceAtMost(sleepEndTime)
+            addTasks(TaskTime(sleepTimeId, longestFreeTime.startTime, lastSleepTime))
+
+            val actualSleepDuration = (lastSleepTime.time - longestFreeTime.startTime.time) / (60 * 1000)
+            this.sleepDebt += (settingData.sleepDuration - actualSleepDuration).toInt()
+//            println("現在の睡眠負債: $sleepDebt 分")
+        } else {
+            this.sleepDebt += settingData.sleepDuration.toInt()
+//            println("現在の睡眠負債: $sleepDebt 分")
         }
-    
-        // println(longestFreeTime)
     }
     
 
@@ -304,8 +319,12 @@ class ScheduleCalculation() {
         return tasks
     }
 
-    fun updateTaskTimeList(scheduleList: MutableList<TaskModel>): List<TaskTime> {
+    /**
+     * スケジュールを更新して、返す。
+     */
+    fun updateTaskTimeList(scheduleList: MutableList<TaskModel>, sleepDebt: Int = 0): List<TaskTime> {
         this.scheduleList = scheduleList
+        this.sleepDebt = sleepDebt
         val tenYearsLater = Date(currentTime.time + 10L * 365 * 24 * 60 * 60 * 1000)
         tasks.add(TaskTime(-1, currentTime, tenYearsLater))
         setFixedTask()
