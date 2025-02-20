@@ -24,7 +24,7 @@ fun HomeScreen(onNavigateBack: () -> Unit) {
                 verticalArrangement = Arrangement.spacedBy(-40.dp)
         ) {
             // TalkCatsのUI
-            TalkCats(modifier = Modifier.padding(top = 5.dp))
+            TalkCats(modifier = Modifier.padding(top = 15.dp))
             LevelList(modifier = Modifier) // LevelListのUI
             Spacer(modifier = Modifier.height(80.dp))
             SleepInfo(modifier = Modifier)

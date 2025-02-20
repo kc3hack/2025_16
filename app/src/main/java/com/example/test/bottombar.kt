@@ -102,13 +102,13 @@ fun BottomAppBarExample(screenState: MutableState<ScreenState>) {
             actions = {
                 IconButton(
                         onClick = { screenState.value = ScreenState.First },
-                        modifier = Modifier.padding(start = 5.dp)
+                        modifier = Modifier.padding(start = 13.dp)
                 ) { Icon(Icons.Filled.Home, contentDescription = "Localized description") }
                 IconButton(
                         onClick = {
                             screenState.value = ScreenState.Second //
                         },
-                        modifier = Modifier.offset(x = 10.dp)
+                        modifier = Modifier.offset(x = 19.dp)
                 ) {
                     Icon(
                             Icons.Filled.DateRange,
@@ -119,7 +119,7 @@ fun BottomAppBarExample(screenState: MutableState<ScreenState>) {
                         onClick = {
                             screenState.value = ScreenState.Third //
                         },
-                        modifier = Modifier.offset(x = 150.dp)
+                        modifier = Modifier.offset(x = 160.dp)
                 ) {
                     Icon(
                             Icons.Filled.Notifications,
@@ -130,7 +130,7 @@ fun BottomAppBarExample(screenState: MutableState<ScreenState>) {
                         onClick = {
                             screenState.value = ScreenState.Forth //
                         },
-                        modifier = Modifier.offset(x = 155.dp)
+                        modifier = Modifier.offset(x = 180.dp)
                 ) {
                     Icon(
                             Icons.Filled.Person,
