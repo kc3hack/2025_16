@@ -14,6 +14,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,9 +36,9 @@ import java.time.YearMonth
 
 @Composable
 fun CalenderScreen(onNavigateBack: () -> Unit) {
-    val currentMonth = remember { YearMonth.now() }
-    val startMonth = remember { currentMonth.minusMonths(100) } // Adjust as needed
-    val endMonth = remember { currentMonth.plusMonths(100) } // Adjust as needed
+    var currentMonth = remember { mutableStateOf(YearMonth.now()) }
+    val startMonth = remember { currentMonth.value.minusMonths(100) } // Adjust as needed
+    val endMonth = remember { currentMonth.value.plusMonths(100) } // Adjust as needed
     val daysOfWeek = remember { daysOfWeek(firstDayOfWeek = DayOfWeek.SUNDAY) }
     var calendarYear = YearMonth.now().getYear()
     var calendarMonth = YearMonth.now().getMonth().toString().lowercaseFirstChar()
@@ -45,7 +46,7 @@ fun CalenderScreen(onNavigateBack: () -> Unit) {
             rememberCalendarState(
                     startMonth = startMonth,
                     endMonth = endMonth,
-                    firstVisibleMonth = currentMonth,
+                    firstVisibleMonth = currentMonth.value,
                     firstDayOfWeek = daysOfWeek.first()
             )
     Column(
@@ -57,7 +58,7 @@ fun CalenderScreen(onNavigateBack: () -> Unit) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             IconButton(
                     onClick = {
-                        //
+                        currentMonth.value=currentMonth.value.minusMonths(1)
                     },
                     modifier =
                             Modifier.border(
@@ -76,14 +77,14 @@ fun CalenderScreen(onNavigateBack: () -> Unit) {
             }
             Spacer(Modifier.width(50.dp))
             Text(
-                    text = "$calendarMonth",
+                    text = "${currentMonth.value.month.toString().lowercaseFirstChar()}",
                     style = TextStyle(fontSize = 23.sp, fontWeight = FontWeight.SemiBold)
             )
             Spacer(Modifier.width(50.dp))
 
             IconButton(
                     onClick = {
-                        //
+                        currentMonth.value=currentMonth.value.plusMonths(1)
                     },
                     modifier =
                             Modifier.border(
@@ -102,7 +103,7 @@ fun CalenderScreen(onNavigateBack: () -> Unit) {
             }
         }
         Spacer(Modifier.height(38.dp))
-        Text(text = "$calendarYear", style = TextStyle(fontSize = 13.sp, color = Color(0xFF8F9BB3)))
+        Text(text = "${currentMonth.value.year}", style = TextStyle(fontSize = 13.sp, color = Color(0xFF8F9BB3)))
         Spacer(Modifier.height(85.dp))
         HorizontalCalendar(
                 state = state,
