@@ -5,11 +5,14 @@ import com.example.test.data.db.*
 import com.example.test.data.model.TaskModel
 import com.example.test.utils.scheduleing.TaskTime
 import java.util.Date
+import java.util.Locale
 
 class SchedulingDao {
     private lateinit var db: AppDatabase
     private lateinit var tasksDao: TasksDao
     private var table = Table()
+
+    val dateFormatToHour = java.text.SimpleDateFormat("HH:mm", Locale.getDefault())// 時間部分を文字列（例："HH:mm"）として取得する用
 
     fun update(context: Context) {
         db = DatabaseManager.getDatabase(context)
@@ -25,13 +28,14 @@ class SchedulingDao {
         table.calculateTimeLine()
         return table.getTaskTimeLine()
     }
-    //[タスクの開始時刻(String),終了時刻(String),task名(String),詳細(String)]
+
+    //[タスクの開始時刻(String),終了時刻(String),task名(String),詳細(String)]のリストを返す
     fun getDayTasks(): List<Array<String>>{
         val returnList = mutableListOf<Array<String>>()
         val dayTasks = table.getDayTasks(Date()).filter { it.id!=-1 }
         for (dayTask in dayTasks){
-            val startTime = dayTask.startTime.toString()
-            val endTime = dayTask.endTime.toString()
+            val startTime = dateFormatToHour.format(dayTask.startTime)
+            val endTime = dateFormatToHour.format(dayTask.endTime)
             var taskName = "不明なタスク"
             var detail = "詳細なし"
             if (dayTask.id == -2){
