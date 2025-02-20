@@ -41,4 +41,12 @@ class SleepManager(context: Context) {
             sharedPrefs.saveStatus(ScheduleType.FREE_TIME)
         }
     }
+
+    fun getSleepTimeSum(): Long{
+        var sleepTimeSum = 0L
+        for (sleepTime in sleepTimeDao.getAllSleepTimes()) {
+            sleepTimeSum += sleepTime.sleepTime
+        }
+        return sleepTimeSum
+    }
 }

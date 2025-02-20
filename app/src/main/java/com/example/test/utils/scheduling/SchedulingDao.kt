@@ -7,16 +7,14 @@ import com.example.test.utils.scheduleing.TaskTime
 import java.util.Date
 import java.util.Locale
 
-class SchedulingDao {
-    private lateinit var db: AppDatabase
-    private lateinit var tasksDao: TasksDao
+class SchedulingDao(context: Context) {
+    private var db = DatabaseManager.getDatabase(context)
+    private var tasksDao = db.TasksDao()
     private var table = Table()
 
     val dateFormatToHour = java.text.SimpleDateFormat("HH:mm", Locale.getDefault())// 時間部分を文字列（例："HH:mm"）として取得する用
 
-    fun update(context: Context) {
-        db = DatabaseManager.getDatabase(context)
-        tasksDao = db.TasksDao()
+    fun update() {
         table.setSchedules(tasksDao.getAllTasks())
     }
 
