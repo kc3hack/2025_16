@@ -50,9 +50,10 @@ fun CalenderScreen(onNavigateBack: () -> Unit) {
             )
     Column(
             Modifier.background(color = Color.White),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(-30.dp)
     ) {
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(50.dp))
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             IconButton(
                     onClick = {
@@ -100,9 +101,9 @@ fun CalenderScreen(onNavigateBack: () -> Unit) {
                 )
             }
         }
-
+        Spacer(Modifier.height(38.dp))
         Text(text = "$calendarYear", style = TextStyle(fontSize = 13.sp, color = Color(0xFF8F9BB3)))
-        Spacer(Modifier.height(5.dp))
+        Spacer(Modifier.height(85.dp))
         HorizontalCalendar(
                 state = state,
                 dayContent = { Day(it) },
