@@ -36,6 +36,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,11 +49,11 @@ import java.util.Date
 import java.util.Locale
 import kotlinx.coroutines.delay
 
-// val inFFamily =
-// FontFamily(
-//         Font(R.font.inter_24pt_medium),
-//         Font(R.font.inter_24pt_extralight, FontWeight.ExtraLight)
-// )
+val inFFamily =
+FontFamily(
+        Font(R.font.inter_24pt_medium),
+        Font(R.font.inter_24pt_extralight, FontWeight.ExtraLight)
+)
 // fontを追加する
 @Composable
 fun LevelCounter(
@@ -120,7 +122,7 @@ fun CurrentTime() {
                 fontWeight = FontWeight.ExtraLight,
                 style = TextStyle(fontSize = 96.sp),
                 textAlign = TextAlign.Center,
-                // fontFamily = FontFamily(Font(R.font.inter_24pt_extralight)),
+                fontFamily = FontFamily(Font(R.font.inter_24pt_extralight)),
                 // fontを追加する
                 modifier = Modifier.padding(top = 15.dp)
         )
@@ -147,7 +149,7 @@ fun SleepTimer(onNavigateBack: () -> Unit) {
         CurrentTime()
         Box(modifier = Modifier.fillMaxWidth()) {
             Image(
-                    painter = painterResource(id = R.drawable.sleepcat),
+                    painter = painterResource(id = R.drawable.sleepywhitecat),
                     // 画像を追加する
                     contentDescription = "My Image",
                     modifier =
@@ -187,7 +189,7 @@ fun SleepTimer(onNavigateBack: () -> Unit) {
                 style = TextStyle(fontSize = 48.sp),
                 color = Color(0xFF49DF0D),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                // fontFamily = FontFamily(Font(R.font.inter_24pt_extralight))
+                fontFamily = FontFamily(Font(R.font.inter_24pt_extralight))
                 // fontを追加する
                 )
         Text(
