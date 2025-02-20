@@ -14,5 +14,6 @@ data class TaskModel(
     val intervalTime: Int,     // 作業の区切る時間
     var workedTime: Int,       // 作業した時間
     var remainingWorkTime: Int,// 残りの作業工数
-    val creationDate: Date     // 作成日（TypeConverterが必要）
+    val creationDate: Date,     // 作成日（TypeConverterが必要）
+    val isEnd: Boolean = false // タスクが終わったか否か
 )

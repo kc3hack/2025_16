@@ -47,11 +47,10 @@ class Table {
     /**
      * スケジュール計算  
      * ScheduleCalculation クラスを利用して、スケジュールを計算・抽出します。
-     *
-     * ここでは例として、calculate() メソッドで何らかの処理を行い、結果のリストを返す実装とします。
      */
     fun calculateTimeLine(): List<TaskTime> {
-        this.taskTimeLine = scheduleCalculation.updateTaskTimeList(scheduleList)
+        val TasksList = scheduleList.filter { !it.isEnd }.toMutableList()
+        this.taskTimeLine = scheduleCalculation.updateTaskTimeList(TasksList)
         return this.taskTimeLine
     }
 }
