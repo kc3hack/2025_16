@@ -31,10 +31,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.test.ui.theme.home.*
 
-@Composable
-fun WatchScreen(onSwitch: () -> Unit) {
-    Text(text = "this is second screen!")
-}
+// @Composable
+// fun WatchScreen(onSwitch: () -> Unit) {
+//     Text(text = "this is second screen!")
+// }
 
 @Composable
 fun CalendarScreen(onSwitch: () -> Unit) {
@@ -85,7 +85,7 @@ fun ScreenSwitcher() {
                                     screenState.value = ScreenState.First
                                 }
                         ScreenState.Second ->
-                                WatchScreen /*ページ名*/ { screenState.value = ScreenState.Second }
+                                SleepTimer /*ページ名*/ { screenState.value = ScreenState.Second }
                         ScreenState.Third ->
                                 CalendarScreen /*ページ名*/ { screenState.value = ScreenState.Third }
                         ScreenState.Forth -> Cats /*ページ名*/ { screenState.value = ScreenState.Forth }
