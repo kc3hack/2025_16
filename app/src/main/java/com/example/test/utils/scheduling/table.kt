@@ -1,6 +1,9 @@
-package com.example.test.utils.scheduleing
+package com.example.test.utils.scheduling
 
 import com.example.test.data.model.*
+import com.example.test.utils.scheduleing.ScheduleCalculation
+import com.example.test.utils.scheduleing.TaskTime
+import java.util.Date
 
 class Table {
     /**
@@ -48,9 +51,16 @@ class Table {
      * スケジュール計算  
      * ScheduleCalculation クラスを利用して、スケジュールを計算・抽出します。
      */
-    fun calculateTimeLine(): List<TaskTime> {
+    fun calculateTimeLine() {
         val TasksList = scheduleList.filter { !it.isEnd }.toMutableList()
         this.taskTimeLine = scheduleCalculation.updateTaskTimeList(TasksList)
-        return this.taskTimeLine
+    }
+
+    /**
+     * 24時間のタスクを返す
+     */
+    fun getDayTasks(startTime: Date): List<TaskTime> {
+        val endTime = Date(startTime.time + 1L * 24 * 60 * 60 * 1000) // 24時間（ミリ秒単位）
+        return scheduleCalculation.getTasksWithinPeriodNoCut(startTime, endTime)
     }
 }

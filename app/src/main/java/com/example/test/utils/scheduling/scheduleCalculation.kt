@@ -69,6 +69,7 @@ class ScheduleCalculation() {
     
     /**
      * tasksから、期間を指定して抽出
+     * その際、タスクの間であっても強制的に切る
      */
     fun getTasksWithinPeriod(startTime: Date, endTime: Date): List<TaskTime> {
         val startIndex = findTaskByTime(startTime,0)
@@ -82,6 +83,23 @@ class ScheduleCalculation() {
         }
         returnTasks[0] = returnTasks[0].copy(startTime = startTime)
         returnTasks[returnTasks.size - 1] = returnTasks[returnTasks.size - 1].copy(endTime = endTime)
+        return returnTasks
+    }
+
+    /**
+     * tasksから、期間を指定して抽出
+     * その際、タスクの途中であればそれも入れる。
+     */
+    fun getTasksWithinPeriodNoCut(startTime: Date, endTime: Date): List<TaskTime> {
+        val startIndex = findTaskByTime(startTime,0)
+        val endIndex = findTaskByTime(endTime,1)
+        if (startIndex == -1 || endIndex == -1 || startIndex > endIndex) {
+            return emptyList()
+        }
+        val returnTasks = mutableListOf<TaskTime>()
+        for (i in startIndex..endIndex) {
+            returnTasks.add(tasks[i])
+        }
         return returnTasks
     }
 
