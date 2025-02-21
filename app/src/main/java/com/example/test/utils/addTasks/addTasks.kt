@@ -30,7 +30,6 @@ class MainActivity : ComponentActivity() {
             intervalTime = 15,
             workedTime = 30,
             remainingWorkTime = 60,
-            creationDate = Date(),
             memo = ""
         )
 
@@ -38,7 +37,7 @@ class MainActivity : ComponentActivity() {
 
     }
 
-    public fun addTask(
+    private fun addTask(
         title: String?,
         type: ScheduleType?,
         startTime: Date?,
@@ -46,21 +45,22 @@ class MainActivity : ComponentActivity() {
         intervalTime: Int?,
         workedTime: Int?,
         remainingWorkTime: Int?,
-        creationDate: Date?,
         memo: String?
     ): Boolean {
+        val creationDate = Date() // メソッドが呼ばれた瞬間の時間を取得
+
         // 必須項目チェック
         val isValid = when (type) {
             ScheduleType.FIXED_TASK, ScheduleType.SLEEP ->
-                title != null && type != null && startTime != null && endTime != null && creationDate != null && memo != null
+                title != null && type != null && startTime != null && endTime != null && memo != null
 
             ScheduleType.DEADLINED_ASSIGNMENT ->
                 title != null && type != null && endTime != null && intervalTime != null &&
-                        workedTime != null && remainingWorkTime != null && creationDate != null && memo != null
+                        workedTime != null && remainingWorkTime != null && memo != null
 
             ScheduleType.NON_DEADLINED_ASSIGNMENT, ScheduleType.FREE_TIME ->
                 title != null && type != null && intervalTime != null &&
-                        workedTime != null && remainingWorkTime != null && creationDate != null && memo != null
+                        workedTime != null && remainingWorkTime != null && memo != null
 
             else -> false
         }
@@ -71,12 +71,12 @@ class MainActivity : ComponentActivity() {
             val newTask = TaskModel(
                 title = title!!,
                 type = type!!,
-                startTime = startTime ?: Date(0), // null の場合はデフォルト値を設定
-                endTime = endTime ?: Date(0), // null の場合はデフォルト値を設定
+                startTime = startTime ?: Date(0),
+                endTime = endTime ?: Date(0),
                 intervalTime = intervalTime ?: 0,
                 workedTime = workedTime ?: 0,
                 remainingWorkTime = remainingWorkTime ?: 0,
-                creationDate = creationDate!!,
+                creationDate = creationDate, // 呼び出し時の時間をセット
                 memo = memo!!
             )
             tasksDao.insert(newTask)
