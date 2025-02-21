@@ -1,5 +1,6 @@
 package com.example.test
 
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Box
@@ -98,45 +99,26 @@ fun ScreenSwitcher() {
 @Composable
 fun BottomAppBarExample(screenState: MutableState<ScreenState>) {
     BottomAppBar(
-            modifier = Modifier.height(76.dp),
-            actions = {
-                IconButton(
-                        onClick = { screenState.value = ScreenState.First },
-                        modifier = Modifier.padding(start = 13.dp)
-                ) { Icon(Icons.Filled.Home, contentDescription = "Localized description") }
-                IconButton(
-                        onClick = {
-                            screenState.value = ScreenState.Second //
-                        },
-                        modifier = Modifier.offset(x = 19.dp)
-                ) {
-                    Icon(
-                            Icons.Filled.DateRange,
-                            contentDescription = "Localized description",
-                    )
+        modifier = Modifier.height(100.dp),
+        actions = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly // 均等配置
+            ) {
+                IconButton(onClick = { screenState.value = ScreenState.First }) {
+                    Icon(Icons.Filled.Home, contentDescription = "Localized description")
                 }
-                IconButton(
-                        onClick = {
-                            screenState.value = ScreenState.Third //
-                        },
-                        modifier = Modifier.offset(x = 160.dp)
-                ) {
-                    Icon(
-                            Icons.Filled.Notifications,
-                            contentDescription = "Localized description",
-                    )
+                IconButton(onClick = { screenState.value = ScreenState.Second }) {
+                    Icon(Icons.Filled.DateRange, contentDescription = "Localized description")
                 }
-                IconButton(
-                        onClick = {
-                            screenState.value = ScreenState.Forth //
-                        },
-                        modifier = Modifier.offset(x = 180.dp)
-                ) {
-                    Icon(
-                            Icons.Filled.Person,
-                            contentDescription = "Localized description",
-                    )
+                Spacer(modifier = Modifier.width(60.dp))
+                IconButton(onClick = { screenState.value = ScreenState.Third }) {
+                    Icon(Icons.Filled.Notifications, contentDescription = "Localized description")
+                }
+                IconButton(onClick = { screenState.value = ScreenState.Forth }) {
+                    Icon(Icons.Filled.Person, contentDescription = "Localized description")
                 }
             }
+        }
     )
 }
