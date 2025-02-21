@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.test.ui.theme.home.*
 import com.example.test.ui.theme.calendar.*
+import com.example.test.ui.theme.input.*
 // @Composable
 // fun WatchScreen(onSwitch: () -> Unit) {
 //     Text(text = "this is second screen!")
@@ -50,7 +51,8 @@ enum class ScreenState {
     First,
     Second,
     Third,
-    Forth
+    Forth,
+    Fifth
 }
 
 @Composable
@@ -61,7 +63,7 @@ fun ScreenSwitcher() {
             bottomBar = { BottomAppBarExample(screenState = screenState) },
             floatingActionButton = {
                 FloatingActionButton(
-                        onClick = { /*ここにタスク追加の処理 */},
+                        onClick = { screenState.value = ScreenState.Fifth},
                         containerColor = Color(0xFF735BF2),
                         elevation = FloatingActionButtonDefaults.elevation(12.dp),
                         modifier =
@@ -89,6 +91,7 @@ fun ScreenSwitcher() {
                         ScreenState.Third ->
                             SleepTimer /*ページ名*/ { screenState.value = ScreenState.Third }
                         ScreenState.Forth -> Cats /*ページ名*/ { screenState.value = ScreenState.Forth }
+                        ScreenState.Fifth -> InputScreen /*ページ名*/ { screenState.value = ScreenState.Fifth }
                     }
                 }
             }
