@@ -1,185 +1,136 @@
 package com.example.test
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CutCornerShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Button
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx. compose. material3.TopAppBar
-import androidx.compose.material3.BottomAppBarDefaults
-import androidx.compose.material3.BottomAppBar
+import android.app.TimePickerDialog
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx. compose. material3.Text
+import androidx. compose. material3.Button
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx. compose. foundation. background
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx. compose. ui. platform. LocalContext
+import androidx. compose. ui. graphics. Color
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.LinearProgressIndicator
-import androidx. compose.material3.FloatingActionButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Outline
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.fontResource
-import androidx.compose.ui.zIndex
-import com.example.test.R
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import kotlinx.coroutines.delay
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.*
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.dp
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.PathFillType
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.unit.Density
-import androidx. compose. ui. platform. LocalDensity
-import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx. compose. foundation. rememberScrollState
+import androidx. compose. foundation. verticalScroll
+import java.util.*
+import kotlin.coroutines.jvm.internal.*
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.content.BroadcastReceiver
+import android.widget.Toast
+import android. widget. NumberPicker
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx. compose. ui. tooling. preview. Preview
 
 
 @Composable
-fun MyApp() {
-    Scaffold(
-        bottomBar = {
-            CustomBottomBar()
-        }
-    ) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(it)) {
-            Text(text = "hello")// メインコンテンツをここに配置
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxSize(),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            FloatingActionButton(
-                onClick = { /*TODO*/ },
-                modifier = Modifier
-                    .offset(y = (-20).dp) // 必要に応じて調整
-                    .clip(CircleShape)
-                    .background(Color.White) // 背景色を指定
-            ) {
-                Text("FAB")
+fun NumberPicker(value: Int, onValueChange: (Int) -> Unit, range: IntRange) {
+    var selectedValue by remember { mutableIntStateOf(value) }
+
+    Row {
+        IconButton(onClick = {
+            if (selectedValue > range.first) {
+                selectedValue--
+                onValueChange(selectedValue)
             }
+        }) {
+            Text(text = "-", fontSize = 24.sp)
         }
+        Text(text = selectedValue.toString(), modifier = Modifier.padding(16.dp))
+        IconButton(onClick = {
+            if (selectedValue < range.last) {
+                selectedValue++
+                onValueChange(selectedValue)
+            }
+        }) {
+            Icon(Icons.Filled.Add, contentDescription = "Increase")
+        }
+    }
+}
+
+
+@Composable
+public fun testAlarmScreen(onTimeSelected: (hour: Int, minute: Int) -> Unit) {
+    val screenState = remember { mutableStateOf(ScreenState.Third) }
+    var hour by remember { mutableIntStateOf(0) }
+    var minute by remember { mutableIntStateOf(0) }
+
+    Column {
+        Text(text = "Set Alarm")
+        Spacer(modifier = Modifier.height(16.dp))
+        Row {
+            NumberPicker(
+                value = hour,
+                onValueChange = { hour = it },
+                range = 0..23
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            NumberPicker(
+                value = minute,
+                onValueChange = { minute = it },
+                range = 0..59
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = { onTimeSelected(hour, minute) }) {
+            Text(text = "Set Alarm")
+        }
+    }
+}
+
+fun testAlarm(context: Context, hour: Int, minute: Int) {
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, AlarmReceiver::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+
+    val calendar = Calendar.getInstance().apply {
+        set(Calendar.HOUR_OF_DAY, hour)
+        set(Calendar.MINUTE, minute)
+        set(Calendar.SECOND, 0)
+    }
+
+    alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+}
+class testAlarmReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent?) {
+        // アラームが鳴った時の処理をここに記述
+        Toast.makeText(context, "Alarm ringing!", Toast.LENGTH_SHORT).show()
     }
 }
 
 @Composable
-fun CustomBottomBar() {
-    Box(
+private fun ScrollBoxes() {
+    Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
-            .background(Color.Gray)
-            .clip(BarShape),
-        contentAlignment = Alignment.Center
+            .background(Color.LightGray)
+            .size(100.dp)
+            .verticalScroll(rememberScrollState())
     ) {
-        Text(text = "わーい"
-        )// BottomAppBarのコンテンツをここに追加
-    }
-}
-
-
-val BarShape = object : Shape {
-    override fun createOutline(
-        size: Size,
-        layoutDirection: LayoutDirection,
-        density: androidx.compose.ui.unit.Density
-    ): Outline {
-        val cutoutRadius = with(density){ 36.dp.toPx() }
-        val cutoutTop = size.height - cutoutRadius * 2
-
-        val path = Path().apply {
-            moveTo(0f, size.height)
-            lineTo(size.width / 2 - cutoutRadius, size.height)
-            arcTo(
-                Rect(
-                    left = size.width / 2 - cutoutRadius,
-                    top = cutoutTop,
-                    right = size.width / 2 + cutoutRadius,
-                    bottom = size.height
-                ),
-                180f,
-                -180f,
-                false
-            )
-            lineTo(size.width, size.height)
-            lineTo(size.width, 0f)
-            lineTo(0f, 0f)
-            close()
-            fillType = PathFillType.EvenOdd
+        repeat(10) {
+            Text("Item $it", modifier = Modifier.padding(2.dp))
         }
-
-        return Outline.Generic(path)
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
-fun Preview() {
-MyApp()
-    CustomBottomBar()
-
-
-}
+fun PreviewAlarmScreen() {
+    testAlarmScreen { hour, minute -> Unit }}
 
 
 

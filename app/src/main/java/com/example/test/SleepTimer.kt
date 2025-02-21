@@ -1,4 +1,9 @@
 package com.example.test
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
@@ -66,6 +71,7 @@ import androidx. compose. ui. unit. LayoutDirection
 import androidx. compose. ui. graphics. PathFillType
 import android. graphics. drawable. shapes. Shape
 import android. util. Size
+import android.widget.Toast
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -80,6 +86,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalContext
 
 
 
@@ -88,7 +95,6 @@ public val inFFamily = FontFamily(
     Font(R.font.inter_24pt_extralight,FontWeight.ExtraLight),
     Font(R.font.inter_24pt_semibold,FontWeight.SemiBold)
 )
-
 
 @Composable
 fun LevelCounter(modifier:Modifier = Modifier,name:String,level:Int,time:Int,expBar:Float){
@@ -150,8 +156,9 @@ fun getCurrentTime(): String {
     val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
     return sdf.format(Date())}
 @Composable
-fun ScreenSwitcher() {
+public fun ScreenSwitcher() {
     val screenState = remember { mutableStateOf(ScreenState.First) }
+    val context = LocalContext.current
     Scaffold (
         bottomBar = {
             BottomAppBarExample(screenState = screenState)
@@ -176,7 +183,8 @@ fun ScreenSwitcher() {
                 when (screenState.value) {
                     ScreenState.First -> SleepTimer /*ページ名いれる。一番左のアイコンがFirst*/ { screenState.value = ScreenState.First }
                     ScreenState.Second -> WatchScreen /*ページ名*/  { screenState.value = ScreenState.Second }
-                    ScreenState.Third -> AlarmScreen  /*ページ名*/  { screenState.value = ScreenState.Third }
+                    ScreenState.Third -> AlarmScreen  /*ページ名*/(
+                        onSwitch =  { screenState.value = ScreenState.Third })
                     ScreenState.Forth -> Cats /*ページ名*/  { screenState.value = ScreenState.Forth}
                 }
             }
@@ -228,8 +236,6 @@ fun BottomAppBarExample(screenState: MutableState<ScreenState>) {
                   }
         )
 }
-
-
 
 @Composable
 fun SleepTimer(onNavigateBack: () -> Unit) {
@@ -337,6 +343,53 @@ fun Cats(onSwitch: () -> Unit){
     Text(text = "this is forth screen.")
 }
 
+
+@Composable
+public fun TAlarmScreen(onTimeSelected: (hour: Int, minute: Int) -> Unit,
+                        onSwitch: () -> Unit) {
+    val screenState = remember { mutableStateOf(ScreenState.Third) }
+    var hour by remember { mutableIntStateOf(0) }
+    var minute by remember { mutableIntStateOf(0) }
+
+    Column {
+        Text(text = "Set Alarm")
+        Spacer(modifier = Modifier.height(16.dp))
+        Row {
+            NumberPicker(
+                value = hour,
+                onValueChange = { hour = it },
+                range = 0..23
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            NumberPicker(
+                value = minute,
+                onValueChange = { minute = it },
+                range = 0..59
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = { onTimeSelected(hour, minute) }) {
+            Text(text = "Set Alarm")
+        }
+    }
+}
+
+fun setAlarm(context: Context, hour: Int, minute: Int) {
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, AlarmReceiver::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+
+    val calendar = Calendar.getInstance().apply {
+        set(Calendar.HOUR_OF_DAY, hour)
+        set(Calendar.MINUTE, minute)
+        set(Calendar.SECOND, 0)
+    }
+
+    alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+}
+
+
+
 enum class ScreenState {
     First, Second, Third,Forth
 }
@@ -344,14 +397,14 @@ enum class ScreenState {
 
 @Preview(showBackground = true)
 @Composable
-fun SecondScreenPreview(){SleepTimer(onNavigateBack = {})
+fun SecondScreenPreview(){
+    SleepTimer(onNavigateBack = {})
     val screenState = remember { mutableStateOf(ScreenState.First) }
     ScreenSwitcher()
 }
 @Preview(showBackground = true)
 @Composable
 fun AlarmPreview() { AlarmScreen (onSwitch = {})
-    val screenState = remember { mutableStateOf(ScreenState.Third) }
 
 }
 @Preview(showBackground = true)
@@ -360,3 +413,11 @@ fun CatsScreenPreview() {
     val screenState = remember { mutableStateOf(ScreenState.Forth) }
 
 }
+
+@Preview(showBackground = true)
+@Composable
+fun TAlarmScreenPreview() {
+
+
+}
+
