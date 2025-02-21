@@ -1,11 +1,16 @@
 package com.example.test.ui.theme.calendar
 
 import android.util.Log
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +28,7 @@ import java.time.LocalDate
 
 @Composable
 fun Day(day: CalendarDay) {
+        val eventCount= 3 /*ここにその日のイベント数を代入*/
         Box(
                 modifier =
                         Modifier.aspectRatio(1f)
@@ -49,6 +55,31 @@ fun Day(day: CalendarDay) {
                                                 else Color(0xFF8F9BB3))),
                                 fontWeight = FontWeight.SemiBold,modifier = Modifier.align(Alignment.Center)
                         )
+                }
+
+                if (eventCount > 0) {
+                Spacer(Modifier.height(50.dp))
+                EventDots(eventCount)
+        }
+
+        }
+}
+
+@Composable
+fun EventDots(eventCount: Int) {
+        Row(
+                
+                modifier = Modifier.width(30.dp).padding(top=43.dp),horizontalArrangement = Arrangement.Center
+                 // 丸が並ぶ幅を制限
+        ) {
+                repeat(eventCount.coerceAtMost(3)) {
+                        index ->
+                        if (index > 0) {
+                                Spacer(modifier = Modifier.width(4.dp)) // 丸同士のスペースを8dpに設定
+                        }// 最大3つの丸を描画
+                        Canvas(modifier = Modifier.size(4.dp)) {
+                                drawCircle(color = Color.Red) // 丸の色
+                        }
                 }
         }
 }
