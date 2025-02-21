@@ -78,7 +78,7 @@ fun EventDots(eventCount: Int) {
                                 Spacer(modifier = Modifier.width(4.dp)) // 丸同士のスペースを8dpに設定
                         }// 最大3つの丸を描画
                         Canvas(modifier = Modifier.size(4.dp)) {
-                                drawCircle(color = Color.Red) // 丸の色
+                                drawCircle(color = Color(0xFF735BF2)) // 丸の色
                         }
                 }
         }
