@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
@@ -33,22 +35,40 @@ fun InputScreen(onNavigateBack: () -> Unit) {
                 contentAlignment = Alignment.Center
         ) {
             Row(
-                    modifier = Modifier.fillMaxWidth().padding(top=10.dp,bottom=10.dp),
-                    horizontalArrangement = Arrangement.Center
+                    modifier = Modifier.fillMaxWidth().padding(top = 10.dp, bottom = 10.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
             ) {
+                Spacer(Modifier.width(10.dp))
+
                 Box(Modifier.clickable { count.intValue = 0 }) {
                     Text(text = "固定の予定", style = TextStyle(fontSize = 13.sp))
                 }
-                Spacer(Modifier.width(10.dp))
+                // Spacer(Modifier.width(10.dp))
                 Box(Modifier.clickable { count.intValue = 1 }) {
                     Text(text = "課題(期限あり)", style = TextStyle(fontSize = 13.sp))
                 }
-                Spacer(Modifier.width(10.dp))
+                // Spacer(Modifier.width(15.dp))
 
                 Box(Modifier.clickable { count.intValue = 2 }) {
                     Text(text = "課題(期限なし)", style = TextStyle(fontSize = 13.sp))
                 }
             }
         }
+        Divider(
+                thickness = 5.dp,
+                modifier =
+                        Modifier.padding(top = 31.dp, start = 130.dp, end = 130.dp)
+                                .then(
+                                        if (count.intValue == 0) Modifier.offset(x = -90.dp)
+                                        else if (count.intValue == 2) Modifier.offset(x = 100.dp)
+                                        else Modifier
+                                ),
+                color = Color(0xFF65558F)
+        )
+        Divider(
+                thickness = 1.dp,
+                modifier = Modifier.padding(top = 33.dp, start = 8.dp, end = 8.dp),
+                color = Color(0xFF65558F)
+        )
     }
 }
