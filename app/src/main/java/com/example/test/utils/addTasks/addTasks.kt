@@ -30,39 +30,59 @@ class MainActivity : ComponentActivity() {
             intervalTime = 15,
             workedTime = 30,
             remainingWorkTime = 60,
-            creationDate = Date()
+            creationDate = Date(),
+            memo = ""
         )
 
         fetchTasks()
 
     }
 
-        // データ追加
-        private fun addTask(
-            title: String,         // 作業名
-            type: ScheduleType,             // 予定タイプ
-            startTime: Date,       // 開始時刻（TypeConverterが必要）
-            endTime: Date,         // 終了時刻（TypeConverterが必要）
-            intervalTime: Int,     // 作業の区切る時間
-            workedTime: Int,       // 作業した時間
-            remainingWorkTime: Int,// 残りの作業工数
-            creationDate: Date     // 作成日（TypeConverterが必要）
-        ) {
-            lifecycleScope.launch {
-                val currentTime = System.currentTimeMillis()
-                val newTask = TaskModel(
-                    title = title,
-                    type = type,
-                    startTime = startTime,
-                    endTime = endTime,
-                    intervalTime = intervalTime,
-                    workedTime = workedTime,
-                    remainingWorkTime = remainingWorkTime,
-                    creationDate = creationDate
-                )
-                tasksDao.insert(newTask)
-            }
+    public fun addTask(
+        title: String?,
+        type: ScheduleType?,
+        startTime: Date?,
+        endTime: Date?,
+        intervalTime: Int?,
+        workedTime: Int?,
+        remainingWorkTime: Int?,
+        creationDate: Date?,
+        memo: String?
+    ): Boolean {
+        // 必須項目チェック
+        val isValid = when (type) {
+            ScheduleType.FIXED_TASK, ScheduleType.SLEEP ->
+                title != null && type != null && startTime != null && endTime != null && creationDate != null && memo != null
+
+            ScheduleType.DEADLINED_ASSIGNMENT ->
+                title != null && type != null && endTime != null && intervalTime != null &&
+                        workedTime != null && remainingWorkTime != null && creationDate != null && memo != null
+
+            ScheduleType.NON_DEADLINED_ASSIGNMENT, ScheduleType.FREE_TIME ->
+                title != null && type != null && intervalTime != null &&
+                        workedTime != null && remainingWorkTime != null && creationDate != null && memo != null
+
+            else -> false
         }
+
+        if (!isValid) return false
+
+        lifecycleScope.launch {
+            val newTask = TaskModel(
+                title = title!!,
+                type = type!!,
+                startTime = startTime ?: Date(0), // null の場合はデフォルト値を設定
+                endTime = endTime ?: Date(0), // null の場合はデフォルト値を設定
+                intervalTime = intervalTime ?: 0,
+                workedTime = workedTime ?: 0,
+                remainingWorkTime = remainingWorkTime ?: 0,
+                creationDate = creationDate!!,
+                memo = memo!!
+            )
+            tasksDao.insert(newTask)
+        }
+        return true
+    }
 
     // データ取得 & ログに出力
     private fun fetchTasks() {
