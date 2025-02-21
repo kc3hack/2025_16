@@ -66,6 +66,7 @@ class SchedulingDao(context: Context) {
                 val task = tasksDao.getTaskById(dayTask.id)
                 if(task is TaskModel){
                     taskName = task.title
+                    detail = task.memo
                 }
             }
             returnList.add(arrayOf(startTime,endTime,taskName,detail))
