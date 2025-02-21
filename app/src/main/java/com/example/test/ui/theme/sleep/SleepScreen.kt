@@ -137,6 +137,7 @@ fun getCurrentTime(): String {
 @Composable
 fun SleepTimer(onNavigateBack: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Spacer(modifier = Modifier.height(20.dp))
         Text(
                 text = "おはようございます",
                 fontWeight = FontWeight.Bold,
@@ -147,20 +148,21 @@ fun SleepTimer(onNavigateBack: () -> Unit) {
                 modifier = Modifier.padding(top = 25.dp)
         )
         CurrentTime()
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             Image(
                     painter = painterResource(id = R.drawable.sleepywhitecat),
                     // 画像を追加する
                     contentDescription = "My Image",
                     modifier =
-                            Modifier.size(width = 390.dp, height = 390.dp)
+                            Modifier
+                                .fillMaxWidth() // 幅を画面いっぱいに
+                                .aspectRatio(1f) // 高さを幅と同じにする（正方形）
                                     .offset(y = (-90).dp) // 画像の位置
             )
 
             Box(
                     modifier =
                             Modifier.size(width = 158.dp, height = 36.dp)
-                                    .offset(x = 100.dp, y = 220.dp)
                                     .zIndex(1f)
                                     .clip(RoundedCornerShape(8.dp))
                                     .background(color = Color(0xFFF9D981).copy(alpha = 0.6f)),
@@ -170,20 +172,19 @@ fun SleepTimer(onNavigateBack: () -> Unit) {
         Box(
                 modifier =
                         Modifier.size(width = 291.dp, height = 34.dp)
-                                .offset(y = (-110).dp)
+                                .offset(y = (-100).dp)
                                 .clip(RectangleShape)
                                 .background(color = Color(0xFF9B9999).copy(alpha = 0.37f))
         ) { LevelCounter(name = "Sleep", level = 1, time = 5, expBar = 0.5f) }
-    }
-    Column(modifier = Modifier.fillMaxWidth().offset(y = 535.dp)) {
-        Text(
+        Column(modifier = Modifier.fillMaxWidth().offset(y = -50.dp)) {
+            Text(
                 text = "現在の睡眠貯金",
                 textAlign = TextAlign.Left,
                 fontWeight = FontWeight.Bold,
                 style = TextStyle(fontSize = 18.sp),
                 modifier = Modifier.padding(start = 20.dp)
-        )
-        Text(
+            )
+            Text(
                 text = "+03:00",
                 fontWeight = FontWeight.ExtraLight,
                 style = TextStyle(fontSize = 48.sp),
@@ -191,19 +192,21 @@ fun SleepTimer(onNavigateBack: () -> Unit) {
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 fontFamily = FontFamily(Font(R.font.inter_24pt_extralight))
                 // fontを追加する
-                )
-        Text(
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(
                 text = "睡眠貯金が2時間から3時間になりました",
                 fontWeight = FontWeight.Bold,
                 style = TextStyle(fontSize = 18.sp),
                 modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
-        Text(
+            )
+            Text(
                 text = "すばらしい、理想的な睡眠時間です",
                 fontWeight = FontWeight.Bold,
                 style = TextStyle(fontSize = 18.sp),
                 modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
+            )
+        }
     }
 }
 
