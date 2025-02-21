@@ -47,6 +47,11 @@ class Table {
         return taskTimeLine
     }
 
+    fun setTaskTimeLine(taskTimeTable: List<TaskTime>) {
+        scheduleCalculation.setTasks(taskTimeTable)
+        this.taskTimeLine = taskTimeTable
+    }
+
     /**
      * スケジュール計算  
      * ScheduleCalculation クラスを利用して、スケジュールを計算・抽出します。

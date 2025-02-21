@@ -12,7 +12,7 @@ class ScheduleCalculation() {
     /**
      * TaskTimeを保存するリスト
      */
-    private val tasks: MutableList<TaskTime> = mutableListOf()
+    private var tasks: MutableList<TaskTime> = mutableListOf()
     /**
      * 現在時刻(嘘)
      */
@@ -326,9 +326,17 @@ class ScheduleCalculation() {
         this.scheduleList = scheduleList
         this.sleepDebt = sleepDebt
         val tenYearsLater = Date(currentTime.time + 10L * 365 * 24 * 60 * 60 * 1000)
+        tasks.clear()
         tasks.add(TaskTime(-1, currentTime, tenYearsLater))
         setFixedTask()
         setSleepTimeAndAssignment()
         return tasks
+    }
+
+    /**
+     * tasksのセッター
+     */
+    fun setTasks(taskTimeLine:List<TaskTime>){
+        this.tasks = taskTimeLine.toMutableList()
     }
 }
