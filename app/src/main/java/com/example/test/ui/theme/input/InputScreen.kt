@@ -27,67 +27,99 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun InputScreen(onNavigateBack: () -> Unit) {
-    val count = remember { mutableIntStateOf(0) }
+        val count = remember { mutableIntStateOf(0) }
 
-    Box(
-            Modifier.fillMaxWidth() // 画面全体を埋める
-                    .padding(16.dp), // 適宜余白を調整
-            contentAlignment = Alignment.Center // 中央寄せ
-    ) {
-        Column(Modifier.fillMaxWidth()) {
-            Box(
-                    Modifier.fillMaxWidth(0.98f)
-                            .background(color = Color(0xFFFCEF8F))
-                            .height(40.dp),
-                    contentAlignment = Alignment.Center
-            ) {
+        Box(
+                Modifier.fillMaxWidth() // 画面全体を埋める
+                        .padding(16.dp), // 適宜余白を調整
+                contentAlignment = Alignment.Center // 中央寄せ
+        ) {
                 Column(Modifier.fillMaxWidth()) {
-                    Row(
-                            modifier = Modifier.fillMaxWidth().padding(top = 10.dp, bottom = 10.dp),
-                            horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        Spacer(Modifier.width(10.dp))
+                        Box(
+                                Modifier.fillMaxWidth(0.98f)
+                                        .background(color = Color(0xFFFCEF8F))
+                                        .height(40.dp),
+                                contentAlignment = Alignment.Center
+                        ) {
+                                Column(Modifier.fillMaxWidth()) {
+                                        Row(
+                                                modifier =
+                                                        Modifier.fillMaxWidth()
+                                                                .padding(
+                                                                        top = 10.dp,
+                                                                        bottom = 10.dp
+                                                                ),
+                                                horizontalArrangement = Arrangement.SpaceEvenly
+                                        ) {
+                                                Spacer(Modifier.width(10.dp))
 
-                        Box(Modifier.clickable { count.intValue = 0 }) {
-                            Text(text = "固定の予定", style = TextStyle(fontSize = 13.sp))
-                        }
-                        // Spacer(Modifier.width(10.dp))
-                        Box(Modifier.clickable { count.intValue = 1 }) {
-                            Text(text = "課題(期限あり)", style = TextStyle(fontSize = 13.sp))
-                        }
-                        // Spacer(Modifier.width(15.dp))
+                                                Box(Modifier.clickable { count.intValue = 0 }) {
+                                                        Text(
+                                                                text = "固定の予定",
+                                                                style = TextStyle(fontSize = 13.sp)
+                                                        )
+                                                }
+                                                // Spacer(Modifier.width(10.dp))
+                                                Box(Modifier.clickable { count.intValue = 1 }) {
+                                                        Text(
+                                                                text = "課題(期限あり)",
+                                                                style = TextStyle(fontSize = 13.sp)
+                                                        )
+                                                }
+                                                // Spacer(Modifier.width(15.dp))
 
-                        Box(Modifier.clickable { count.intValue = 2 }) {
-                            Text(text = "課題(期限なし)", style = TextStyle(fontSize = 13.sp))
+                                                Box(Modifier.clickable { count.intValue = 2 }) {
+                                                        Text(
+                                                                text = "課題(期限なし)",
+                                                                style = TextStyle(fontSize = 13.sp)
+                                                        )
+                                                }
+                                        }
+                                        // Schedule()
+                                }
+                                Divider(
+                                        thickness = 5.dp,
+                                        modifier =
+                                                Modifier.padding(
+                                                                top = 31.dp,
+                                                                start = 130.dp,
+                                                                end = 130.dp
+                                                        )
+                                                        .then(
+                                                                if (count.intValue == 0)
+                                                                        Modifier.offset(x = -90.dp)
+                                                                else if (count.intValue == 2)
+                                                                        Modifier.offset(x = 100.dp)
+                                                                else Modifier
+                                                        ),
+                                        color = Color(0xFF65558F)
+                                )
+
+                                Divider(
+                                        thickness = 1.dp,
+                                        modifier =
+                                                Modifier.padding(
+                                                        top = 33.dp,
+                                                        start = 8.dp,
+                                                        end = 8.dp
+                                                ),
+                                        color = Color(0xFF65558F)
+                                )
                         }
-                    }
-                    // Schedule()
+                        Box(
+                                Modifier.fillMaxWidth(0.98f)
+                                        .background(color = Color(0xFFFCEF8F))
+                                        .padding(top = 50.dp),
+                                contentAlignment = Alignment.Center
+                        ) {
+                                if (count.value == 0) {
+                                        Schedule()
+                                } else if (count.value == 1) {
+                                        LimitedTask()
+                                } else if (count.value == 2){
+                                        NoLimitedTask()
+                                }
+                        }
                 }
-                Divider(
-                        thickness = 5.dp,
-                        modifier =
-                                Modifier.padding(top = 31.dp, start = 130.dp, end = 130.dp)
-                                        .then(
-                                                if (count.intValue == 0) Modifier.offset(x = -90.dp)
-                                                else if (count.intValue == 2)
-                                                        Modifier.offset(x = 100.dp)
-                                                else Modifier
-                                        ),
-                        color = Color(0xFF65558F)
-                )
-
-                Divider(
-                        thickness = 1.dp,
-                        modifier = Modifier.padding(top = 33.dp, start = 8.dp, end = 8.dp),
-                        color = Color(0xFF65558F)
-                )
-            }
-            Box(
-                    Modifier.fillMaxWidth(0.98f)
-                            .background(color = Color(0xFFFCEF8F))
-                            .padding(top = 50.dp),
-                    contentAlignment = Alignment.Center
-            ) { Schedule() }
         }
-    }
 }
