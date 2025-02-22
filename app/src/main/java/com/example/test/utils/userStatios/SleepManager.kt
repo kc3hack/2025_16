@@ -77,4 +77,10 @@ class SleepManager(context: Context) {
         return (recentSleepedSum / (1000 * 60))-(SettingData().sleepDuration * sleepDebtRange)
     }
 
+    /**
+     * 睡眠状況を返す(時間単位)
+     */
+    fun getSleepDebtToHour(date: Date):Float {
+        return (getSleepDebt(date).toFloat() / 60)
+    }
 }
