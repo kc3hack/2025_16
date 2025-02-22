@@ -1,23 +1,113 @@
 package com.example.test.ui.theme.input
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import java.time.format.TextStyle
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Schedule() {
-    val name = remember { mutableStateOf("") }
-
-    TextField(
-            value = name.value,
-            onValueChange = { name.value = it },
-            label = { Text("入力してください") },
-            placeholder = { Text("テキストを入力...") },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(0.8f)
-    )
+    var name = remember { mutableStateOf("") }
+    var selectedDate = remember { mutableStateOf<Long?>(null) }
+    var showModal = remember { mutableStateOf(false) }
+    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+        TextField(
+                value = name.value,
+                colors =
+                        TextFieldDefaults.textFieldColors(
+                                containerColor = Color(0xFFF9D981) // 背景色を変更
+                        ),
+                onValueChange = { name.value = it },
+                label = { Text("タスク名") },
+                placeholder = { Text("タスク名を入力") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(0.8f).background(color = Color(0xFFF9D981))
+        )
+        OutlinedTextField(
+                value = selectedDate.value?.let { convertMillisToDate(it) } ?: "",
+                onValueChange = {},
+                label = { Text("予定日") },
+                placeholder = { Text("MM/DD/YYYY") },
+                trailingIcon = {
+                    Icon(Icons.Default.DateRange, contentDescription = "Select date")
+                },
+                modifier =
+                        Modifier.fillMaxWidth(0.8f).pointerInput(selectedDate) {
+                            awaitEachGesture {
+                                // Modifier.clickable doesn't work for text fields, so we use
+                                // Modifier.pointerInput
+                                // in the Initial pass to observe events before the text field
+                                // consumes them
+                                // in the Main pass.
+                                awaitFirstDown(pass = PointerEventPass.Initial)
+                                val upEvent =
+                                        waitForUpOrCancellation(pass = PointerEventPass.Initial)
+                                if (upEvent != null) {
+                                    showModal.value = true
+                                }
+                            }
+                        }
+        )
+        if (showModal.value) {
+            DatePickerModal(
+                    onDateSelected = { selectedDate.value = it },
+                    onDismiss = { showModal.value = false }
+            )
+        }
+        var selectedTime = remember { mutableStateOf<TimePickerState?>(null) }
+        var showDialExample = remember { mutableStateOf(false) }
+        Box(
+                Modifier.fillMaxWidth(0.8f)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(color = Color(0xFFF9D981))
+                        .padding(start = 20.dp, end = 20.dp, top = 10.dp),
+                contentAlignment = Alignment.Center
+        ) {
+            Column(Modifier.fillMaxWidth()) {
+                Text(
+                        text = "開始時刻",
+                        style =
+                                androidx.compose.ui.text.TextStyle(
+                                        fontSize = 13.sp,
+                                        color = Color(0xFF49454F)
+                                ),
+                        modifier = Modifier.padding(bottom = 10.dp)
+                )
+                DialUseStateExample(
+                        onDismiss = { showDialExample.value = false },
+                        onConfirm = { time ->
+                            selectedTime.value = time
+                            showDialExample.value = false
+                        },
+                )
+            }
+        }
+    }
 }
