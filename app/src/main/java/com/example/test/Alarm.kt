@@ -158,7 +158,8 @@ fun SetAlarm(context: Context, hour: Int, minute: Int, isAm: Boolean)  {
 private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit, selectedHour: Int?) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
-    val itemHeightPx = with(LocalDensity.current) { 30.dp.toPx()}
+    val itemHeight = 48.dp
+    val itemHeightPx = with(LocalDensity.current) { itemHeight.toPx() }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -189,6 +190,8 @@ private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit, selectedHour: Int
             Text(
                 text = String.format("%02d", i),
                 modifier = Modifier.padding(top = 15.dp)
+                    .height(itemHeight)
+                    .fillMaxWidth()
                 ,textAlign = TextAlign.Center,
                     color = if (selectedHour == i)Color.White else Color.Gray,
                     fontSize = 20.sp,
@@ -197,7 +200,7 @@ private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit, selectedHour: Int
                 )
         }
         LaunchedEffect(scrollState.value) {
-            val index = ((scrollState.value / (scrollState.maxValue / 13)).toFloat() + 0.5f).toInt()
+            val index = ((scrollState.value /  + 0.5f).toInt()
             if (index != selectedHour) {
                 onHourSelected(index)
                 Toast.makeText(context, "Hour selected: $index", Toast.LENGTH_SHORT).show()
@@ -358,12 +361,13 @@ public fun AlarmScreen(onSwitch: () -> Unit) {
             )
             Column(
                 modifier = Modifier.fillMaxWidth()
-                , horizontalAlignment = Alignment.CenterHorizontally) {
+                    .size(width = 343.dp, height = 346.dp)
+                ,horizontalAlignment = Alignment.CenterHorizontally)
+                {
                 Box(
                     modifier = Modifier
-                        .size(width = 182.dp, height = 138.dp)
-                        .offset(y = 70.dp)
-                ) {
+                        .size(width = 343.dp, height = 346.dp),
+                    ) {
                     val hour by viewModel.hour.observeAsState()
                     val minute by viewModel.minute.observeAsState()
                     val isAm by viewModel.isAm.observeAsState()
