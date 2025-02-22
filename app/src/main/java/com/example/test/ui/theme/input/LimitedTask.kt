@@ -36,6 +36,9 @@ import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.test.ScreenState
+import com.example.test.ScreenViewModel
 import java.time.format.TextStyle
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,7 +52,7 @@ fun LimitedTask() {
         var showDialEnd = remember { mutableStateOf(false) }
         var taskNeedTime = remember { mutableStateOf("0") }
         var taskWorkTime = remember { mutableStateOf("0") }
-
+        val screenViewModel:ScreenViewModel = viewModel()
         Column(
                 Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -170,7 +173,8 @@ fun LimitedTask() {
                 )
 
                 TextButton(
-                        onClick = { /*ここに値を渡す設定を追加 */},
+                        onClick = { /*ここに値を渡す設定を追加 */screenViewModel.navigateTo(
+                                ScreenState.Second)},
                         modifier =
                                 Modifier.clip(RoundedCornerShape(27.dp))
                                         .width(100.dp)
