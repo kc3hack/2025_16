@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -36,82 +38,94 @@ import java.time.YearMonth
 
 @Composable
 fun CalenderScreen(onNavigateBack: () -> Unit) {
-    var currentMonth = remember { mutableStateOf(YearMonth.now()) }
-    val startMonth = remember { currentMonth.value.minusMonths(100) } // Adjust as needed
-    val endMonth = remember { currentMonth.value.plusMonths(100) } // Adjust as needed
-    val daysOfWeek = remember { daysOfWeek(firstDayOfWeek = DayOfWeek.SUNDAY) }
-    var calendarYear = YearMonth.now().getYear()
-    var calendarMonth = YearMonth.now().getMonth().toString().lowercaseFirstChar()
-    val state =
-            rememberCalendarState(
-                    startMonth = startMonth,
-                    endMonth = endMonth,
-                    firstVisibleMonth = currentMonth.value,
-                    firstDayOfWeek = daysOfWeek.first()
-            )
-    Column(
-            Modifier.background(color = Color.White),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(-30.dp)
-    ) {
-        Spacer(Modifier.height(50.dp))
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            IconButton(
-                    onClick = {
-                        currentMonth.value=currentMonth.value.minusMonths(1)
-                    },
-                    modifier =
-                            Modifier.border(
-                                    width = 2.dp,
-                                    color = Color(0xFFCED3DE),
-                                    shape = RoundedCornerShape(10.dp)
-                            )
-            ) {
-                Icon(
-                        imageVector =
-                                ImageVector.vectorResource(
-                                        id = R.drawable.baseline_arrow_back_ios_new_24
-                                ),
-                        contentDescription = "Localized description",
+        var currentMonth = remember { mutableStateOf(YearMonth.now()) }
+        val startMonth = remember { currentMonth.value.minusMonths(100) } // Adjust as needed
+        val endMonth = remember { currentMonth.value.plusMonths(100) } // Adjust as needed
+        val daysOfWeek = remember { daysOfWeek(firstDayOfWeek = DayOfWeek.SUNDAY) }
+        var calendarYear = YearMonth.now().getYear()
+        var calendarMonth = YearMonth.now().getMonth().toString().lowercaseFirstChar()
+        val state =
+                rememberCalendarState(
+                        startMonth = startMonth,
+                        endMonth = endMonth,
+                        firstVisibleMonth = currentMonth.value,
+                        firstDayOfWeek = daysOfWeek.first()
                 )
-            }
-            Spacer(Modifier.width(50.dp))
-            Text(
-                    text = "${currentMonth.value.month.toString().lowercaseFirstChar()}",
-                    style = TextStyle(fontSize = 23.sp, fontWeight = FontWeight.SemiBold)
-            )
-            Spacer(Modifier.width(50.dp))
+        Column(
+                Modifier.background(color = Color.White).verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(-30.dp)
+        ) {
+                Spacer(Modifier.height(50.dp))
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                        IconButton(
+                                onClick = {
+                                        currentMonth.value = currentMonth.value.minusMonths(1)
+                                },
+                                modifier =
+                                        Modifier.border(
+                                                width = 2.dp,
+                                                color = Color(0xFFCED3DE),
+                                                shape = RoundedCornerShape(10.dp)
+                                        )
+                        ) {
+                                Icon(
+                                        imageVector =
+                                                ImageVector.vectorResource(
+                                                        id =
+                                                                R.drawable
+                                                                        .baseline_arrow_back_ios_new_24
+                                                ),
+                                        contentDescription = "Localized description",
+                                )
+                        }
+                        Spacer(Modifier.width(50.dp))
+                        Text(
+                                text =
+                                        "${currentMonth.value.month.toString().lowercaseFirstChar()}",
+                                style =
+                                        TextStyle(
+                                                fontSize = 23.sp,
+                                                fontWeight = FontWeight.SemiBold
+                                        )
+                        )
+                        Spacer(Modifier.width(50.dp))
 
-            IconButton(
-                    onClick = {
-                        currentMonth.value=currentMonth.value.plusMonths(1)
-                    },
-                    modifier =
-                            Modifier.border(
-                                    width = 2.dp,
-                                    color = Color(0xFFCED3DE),
-                                    shape = RoundedCornerShape(10.dp)
-                            )
-            ) {
-                Icon(
-                        imageVector =
-                                ImageVector.vectorResource(
-                                        id = R.drawable.baseline_arrow_forward_ios_24
-                                ),
-                        contentDescription = "Localized description",
-                )
-            }
-        }
-        Spacer(Modifier.height(38.dp))
-        Text(text = "${currentMonth.value.year}", style = TextStyle(fontSize = 13.sp, color = Color(0xFF8F9BB3)))
-        Spacer(Modifier.height(85.dp))
-        HorizontalCalendar(
-                state = state,
-                dayContent = { Day(it) },
-                monthHeader = {
-                    DaysOfWeekTitle(daysOfWeek = daysOfWeek) // Use the title as month header
+                        IconButton(
+                                onClick = { currentMonth.value = currentMonth.value.plusMonths(1) },
+                                modifier =
+                                        Modifier.border(
+                                                width = 2.dp,
+                                                color = Color(0xFFCED3DE),
+                                                shape = RoundedCornerShape(10.dp)
+                                        )
+                        ) {
+                                Icon(
+                                        imageVector =
+                                                ImageVector.vectorResource(
+                                                        id =
+                                                                R.drawable
+                                                                        .baseline_arrow_forward_ios_24
+                                                ),
+                                        contentDescription = "Localized description",
+                                )
+                        }
                 }
-        )
-        ToDoList(modifier = Modifier)
-    }
+                Spacer(Modifier.height(38.dp))
+                Text(
+                        text = "${currentMonth.value.year}",
+                        style = TextStyle(fontSize = 13.sp, color = Color(0xFF8F9BB3))
+                )
+                Spacer(Modifier.height(85.dp))
+                HorizontalCalendar(
+                        state = state,
+                        dayContent = { Day(it) },
+                        monthHeader = {
+                                DaysOfWeekTitle(
+                                        daysOfWeek = daysOfWeek
+                                ) // Use the title as month header
+                        }
+                )
+                ToDoList(modifier = Modifier)
+        }
 }

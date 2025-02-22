@@ -24,6 +24,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.test.ui.theme.*
 import com.example.test.ui.theme.home.*
 import androidx.compose.runtime.remember
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,10 +34,11 @@ class MainActivity : ComponentActivity() {
                 super.onCreate(savedInstanceState)
                 enableEdgeToEdge()
                 setContent {
+                        val viewModel: ScreenViewModel = viewModel()
                         TestTheme {
                                 HomeScreen(onNavigateBack = { finish() })
                                 Surface() {
-                                        ScreenSwitcher()}
+                                        ScreenSwitcher(viewModel)}
                         }
                 }
         }

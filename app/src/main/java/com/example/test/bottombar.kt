@@ -23,46 +23,59 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.test.ui.theme.home.*
+import androidx.lifecycle.ViewModel
 import com.example.test.ui.theme.calendar.*
+import com.example.test.ui.theme.home.*
+import com.example.test.ui.theme.input.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import androidx.lifecycle.viewmodel.compose.viewModel
 // @Composable
 // fun WatchScreen(onSwitch: () -> Unit) {
 //     Text(text = "this is second screen!")
 // }
 
-//@Composable
-//fun CalendarScreen(onSwitch: () -> Unit) {
+// @Composable
+// fun CalendarScreen(onSwitch: () -> Unit) {
 //    Text(text = "this is third screen.")
-//}
+// }
 
 @Composable
 fun Cats(onSwitch: () -> Unit) {
     Text(text = "this is forth screen.")
 }
 
-enum class ScreenState {
-    First,
-    Second,
-    Third,
-    Forth
+ enum class ScreenState {
+     First,
+     Second,
+     Third,
+     Forth,
+     Fifth
+ }
+class ScreenViewModel : ViewModel() {
+    private val _screenState = MutableStateFlow(ScreenState.First)
+    val screenState: StateFlow<ScreenState> = _screenState
+
+    fun navigateTo(screen: ScreenState) {
+        _screenState.value = screen
+    }
 }
 
 @Composable
-fun ScreenSwitcher() {
-    val screenState = remember { mutableStateOf(ScreenState.First) }
+fun ScreenSwitcher(viewModel: ScreenViewModel= androidx.lifecycle.viewmodel.compose.viewModel()) {
+    val screenState by viewModel.screenState.collectAsState()
+
     Scaffold(
             modifier = Modifier.background(color = Color.Transparent),
-            bottomBar = { BottomAppBarExample(screenState = screenState) },
+            bottomBar = { BottomAppBarExample(viewModel) },
             floatingActionButton = {
                 FloatingActionButton(
-                        onClick = { /*ここにタスク追加の処理 */},
+                        onClick = { viewModel.navigateTo(ScreenState.Fifth) },
                         containerColor = Color(0xFF735BF2),
                         elevation = FloatingActionButtonDefaults.elevation(12.dp),
                         modifier =
@@ -80,16 +93,19 @@ fun ScreenSwitcher() {
             floatingActionButtonPosition = FabPosition.Center,
             content = { innerPadding ->
                 Box(modifier = Modifier.padding(innerPadding)) {
-                    when (screenState.value) {
+                    when (screenState) {
                         ScreenState.First ->
                                 HomeScreen /*ページ名いれる。一番左のアイコンがFirst*/ {
-                                    screenState.value = ScreenState.First
+                                    viewModel.navigateTo(ScreenState.First)
                                 }
                         ScreenState.Second ->
-                                 CalenderScreen/*ページ名*/ { screenState.value = ScreenState.Second }
+                                CalenderScreen /*ページ名*/ { viewModel.navigateTo(ScreenState.Second) }
                         ScreenState.Third ->
-                            SleepTimer /*ページ名*/ { screenState.value = ScreenState.Third }
-                        ScreenState.Forth -> Cats /*ページ名*/ { screenState.value = ScreenState.Forth }
+                                SleepTimer /*ページ名*/ { viewModel.navigateTo(ScreenState.Third) }
+                        ScreenState.Forth ->
+                                Cats /*ページ名*/ { viewModel.navigateTo(ScreenState.Forth) }
+                        ScreenState.Fifth ->
+                                InputScreen /*ページ名*/ { viewModel.navigateTo(ScreenState.Fifth) }
                     }
                 }
             }
@@ -97,7 +113,7 @@ fun ScreenSwitcher() {
 }
 
 @Composable
-fun BottomAppBarExample(screenState: MutableState<ScreenState>) {
+fun BottomAppBarExample(viewModel: ScreenViewModel) {
     BottomAppBar(
         modifier = Modifier.height(100.dp),
         actions = {
@@ -105,17 +121,17 @@ fun BottomAppBarExample(screenState: MutableState<ScreenState>) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly // 均等配置
             ) {
-                IconButton(onClick = { screenState.value = ScreenState.First }) {
+                IconButton(onClick = { viewModel.navigateTo(ScreenState.First) }) {
                     Icon(Icons.Filled.Home, contentDescription = "Localized description")
                 }
-                IconButton(onClick = { screenState.value = ScreenState.Second }) {
+                IconButton(onClick = { viewModel.navigateTo(ScreenState.Second) }) {
                     Icon(Icons.Filled.DateRange, contentDescription = "Localized description")
                 }
                 Spacer(modifier = Modifier.width(60.dp))
-                IconButton(onClick = { screenState.value = ScreenState.Third }) {
+                IconButton(onClick = { viewModel.navigateTo(ScreenState.Third) }) {
                     Icon(Icons.Filled.Notifications, contentDescription = "Localized description")
                 }
-                IconButton(onClick = { screenState.value = ScreenState.Forth }) {
+                IconButton(onClick = { viewModel.navigateTo(ScreenState.Forth) }) {
                     Icon(Icons.Filled.Person, contentDescription = "Localized description")
                 }
             }
