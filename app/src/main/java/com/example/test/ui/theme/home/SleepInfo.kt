@@ -17,10 +17,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.test.ui.theme.home.*
+import com.example.test.utils.Controller
 
 @Composable
 fun SleepInfo(modifier: Modifier = Modifier) {
-    val sleepTime: Float = (5).toFloat()
+    val sleepTime: Float = Controller.sleepManager.getSleepDebtToHour()//(5).toFloat()
     val sleepCount = String.format("%.1f", sleepTime)
     Column(
             modifier = Modifier.fillMaxWidth().padding(2.dp),

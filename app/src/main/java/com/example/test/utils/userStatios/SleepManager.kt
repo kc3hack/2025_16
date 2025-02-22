@@ -80,7 +80,7 @@ class SleepManager(context: Context) {
     /**
      * 睡眠状況を返す(時間単位)
      */
-    fun getSleepDebtToHour(date: Date):Float {
+    fun getSleepDebtToHour(date: Date = Date()):Float {
         return (getSleepDebt(date).toFloat() / 60)
     }
 }

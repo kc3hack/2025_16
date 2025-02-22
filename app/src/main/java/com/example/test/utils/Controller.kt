@@ -6,15 +6,15 @@ import com.example.test.utils.userStatios.CatLevels
 import com.example.test.utils.userStatus.SleepManager
 
 object Controller {
-    private lateinit var schedulingDao: SchedulingDao
-    private lateinit var sleepManager: SleepManager
+    private lateinit var SchedulingDao: SchedulingDao
+    private lateinit var SleepManager: SleepManager
 
-    val dao: SchedulingDao get() = schedulingDao
-    val manager: SleepManager get() = sleepManager
+    val schedulingDao: SchedulingDao get() = SchedulingDao
+    val sleepManager: SleepManager get() = SleepManager
     val catLevels: CatLevels by lazy { CatLevels(schedulingDao, sleepManager) }
 
     fun init(context: Context) {
-        schedulingDao = SchedulingDao(context)
-        sleepManager = SleepManager(context)
+        SchedulingDao = SchedulingDao(context)
+        SleepManager = SleepManager(context)
     }
 }

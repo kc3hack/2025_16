@@ -47,7 +47,7 @@ class SchedulingDao(context: Context) {
 //    }
 
     //[タスクの開始時刻(String),終了時刻(String),task名(String),詳細(String)]のリストを返す
-    fun getDayTasks(day:String = ""): List<Array<String>>{
+    fun getDayTasks(day:String = dateFormatToDay.format(Date())): List<Array<String>>{
         val returnList = mutableListOf<Array<String>>()
         var dayDate = dateFormatToHour.parse(day)
         if (dayDate == null){
