@@ -154,9 +154,6 @@ fun SetAlarm(context: Context, hour: Int, minute: Int, isAm: Boolean)  {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
             Toast.makeText(context, "アラームがセットされました", Toast.LENGTH_SHORT).show()
 }
-
-
-
 @Composable
 private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit, selectedHour: Int?) {
     val scrollState = rememberScrollState()
@@ -185,13 +182,13 @@ private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit, selectedHour: Int
                     strokeWidth = strokeWidth
                 )
             }
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState)
     ) {
+        Spacer(modifier = Modifier.height(40.dp))
         for (i in 0..12) {
             Text(
                 text = String.format("%02d", i),
                 modifier = Modifier.padding(top = 15.dp)
-                    .clickable { onHourSelected(i) }
                 ,textAlign = TextAlign.Center,
                     color = if (selectedHour == i)Color.White else Color.Gray,
                     fontSize = 20.sp,
@@ -200,11 +197,11 @@ private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit, selectedHour: Int
                 )
         }
         LaunchedEffect(scrollState.value) {
-            val newHour = (scrollState.value / itemHeightPx).toInt()
-            val scrollThreshold = (scrollState.maxValue / 13).toInt()
-            if (newHour in 0..12 && newHour != selectedHour && (scrollState.value % itemHeightPx) < scrollThreshold) {
-                onHourSelected(newHour)
-                Toast.makeText(context, "Hour selected: $newHour", Toast.LENGTH_SHORT).show()
+            val index = ((scrollState.value / (scrollState.maxValue / 13)).toFloat() + 0.5f).toInt()
+            if (index != selectedHour) {
+                onHourSelected(index)
+                Toast.makeText(context, "Hour selected: $index", Toast.LENGTH_SHORT).show()
+
             }
         }
     }
@@ -238,14 +235,15 @@ private fun mmScrollBoxes(onMinuteSelected: (minute: Int) -> Unit, selectedMinut
                     strokeWidth = strokeWidth
                 )
             }
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState)
 
     ) {
+        Spacer(modifier = Modifier.height(40.dp))
         for (i in 0..59) {
             Text(
                 text = String.format("%02d",i),
                 modifier = Modifier.padding(top = 15.dp)
-                    .clickable { onMinuteSelected(i) }
+
                 ,textAlign = TextAlign.Center,
                 color = if (selectedMinute == i)Color.White else Color.Gray,
                 fontSize = 20.sp,
@@ -253,11 +251,11 @@ private fun mmScrollBoxes(onMinuteSelected: (minute: Int) -> Unit, selectedMinut
             )
         }
         LaunchedEffect(scrollState.value) {
-            val newMinute = (scrollState.value / itemHeightPx).toInt()
-            val scrollThreshold = (scrollState.maxValue / 60).toInt()
-            if (newMinute in 0..59 && newMinute != selectedMinute && (scrollState.value % itemHeightPx) < scrollThreshold) {
-                onMinuteSelected(newMinute)
-                Toast.makeText(context, "Minute selected: $newMinute", Toast.LENGTH_SHORT).show()
+            val index = ((scrollState.value / (scrollState.maxValue / 60)).toFloat() + 0.5f).toInt()
+            if (index != selectedMinute) {
+               onMinuteSelected(index)
+                Toast.makeText(context, "Minute selected: $index", Toast.LENGTH_SHORT).show()
+
             }
         }
     }
@@ -293,7 +291,7 @@ fun AmPmScrollSelector(onAmPmSelected: (Boolean) -> Unit, isAmSelected: Boolean?
             }
             .verticalScroll(scrollState)
     ) {
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(40.dp))
         Text(
             text = "AM",
             color = if (isAmSelected == true) Color.White else Color.Gray,
@@ -313,7 +311,7 @@ fun AmPmScrollSelector(onAmPmSelected: (Boolean) -> Unit, isAmSelected: Boolean?
             fontSize = 20.sp,
             fontFamily = FontFamily(Font(R.font.inter_24pt_semibold)),
             modifier = Modifier
-                .padding(top = 16.dp, bottom = 14.dp, start = 16.dp, end = 16.dp)
+                .padding(bottom = 14.dp, start = 16.dp, end = 16.dp)
                 .clickable {
                     isAm = false
                     onAmPmSelected(false)
@@ -388,7 +386,7 @@ public fun AlarmScreen(onSwitch: () -> Unit) {
                         fontSize = 20.sp,
                         fontFamily = FontFamily(Font(R.font.inter_24pt_semibold)),
                         modifier = Modifier.offset(x = 100.dp)
-                            .padding(top = 13.dp)
+                            .padding(top = 53.dp)
                     )
 
                 }
