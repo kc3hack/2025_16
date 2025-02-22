@@ -105,10 +105,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import android.app.TimePickerDialog
 import androidx.compose.material.*
+import androidx. compose. material3.Slider
+import androidx. compose. material3.SliderDefaults
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx. compose. foundation. clickable
+import androidx. compose. foundation. ScrollState
 import java.util.Calendar
 
 
@@ -116,64 +119,51 @@ import java.util.Calendar
 class TimeViewModel : ViewModel() {
     private val _hour = MutableLiveData<Int>()
     private val _minute = MutableLiveData<Int>()
+    private val _isAm = MutableLiveData<Boolean>()
 
     val hour: LiveData<Int> = _hour
     val minute: LiveData<Int> = _minute
+    val isAm: LiveData<Boolean> = _isAm
 
     fun setHour(hour: Int) {
         _hour.value = hour
     }
-
     fun setMinute(minute: Int) {
         _minute.value = minute
     }
+    fun setAmPm(isAm: Boolean) {
+        _isAm.value = isAm
+    }
 }
-
-@Composable
-fun SetAlarm(context: Context, viewModel: TimeViewModel) {
-    val hour by viewModel.hour.observeAsState()
-    val minute by viewModel.minute.observeAsState()
-
-    hour?.let { h ->
-        minute?.let { m ->
-            // アラームを設定するコード
-            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val intent = Intent(context, AlarmReceiver::class.java)
-            val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+fun SetAlarm(context: Context, hour: Int, minute: Int, isAm: Boolean)  {
+    val hour24 = if (isAm){
+        if (hour == 12) 0 else hour
+    } else {
+        if (hour == 12) 12 else hour + 12
+    }
+    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(context, AlarmReceiver::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
             val calendar = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, h)
-                set(Calendar.MINUTE, m)
+                set(Calendar.HOUR_OF_DAY, hour24)
+                set(Calendar.MINUTE, minute)
                 set(Calendar.SECOND, 0)
             }
 
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
             Toast.makeText(context, "アラームがセットされました", Toast.LENGTH_SHORT).show()
-        }
-    }
 }
-/*@Composable
-fun MainComponent() {
-    val context = LocalContext.current
-    val viewModel = viewModel<TimeViewModel>()
-
-    Column {
-        hhScrollBoxes { hour -> viewModel.setHour(hour) }
-        mmScrollBoxes { minute -> viewModel.setMinute(minute) }
-        SetAlarm(context, viewModel)
-    }
-}
-*/
 
 
 @Composable
-private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit) {
+private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit, selectedHour: Int?) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(0.dp),
         modifier = Modifier
             .background(color = Color(0xFF252B26))
-            .size(width = 100.dp, height = 50.dp)
+            .size(width = 100.dp, height = 130.dp)
             .drawWithContent {
                 drawContent()
                 val strokeWidth = 2.dp.toPx()
@@ -194,11 +184,11 @@ private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit) {
     ) {
         for (i in 0..23) {
             Text(
-                    text = i.toString(),
+                    text = String.format("%02d", i),
                 modifier = Modifier.padding(top = 15.dp,bottom = 15.dp)
                     .clickable { onHourSelected(i) }
                 ,textAlign = TextAlign.Center,
-                    color = Color.White,
+                    color = if (selectedHour == i)Color.White else Color.Gray,
                     fontSize = 20.sp,
                     fontFamily = FontFamily(Font(R.font.inter_24pt_semibold))
                 )
@@ -207,14 +197,14 @@ private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit) {
     }
 }
 @Composable
-private fun mmScrollBoxes(onMinuteSelected: (minute: Int) -> Unit) {
+private fun mmScrollBoxes(onMinuteSelected: (minute: Int) -> Unit, selectedMinute: Int?) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp),
         modifier = Modifier
             .offset(x = 100.dp)
             .background(color = Color(0xFF252B26))
-            .size(width = 100.dp, height = 50.dp)
+            .size(width = 100.dp, height = 130.dp)
             .drawWithContent {
                 drawContent()
                 val strokeWidth = 2.dp.toPx()
@@ -236,11 +226,12 @@ private fun mmScrollBoxes(onMinuteSelected: (minute: Int) -> Unit) {
     ) {
         for (i in 0..59) {
             Text(
-                text = i.toString(),
-                modifier = Modifier.padding(top = 15.dp, bottom = 15.dp)
-                .clickable { onMinuteSelected(i) },
+                text = String.format("%02d",i),
+                modifier = Modifier
+                    .padding(top = 15.dp, bottom = 15.dp)
+                    .clickable { onMinuteSelected(i) },
                 textAlign = TextAlign.Center,
-                color = Color.White,
+                color = if (selectedMinute == i)Color.White else Color.Gray,
                 fontSize = 20.sp,
                 fontFamily = FontFamily(Font(R.font.inter_24pt_semibold))
             )
@@ -249,21 +240,90 @@ private fun mmScrollBoxes(onMinuteSelected: (minute: Int) -> Unit) {
     }
 }
 
+@Composable
+fun AmPmScrollSelector(onAmPmSelected: (Boolean) -> Unit, isAmSelected: Boolean?) {
+    var isAm by remember { mutableStateOf(isAmSelected == true) }
+    val scrollState = rememberScrollState()
+    val context = LocalContext.current
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .size(width = 70.dp, height = 158.dp)
+            .offset(x = 180.dp)
+            .background(Color(0xFF252B26))
+            .drawWithContent {
+                drawContent()
+                val strokeWidth = 2.dp.toPx()
+                drawLine(
+                    color = Color(0xFF8B8B8B),
+                    start = Offset(0f, 0f),
+                    end = Offset(size.width, 0f),
+                    strokeWidth = strokeWidth
+                )
+                drawLine(
+                    color = Color(0xFF8B8B8B),
+                    start = Offset(0f, size.height),
+                    end = Offset(size.width, size.height),
+                    strokeWidth = strokeWidth
+                )
+            }
+            .verticalScroll(scrollState)
+    ) {
+        Spacer(modifier = Modifier.height(50.dp))
+        Text(
+            text = "AM",
+            color = if (isAmSelected == true) Color.White else Color.Gray,
+            fontSize = 20.sp,
+            fontFamily = FontFamily(Font(R.font.inter_24pt_semibold)),
+            modifier = Modifier
+                .padding(16.dp)
+                .clickable {
+                    isAm = true
+                    onAmPmSelected(true)
+                }
+        )
+        Spacer(modifier = Modifier.height(50.dp))
+        Text(
+            text = "PM",
+            color = if (isAmSelected == false) Color.White else Color.Gray,
+            fontSize = 20.sp,
+            fontFamily = FontFamily(Font(R.font.inter_24pt_semibold)),
+            modifier = Modifier
+                .padding(top = 16.dp, bottom = 14.dp, start = 16.dp, end = 16.dp)
+                .clickable {
+                    isAm = false
+                    onAmPmSelected(false)
+                }
+        )
+        Spacer(modifier = Modifier.height(50.dp))
+    }
+    LaunchedEffect(scrollState.value) {
+        val scrollThreshold = 50
+        val previousIsAm = isAm
+        isAm = scrollState.value <= scrollThreshold
+        if (previousIsAm != isAm) {
+            onAmPmSelected(isAm)
+        }
+    }
+}
 
 
 @Composable
 public fun AlarmScreen(onSwitch: () -> Unit) {
     var buttonClicked by remember { mutableStateOf(false) }
-    var viewModel = TimeViewModel()
+    var viewModel = viewModel <TimeViewModel>()
     val context = LocalContext.current
-    Column(modifier = Modifier
+
+    Column(
+        modifier = Modifier
         .fillMaxSize()
         .background(color = Color.Black),
         horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(80.dp))
         Box(
             modifier = Modifier
-                .size(width = 343.dp, height = 343.dp)
+                .size(width = 343.dp, height = 346.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .background(color = Color(0xFF252B26))
                 .align(alignment = Alignment.CenterHorizontally)
@@ -275,25 +335,38 @@ public fun AlarmScreen(onSwitch: () -> Unit) {
                 color = Color.White,
                 modifier = Modifier.padding(top = 18.dp, start = 15.dp)
             )
-            Column(modifier = Modifier.fillMaxWidth()
+            Column(
+                modifier = Modifier.fillMaxWidth()
                 , horizontalAlignment = Alignment.CenterHorizontally) {
                 Box(
                     modifier = Modifier
-                        .size(width = 202.dp, height = 56.dp)
-                        .offset(y = 120.dp)
+                        .size(width = 182.dp, height = 138.dp)
+                        .offset(y = 70.dp)
+                ) {
+                    val hour by viewModel.hour.observeAsState()
+                    val minute by viewModel.minute.observeAsState()
+                    val isAm by viewModel.isAm.observeAsState()
 
-                )
-
-                {
-                    hhScrollBoxes { hour -> viewModel.setHour(hour) }
-                    mmScrollBoxes{ minute -> viewModel.setMinute(minute) }
-                    Text(":",
-                    color = Color.White,
+                    hhScrollBoxes(
+                        onHourSelected = { hour -> viewModel.setHour(hour) },
+                        selectedHour = hour
+                    )
+                    mmScrollBoxes(
+                        onMinuteSelected = { minute -> viewModel.setMinute(minute) },
+                        selectedMinute = minute
+                    )
+                    AmPmScrollSelector(
+                        onAmPmSelected = { isAm -> viewModel.setAmPm(isAm) },
+                        isAmSelected = viewModel.isAm.value
+                    )
+                    Text(
+                        ":",
+                        color = Color.White,
                         fontSize = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.inter_24pt_semibold)),
-                    modifier = Modifier.align(Alignment.Center)
-                        .padding(bottom = 5.dp))
-
+                        fontFamily = FontFamily(Font(R.font.inter_24pt_semibold)),
+                        modifier = Modifier.offset(x = 100.dp)
+                            .padding(top = 13.dp)
+                    )
 
                 }
             }
@@ -305,8 +378,7 @@ public fun AlarmScreen(onSwitch: () -> Unit) {
                     .border(1.dp, Color(color = 0xFF4E4E4E), RoundedCornerShape(12.dp))
                     .clip(RoundedCornerShape(12.dp))
                     .background(Color(color = 0xFF343835))
-                    ,
-                colors = ButtonDefaults.buttonColors( containerColor = Color(0xFF343835))
+                , colors = ButtonDefaults.buttonColors( containerColor = Color(0xFF343835))
 
             ) {
                 Text(
@@ -318,8 +390,15 @@ public fun AlarmScreen(onSwitch: () -> Unit) {
 
             Button(
                 onClick = {
-                    SetAlarm(context, viewModel)
-                    buttonClicked = true },
+                    viewModel.hour.value ?.let { hour ->
+                        viewModel.minute.value?.let { minute ->
+                            viewModel.isAm.value?.let { isAm ->
+                                SetAlarm(context, hour, minute, isAm)
+                            }
+                        }
+                    }
+                    buttonClicked = true
+                          },
                 modifier = Modifier
                     .size(width = 148.dp, height = 56.dp)
                     .offset(x = 180.dp, y = 270.dp)

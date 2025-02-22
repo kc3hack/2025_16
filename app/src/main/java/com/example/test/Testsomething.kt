@@ -9,12 +9,13 @@ import android.widget.Toast
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.util.Calendar
-
+/*
 @Composable
 fun TimePickerDialog(
     context: Context,
@@ -33,7 +34,7 @@ fun TimePickerDialog(
         minute,
         true
     ).show()
-}
+}*/
 /*class TimeViewModel : ViewModel() {
     private val _time = MutableLiveData<Pair<Int, Int>>()
     val time: LiveData<Pair<Int, Int>> = _time
@@ -62,6 +63,32 @@ fun SetAlarm(context: Context, viewModel: TimeViewModel) {
 }
 
 */
+
+
+
+/*
+import androidx.compose.foundation.layout.FlowRowScopeInstance.align
+import androidx. compose. foundation. layout. ColumnScopeInstance. align
+ */
+
+
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.background
+import androidx. compose. foundation. pager. rememberPagerState
+import androidx. compose. foundation. ExperimentalFoundationApi
+import androidx. compose. foundation. pager. VerticalPager
+import androidx. compose. foundation. layout. PaddingValues
+import androidx. compose. ui. graphics. Color
+import androidx. compose. ui. Alignment
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx. compose. material3.Text
+
+@OptIn(ExperimentalFoundationApi::class)
+
+
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         // アラームが鳴った時のアクションをここに実装
