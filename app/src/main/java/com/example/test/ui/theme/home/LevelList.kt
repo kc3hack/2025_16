@@ -14,11 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.test.ui.theme.home.*
+import com.example.test.utils.Controller
 import com.example.test.utils.userStatios.CatLevels
 
 @Composable
-fun LevelList(modifier: Modifier = Modifier, context: Context) {
-        val catLevels = CatLevels(context)
+fun LevelList(modifier: Modifier = Modifier) {
+        val catLevels = Controller.catLevels
         val workLevel = catLevels.getWorkCatLevel()
         val workTime = 1
         val workExpBar = catLevels.getNextRequiredTimeWorkCat()

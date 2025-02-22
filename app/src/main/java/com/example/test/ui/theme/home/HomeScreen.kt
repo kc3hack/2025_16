@@ -17,6 +17,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.test.ui.theme.ToDoList
+import com.example.test.utils.Controller
+import com.example.test.utils.scheduling.SchedulingDao
+import com.example.test.utils.userStatus.SleepManager
 
 @Composable
 fun HomeScreen(onNavigateBack: () -> Unit) {
@@ -32,7 +35,7 @@ fun HomeScreen(onNavigateBack: () -> Unit) {
             val context = LocalContext.current
             // TalkCatsのUI
             TalkCats(modifier = Modifier.padding(top = 15.dp))
-            LevelList(modifier = Modifier, context = context) // LevelListのUI
+            LevelList(modifier = Modifier) // LevelListのUI
             Spacer(modifier = Modifier.height(80.dp))
             SleepInfo(modifier = Modifier)
             ToDoList(modifier = Modifier)

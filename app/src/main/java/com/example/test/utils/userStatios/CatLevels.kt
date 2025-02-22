@@ -4,12 +4,12 @@ import android.content.Context
 import com.example.test.utils.scheduling.SchedulingDao
 import com.example.test.utils.userStatus.SleepManager
 
-class CatLevels (context: Context){
+class CatLevels (schedulingDao:SchedulingDao, sleepManager:SleepManager){
     private val requiredTimeWorkCat = 100
     private val requiredTimeSleepCat = 420
 
-    private val schedulingDao = SchedulingDao(context)
-    private val sleepManager = SleepManager(context)
+    private val schedulingDao = schedulingDao
+    private val sleepManager = sleepManager
 
     fun getWorkCatLevel(): Int {
         return schedulingDao.endTasksTime() / requiredTimeWorkCat

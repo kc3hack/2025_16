@@ -31,9 +31,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.test.*
+import com.example.test.utils.Controller
+import com.example.test.utils.scheduling.SchedulingDao
+import com.example.test.utils.userStatus.SleepManager
+
 class MainActivity : ComponentActivity() {
         override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
+                Controller.init(this)
                 enableEdgeToEdge()
                 setContent {
                         val viewModel: ScreenViewModel = viewModel()
@@ -61,7 +66,7 @@ fun GreetingPreview() {
                         ) {
                                 // TalkCatsのUI
                                 TalkCats(modifier = Modifier.padding(top = 5.dp))
-                                LevelList(modifier = Modifier, context = context) // LevelListのUI
+                                LevelList(modifier = Modifier) // LevelListのUI
                                 Spacer(modifier = Modifier.height(80.dp))
                                 SleepInfo(modifier = Modifier)
                                 ToDoList(modifier = Modifier)
