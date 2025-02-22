@@ -156,14 +156,19 @@ fun SetAlarm(context: Context, hour: Int, minute: Int, isAm: Boolean)  {
 }
 
 
+
 @Composable
 private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit, selectedHour: Int?) {
+    val scrollState = rememberScrollState()
+    val context = LocalContext.current
+    val itemHeightPx = with(LocalDensity.current) { 30.dp.toPx()}
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(0.dp),
         modifier = Modifier
             .background(color = Color(0xFF252B26))
-            .size(width = 100.dp, height = 130.dp)
+            .size(width = 100.dp, height = 138.dp)
             .drawWithContent {
                 drawContent()
                 val strokeWidth = 2.dp.toPx()
@@ -182,29 +187,41 @@ private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit, selectedHour: Int
             }
             .verticalScroll(rememberScrollState())
     ) {
-        for (i in 0..23) {
+        for (i in 0..12) {
             Text(
-                    text = String.format("%02d", i),
-                modifier = Modifier.padding(top = 15.dp,bottom = 15.dp)
+                text = String.format("%02d", i),
+                modifier = Modifier.padding(top = 15.dp)
                     .clickable { onHourSelected(i) }
                 ,textAlign = TextAlign.Center,
                     color = if (selectedHour == i)Color.White else Color.Gray,
                     fontSize = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.inter_24pt_semibold))
+                    fontFamily = FontFamily(Font(R.font.inter_24pt_semibold)
+                    )
                 )
-
+        }
+        LaunchedEffect(scrollState.value) {
+            val newHour = (scrollState.value / itemHeightPx).toInt()
+            val scrollThreshold = (scrollState.maxValue / 13).toInt()
+            if (newHour in 0..12 && newHour != selectedHour && (scrollState.value % itemHeightPx) < scrollThreshold) {
+                onHourSelected(newHour)
+                Toast.makeText(context, "Hour selected: $newHour", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
 @Composable
 private fun mmScrollBoxes(onMinuteSelected: (minute: Int) -> Unit, selectedMinute: Int?) {
+    val scrollState = rememberScrollState()
+    val context = LocalContext.current
+    val itemHeightPx = with(LocalDensity.current) { 30.dp.toPx()}
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(20.dp),
+        verticalArrangement = Arrangement.spacedBy(0.dp),
         modifier = Modifier
             .offset(x = 100.dp)
             .background(color = Color(0xFF252B26))
-            .size(width = 100.dp, height = 130.dp)
+            .size(width = 100.dp, height = 138.dp)
             .drawWithContent {
                 drawContent()
                 val strokeWidth = 2.dp.toPx()
@@ -227,15 +244,21 @@ private fun mmScrollBoxes(onMinuteSelected: (minute: Int) -> Unit, selectedMinut
         for (i in 0..59) {
             Text(
                 text = String.format("%02d",i),
-                modifier = Modifier
-                    .padding(top = 15.dp, bottom = 15.dp)
-                    .clickable { onMinuteSelected(i) },
-                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 15.dp)
+                    .clickable { onMinuteSelected(i) }
+                ,textAlign = TextAlign.Center,
                 color = if (selectedMinute == i)Color.White else Color.Gray,
                 fontSize = 20.sp,
                 fontFamily = FontFamily(Font(R.font.inter_24pt_semibold))
             )
-
+        }
+        LaunchedEffect(scrollState.value) {
+            val newMinute = (scrollState.value / itemHeightPx).toInt()
+            val scrollThreshold = (scrollState.maxValue / 60).toInt()
+            if (newMinute in 0..59 && newMinute != selectedMinute && (scrollState.value % itemHeightPx) < scrollThreshold) {
+                onMinuteSelected(newMinute)
+                Toast.makeText(context, "Minute selected: $newMinute", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
@@ -249,7 +272,7 @@ fun AmPmScrollSelector(onAmPmSelected: (Boolean) -> Unit, isAmSelected: Boolean?
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
-            .size(width = 70.dp, height = 158.dp)
+            .size(width = 70.dp, height = 138.dp)
             .offset(x = 180.dp)
             .background(Color(0xFF252B26))
             .drawWithContent {
@@ -270,7 +293,7 @@ fun AmPmScrollSelector(onAmPmSelected: (Boolean) -> Unit, isAmSelected: Boolean?
             }
             .verticalScroll(scrollState)
     ) {
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = "AM",
             color = if (isAmSelected == true) Color.White else Color.Gray,
@@ -283,7 +306,7 @@ fun AmPmScrollSelector(onAmPmSelected: (Boolean) -> Unit, isAmSelected: Boolean?
                     onAmPmSelected(true)
                 }
         )
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(5.dp))
         Text(
             text = "PM",
             color = if (isAmSelected == false) Color.White else Color.Gray,
@@ -299,7 +322,7 @@ fun AmPmScrollSelector(onAmPmSelected: (Boolean) -> Unit, isAmSelected: Boolean?
         Spacer(modifier = Modifier.height(50.dp))
     }
     LaunchedEffect(scrollState.value) {
-        val scrollThreshold = 50
+        val scrollThreshold = scrollState.maxValue / 2
         val previousIsAm = isAm
         isAm = scrollState.value <= scrollThreshold
         if (previousIsAm != isAm) {
@@ -357,7 +380,7 @@ public fun AlarmScreen(onSwitch: () -> Unit) {
                     )
                     AmPmScrollSelector(
                         onAmPmSelected = { isAm -> viewModel.setAmPm(isAm) },
-                        isAmSelected = viewModel.isAm.value
+                        isAmSelected = isAm
                     )
                     Text(
                         ":",
