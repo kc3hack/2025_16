@@ -1,5 +1,6 @@
 package com.example.test
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,6 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.test.ui.theme.*
 import com.example.test.ui.theme.home.*
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -49,6 +51,7 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
+        val context = LocalContext.current
         TestTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                         Column(
@@ -58,7 +61,7 @@ fun GreetingPreview() {
                         ) {
                                 // TalkCatsのUI
                                 TalkCats(modifier = Modifier.padding(top = 5.dp))
-                                LevelList(modifier = Modifier) // LevelListのUI
+                                LevelList(modifier = Modifier, context = context) // LevelListのUI
                                 Spacer(modifier = Modifier.height(80.dp))
                                 SleepInfo(modifier = Modifier)
                                 ToDoList(modifier = Modifier)

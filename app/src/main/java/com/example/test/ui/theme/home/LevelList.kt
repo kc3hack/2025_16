@@ -1,5 +1,6 @@
 package com.example.test.ui.theme.home
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,15 +14,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.test.ui.theme.home.*
+import com.example.test.utils.userStatios.CatLevels
 
 @Composable
-fun LevelList(modifier: Modifier = Modifier) {
-        val workLevel = 1
+fun LevelList(modifier: Modifier = Modifier, context: Context) {
+        val catLevels = CatLevels(context)
+        val workLevel = catLevels.getWorkCatLevel()
         val workTime = 1
-        val workExpBar = 0.4.toFloat()
-        val sleepLevel = 1
+        val workExpBar = catLevels.getNextRequiredTimeWorkCat()
+        val sleepLevel = catLevels.getSleepCatLevel()
         val sleepTime = 1
-        val sleepExpBar = 0.5.toFloat()
+        val sleepExpBar = catLevels.getSleepCatLevel()
         Box(
                 modifier =
                         Modifier.background(
@@ -47,14 +50,14 @@ fun LevelList(modifier: Modifier = Modifier) {
                                 "Work",
                                 workLevel,
                                 workTime,
-                                workExpBar
+                                workExpBar.toFloat()
                         )
                         LevelCounter(
                                 modifier = Modifier.padding(0.dp),
                                 "Sleep",
                                 sleepLevel,
                                 sleepTime,
-                                sleepExpBar
+                                sleepExpBar.toFloat()
                         )
                 }
         }
