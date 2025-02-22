@@ -8,9 +8,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Checkbox
@@ -18,6 +23,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -39,35 +47,42 @@ fun Schedule() {
     var taskDetail = remember { mutableStateOf("") }
     var selectedDate = remember { mutableStateOf<Long?>(null) }
     var showModal = remember { mutableStateOf(false) }
+    var startTime = remember { mutableStateOf<TimePickerState?>(null) }
+    var showDialStart = remember { mutableStateOf(false) }
+    var endTime = remember { mutableStateOf<TimePickerState?>(null) }
+    var showDialEnd = remember { mutableStateOf(false) }
+
+    var checked = remember { mutableStateOf(false) }
+
     Column(
-            Modifier.fillMaxWidth(),
+            Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        // TextField(
-        //         value = name.value,
-        //         colors =
-        //                 TextFieldDefaults.textFieldColors(
-        //                         containerColor = Color(0xFFF9D981) // 背景色を変更
-        //                 ),
-        //         onValueChange = { name.value = it },
-        //         label = { Text("タスク名") },
-        //         placeholder = { Text("タスク名を入力") },
-        //         singleLine = true,
-        //         modifier = Modifier.fillMaxWidth(0.8f).background(color = Color(0xFFF9D981))
-        // )
-        // TextField(
-        //         value = taskDetail.value,
-        //         colors =
-        //                 TextFieldDefaults.textFieldColors(
-        //                         containerColor = Color(0xFFF9D981) // 背景色を変更
-        //                 ),
-        //         onValueChange = { taskDetail.value = it },
-        //         label = { Text("タスク詳細") },
-        //         placeholder = { Text("タスクの詳細を入力") },
-        //         singleLine = true,
-        //         modifier = Modifier.fillMaxWidth(0.8f).background(color = Color(0xFFF9D981))
-        // )
+        TextField(
+                value = name.value,
+                colors =
+                        TextFieldDefaults.textFieldColors(
+                                containerColor = Color(0xFFF9D981) // 背景色を変更
+                        ),
+                onValueChange = { name.value = it },
+                label = { Text("タスク名") },
+                placeholder = { Text("タスク名を入力") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(0.8f).background(color = Color(0xFFF9D981))
+        )
+        TextField(
+                value = taskDetail.value,
+                colors =
+                        TextFieldDefaults.textFieldColors(
+                                containerColor = Color(0xFFF9D981) // 背景色を変更
+                        ),
+                onValueChange = { taskDetail.value = it },
+                label = { Text("タスク詳細") },
+                placeholder = { Text("タスクの詳細を入力") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(0.8f).background(color = Color(0xFFF9D981))
+        )
 
         OutlinedTextField(
                 value = selectedDate.value?.let { convertMillisToDate(it) } ?: "",
@@ -100,8 +115,7 @@ fun Schedule() {
                     onDismiss = { showModal.value = false }
             )
         }
-        var startTime = remember { mutableStateOf<TimePickerState?>(null) }
-        var showDialStart = remember { mutableStateOf(false) }
+
         Box(
                 Modifier.fillMaxWidth(0.8f)
                         .clip(RoundedCornerShape(20.dp))
@@ -128,8 +142,6 @@ fun Schedule() {
                 )
             }
         }
-        var endTime = remember { mutableStateOf<TimePickerState?>(null) }
-        var showDialEnd = remember { mutableStateOf(false) }
 
         Box(
                 Modifier.fillMaxWidth(0.8f)
@@ -157,7 +169,7 @@ fun Schedule() {
                 )
             }
         }
-        var checked = remember { mutableStateOf(false) }
+
         Box(
                 Modifier.fillMaxWidth(0.8f)
                         .clip(RoundedCornerShape(20.dp))
@@ -177,5 +189,22 @@ fun Schedule() {
                 )
             }
         }
+        TextButton(
+                onClick = { /*ここに値を渡す設定を追加 */},
+                modifier =
+                        Modifier.clip(RoundedCornerShape(27.dp))
+                                .width(100.dp)
+                                .height(50.dp)
+                                .background(color = Color(0xFFFFBB00))
+        ) {
+            Text(
+                    text = "設定",
+                    style =
+                            androidx.compose.ui.text.TextStyle(
+                                    fontSize = 17.sp,
+                            )
+            )
+        }
+        Spacer(Modifier.height(30.dp))
     }
 }
