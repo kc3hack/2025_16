@@ -21,6 +21,7 @@ class SleepManager(context: Context) {
     // 睡眠開始時間を保存
     fun setSleepStartTime() {
         sharedPrefs.saveLastSleepDate(Date())
+        sharedPrefs.saveStatus(ScheduleType.SLEEP)
     }
 
     fun wakeUp() {
