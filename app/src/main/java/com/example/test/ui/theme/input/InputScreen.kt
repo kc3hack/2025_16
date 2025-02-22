@@ -116,7 +116,7 @@ fun InputScreen(onNavigateBack: () -> Unit) {
                                         Schedule()
                                 } else if (count.value == 1) {
                                         LimitedTask()
-                                } else if (count.value == 2){
+                                } else if (count.value == 2) {
                                         NoLimitedTask()
                                 }
                         }
