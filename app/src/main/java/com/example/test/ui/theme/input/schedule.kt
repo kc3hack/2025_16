@@ -124,7 +124,7 @@ fun Schedule() {
                         Modifier.fillMaxWidth(0.8f)
                                 .clip(RoundedCornerShape(20.dp))
                                 .background(color = Color(0xFFF9D981))
-                                .padding(start = 20.dp, end = 20.dp, top = 10.dp),
+                                .padding(start = 40.dp, end = 40.dp, top = 10.dp),
                         contentAlignment = Alignment.Center
                 ) {
                         Column(Modifier.fillMaxWidth()) {
@@ -151,7 +151,7 @@ fun Schedule() {
                         Modifier.fillMaxWidth(0.8f)
                                 .clip(RoundedCornerShape(20.dp))
                                 .background(color = Color(0xFFF9D981))
-                                .padding(start = 20.dp, end = 20.dp, top = 10.dp),
+                                .padding(start = 40.dp, end = 40.dp, top = 10.dp),
                         contentAlignment = Alignment.Center
                 ) {
                         Column(Modifier.fillMaxWidth()) {

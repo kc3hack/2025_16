@@ -51,7 +51,7 @@ fun InputScreen(onNavigateBack: () -> Unit) {
                                                                 ),
                                                 horizontalArrangement = Arrangement.SpaceEvenly
                                         ) {
-                                                Spacer(Modifier.width(10.dp))
+//                                                Spacer(Modifier.width(10.dp))
 
                                                 Box(Modifier.clickable { count.intValue = 0 }) {
                                                         Text(
@@ -82,14 +82,14 @@ fun InputScreen(onNavigateBack: () -> Unit) {
                                         modifier =
                                                 Modifier.padding(
                                                                 top = 31.dp,
-                                                                start = 130.dp,
-                                                                end = 130.dp
+                                                                start = 140.dp,
+                                                                end = 160.dp
                                                         )
                                                         .then(
                                                                 if (count.intValue == 0)
-                                                                        Modifier.offset(x = -90.dp)
+                                                                        Modifier.offset(x = -105.dp)
                                                                 else if (count.intValue == 2)
-                                                                        Modifier.offset(x = 100.dp)
+                                                                        Modifier.offset(x = 115.dp)
                                                                 else Modifier
                                                         ),
                                         color = Color(0xFF65558F)
