@@ -44,6 +44,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
@@ -87,22 +88,22 @@ private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit, selectedHour: Int
             modifier =
                     Modifier.background(color = Color(0xFF252B26))
                             .size(width = 100.dp, height = 138.dp)
-                        .drawWithContent {
-                            drawContent()
-                            val strokeWidth = 2.dp.toPx()
-                            drawLine(
-                                color = Color(0xFF8B8B8B),
-                                start = Offset(0f, 0f),
-                                end = Offset(size.width+50, 0f),
-                                strokeWidth = strokeWidth
-                            )
-                            drawLine(
-                                color = Color(0xFF8B8B8B),
-                                start = Offset(0f, size.height),
-                                end = Offset(size.width+50, size.height),
-                                strokeWidth = strokeWidth
-                            )
-                        }
+                            .drawWithContent {
+                                drawContent()
+                                val strokeWidth = 2.dp.toPx()
+                                drawLine(
+                                        color = Color(0xFF8B8B8B),
+                                        start = Offset(0f, 0f),
+                                        end = Offset(size.width + 50, 0f),
+                                        strokeWidth = strokeWidth
+                                )
+                                drawLine(
+                                        color = Color(0xFF8B8B8B),
+                                        start = Offset(0f, size.height),
+                                        end = Offset(size.width + 50, size.height),
+                                        strokeWidth = strokeWidth
+                                )
+                            }
                             .verticalScroll(scrollState)
     ) {
         Spacer(modifier = Modifier.height(40.dp))
@@ -139,22 +140,22 @@ private fun mmScrollBoxes(onMinuteSelected: (minute: Int) -> Unit, selectedMinut
             modifier =
                     Modifier.background(color = Color(0xFF252B26))
                             .size(width = 100.dp, height = 138.dp)
-                        .drawWithContent {
-                            drawContent()
-                            val strokeWidth = 2.dp.toPx()
-                            drawLine(
-                                color = Color(0xFF8B8B8B),
-                                start = Offset(0f, 0f),
-                                end = Offset(size.width+50, 0f),
-                                strokeWidth = strokeWidth
-                            )
-                            drawLine(
-                                color = Color(0xFF8B8B8B),
-                                start = Offset(0f, size.height),
-                                end = Offset(size.width+50, size.height),
-                                strokeWidth = strokeWidth
-                            )
-                        }
+                            .drawWithContent {
+                                drawContent()
+                                val strokeWidth = 2.dp.toPx()
+                                drawLine(
+                                        color = Color(0xFF8B8B8B),
+                                        start = Offset(0f, 0f),
+                                        end = Offset(size.width + 50, 0f),
+                                        strokeWidth = strokeWidth
+                                )
+                                drawLine(
+                                        color = Color(0xFF8B8B8B),
+                                        start = Offset(0f, size.height),
+                                        end = Offset(size.width + 50, size.height),
+                                        strokeWidth = strokeWidth
+                                )
+                            }
                             .verticalScroll(scrollState)
     ) {
         Spacer(modifier = Modifier.height(40.dp))
@@ -190,22 +191,22 @@ fun AmPmScrollSelector(onAmPmSelected: (Boolean) -> Unit, isAmSelected: Boolean?
             modifier =
                     Modifier.size(width = 70.dp, height = 138.dp)
                             .background(Color(0xFF252B26))
-                        .drawWithContent {
-                            drawContent()
-                            val strokeWidth = 2.dp.toPx()
-                            drawLine(
-                                color = Color(0xFF8B8B8B),
-                                start = Offset(0f, 0f),
-                                end = Offset(size.width, 0f),
-                                strokeWidth = strokeWidth
-                            )
-                            drawLine(
-                                color = Color(0xFF8B8B8B),
-                                start = Offset(0f, size.height),
-                                end = Offset(size.width, size.height),
-                                strokeWidth = strokeWidth
-                            )
-                        }
+                            .drawWithContent {
+                                drawContent()
+                                val strokeWidth = 2.dp.toPx()
+                                drawLine(
+                                        color = Color(0xFF8B8B8B),
+                                        start = Offset(0f, 0f),
+                                        end = Offset(size.width, 0f),
+                                        strokeWidth = strokeWidth
+                                )
+                                drawLine(
+                                        color = Color(0xFF8B8B8B),
+                                        start = Offset(0f, size.height),
+                                        end = Offset(size.width, size.height),
+                                        strokeWidth = strokeWidth
+                                )
+                            }
                             .verticalScroll(scrollState)
     ) {
         Spacer(modifier = Modifier.height(40.dp))
@@ -249,12 +250,14 @@ public fun AlarmScreen(onSwitch: () -> Unit) {
     var buttonClicked by remember { mutableStateOf(false) }
     var viewModel = viewModel<TimeViewModel>()
     val context = LocalContext.current
-
+    val hour = viewModel.hour.value
+    val minute = viewModel.minute.value
     Column(
             modifier = Modifier.fillMaxSize().background(color = Color.Black),
             horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(80.dp))
+
         Box(
                 modifier =
                         Modifier.size(width = 343.dp, height = 346.dp)
@@ -262,98 +265,127 @@ public fun AlarmScreen(onSwitch: () -> Unit) {
                                 .background(color = Color(0xFF252B26))
                                 .align(Alignment.CenterHorizontally)
         ) {
-            Text(
-                    text = "アラームをセット",
-                    fontFamily = FontFamily(Font(R.font.inter_24pt_semibold)),
-                    fontSize = 20.sp,
-                    color = Color.White,
-                    modifier = Modifier.padding(top = 18.dp, start = 15.dp)
-            )
-            Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Box(modifier = Modifier.size(width = 300.dp, height = 138.dp).offset(y = 70.dp)) {
-                    val hour by viewModel.hour.observeAsState()
-                    val minute by viewModel.minute.observeAsState()
-                    val isAm by viewModel.isAm.observeAsState()
+            if (!buttonClicked) {
+                Text(
+                        text = "アラームをセット",
+                        fontFamily = FontFamily(Font(R.font.inter_24pt_semibold)),
+                        fontSize = 20.sp,
+                        color = Color.White,
+                        modifier = Modifier.padding(top = 18.dp, start = 15.dp)
+                )
+                Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Box(
+                            modifier =
+                                    Modifier.size(width = 300.dp, height = 138.dp).offset(y = 70.dp)
+                    ) {
+                        val hour by viewModel.hour.observeAsState()
+                        val minute by viewModel.minute.observeAsState()
+                        val isAm by viewModel.isAm.observeAsState()
 
-                    Row(Modifier.fillMaxWidth()) {
-                        hhScrollBoxes(
-                                onHourSelected = { hour -> viewModel.setHour(hour) },
-                                selectedHour = hour
-                        )
-                        Text(
-                                ":",
-                                color = Color.White,
-                                fontSize = 20.sp,
-                                fontFamily = FontFamily(Font(R.font.inter_24pt_semibold)),
-                                modifier = Modifier.padding(top = 53.dp)
-                        )
+                        Row(Modifier.fillMaxWidth()) {
+                            hhScrollBoxes(
+                                    onHourSelected = { hour -> viewModel.setHour(hour) },
+                                    selectedHour = hour
+                            )
+                            Text(
+                                    ":",
+                                    color = Color.White,
+                                    fontSize = 20.sp,
+                                    fontFamily = FontFamily(Font(R.font.inter_24pt_semibold)),
+                                    modifier = Modifier.padding(top = 53.dp)
+                            )
 
-                        mmScrollBoxes(
-                                onMinuteSelected = { minute -> viewModel.setMinute(minute) },
-                                selectedMinute = minute
-                        )
+                            mmScrollBoxes(
+                                    onMinuteSelected = { minute -> viewModel.setMinute(minute) },
+                                    selectedMinute = minute
+                            )
 
-                        AmPmScrollSelector(
-                                onAmPmSelected = { isAm -> viewModel.setAmPm(isAm) },
-                                isAmSelected = isAm
-                        )
+                            AmPmScrollSelector(
+                                    onAmPmSelected = { isAm -> viewModel.setAmPm(isAm) },
+                                    isAmSelected = isAm
+                            )
+                        }
                     }
-
                 }
-            }
-            Button(
-                    onClick = { onSwitch() },
-                    modifier =
-                            Modifier.size(width = 148.dp, height = 56.dp)
-                                    .offset(x = 15.dp, y = 270.dp)
-                                    .border(
-                                            1.dp,
-                                            Color(color = 0xFF4E4E4E),
-                                            RoundedCornerShape(12.dp)
-                                    )
-                                    .clip(RoundedCornerShape(12.dp))
-                                    .background(Color(color = 0xFF343835)),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF343835))
-            ) { Text(text = "Cancel", color = Color.White, fontSize = 16.sp) }
+                Button(
+                        onClick = { onSwitch() },
+                        modifier =
+                                Modifier.size(width = 148.dp, height = 56.dp)
+                                        .offset(x = 15.dp, y = 270.dp)
+                                        .border(
+                                                1.dp,
+                                                Color(color = 0xFF4E4E4E),
+                                                RoundedCornerShape(12.dp)
+                                        )
+                                        .clip(RoundedCornerShape(12.dp))
+                                        .background(Color(color = 0xFF343835)),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF343835))
+                ) { Text(text = "Cancel", color = Color.White, fontSize = 16.sp) }
 
-            Button(
-                    onClick = {
-                        viewModel.hour.value?.let { hour ->
-                            viewModel.minute.value?.let { minute ->
-                                viewModel.isAm.value?.let { isAm ->
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                        if (!context.getSystemService(AlarmManager::class.java)
-                                                        .canScheduleExactAlarms()
-                                        ) {
-                                            // 権限がない場合、ユーザーに設定画面を表示してもらう
-                                            val intent =
-                                                    Intent(
-                                                            Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
-                                                    )
-                                            context.startActivity(intent)
+                Button(
+                        onClick = {
+                            viewModel.hour.value?.let { hour ->
+                                viewModel.minute.value?.let { minute ->
+                                    viewModel.isAm.value?.let { isAm ->
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                            if (!context.getSystemService(AlarmManager::class.java)
+                                                            .canScheduleExactAlarms()
+                                            ) {
+                                                // 権限がない場合、ユーザーに設定画面を表示してもらう
+                                                val intent =
+                                                        Intent(
+                                                                Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+                                                        )
+                                                context.startActivity(intent)
+                                            } else {
+                                                // アラームを設定する処理
+                                                SetAlarm(context, hour, minute, isAm)
+                                            }
                                         } else {
-                                            // アラームを設定する処理
+                                            // Android 12以前では権限が不要
                                             SetAlarm(context, hour, minute, isAm)
                                         }
-                                    } else {
-                                        // Android 12以前では権限が不要
-                                        SetAlarm(context, hour, minute, isAm)
                                     }
                                 }
                             }
-                        }
-                        buttonClicked = true
-                    },
-                    modifier =
-                            Modifier.size(width = 148.dp, height = 56.dp)
-                                    .offset(x = 180.dp, y = 270.dp)
-                                    .clip(RoundedCornerShape(12.dp))
-                                    .background(Color(color = 0xFF349053)),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF349053))
-            ) { Text(text = "Save", color = Color.White, fontSize = 16.sp) }
+                            buttonClicked = true
+                        },
+                        modifier =
+                                Modifier.size(width = 148.dp, height = 56.dp)
+                                        .offset(x = 180.dp, y = 270.dp)
+                                        .clip(RoundedCornerShape(12.dp))
+                                        .background(Color(color = 0xFF349053)),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF349053))
+                ) { Text(text = "Save", color = Color.White, fontSize = 16.sp) }
+            } else {
+                Box(
+                        Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center,
+                ) {
+                    Column(
+                            Modifier.fillMaxWidth().padding(top = 40.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(30.dp)
+                    ) {
+                        Text(
+                                text = "アラームは",
+                                style = TextStyle(color = Color.White, fontSize = 20.sp)
+                        )
+                        Text(
+                                text =
+                                        "${hour.toString().padStart(2,'0')}:${minute.toString().padStart(2,'0')}",
+                                style = TextStyle(color = Color.White, fontSize = 40.sp)
+                        )
+                        Text(
+                                text = "に設定されています",
+                                style = TextStyle(color = Color.White, fontSize = 20.sp)
+                        )
+                    }
+                }
+            }
         }
     }
 

@@ -8,6 +8,7 @@ import android.content.Intent
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import java.util.Calendar
 
@@ -41,6 +42,7 @@ fun SetAlarm(context: Context, hour: Int, minute: Int, isAm: Boolean) {
             } else {
                 if (hour == 12) 12 else hour + 12
             }
+
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent =
             Intent(context, AlarmReceiver::class.java).apply {
@@ -57,11 +59,16 @@ fun SetAlarm(context: Context, hour: Int, minute: Int, isAm: Boolean) {
 
     val calendar =
             Calendar.getInstance().apply {
+                if (timeInMillis <= System.currentTimeMillis()) {
+                    add(Calendar.DAY_OF_YEAR, 1)
+                }
+
                 set(Calendar.HOUR_OF_DAY, hour24)
                 set(Calendar.MINUTE, minute)
                 set(Calendar.SECOND, 0)
             }
-
+    Log.d("SetAlarm", "Calendar Time: ${calendar.timeInMillis}")
+    //    Log.d("SetAlarmMIli", "Calendar Time: ${calendar.timeInMillis}")
     // Android 12以降はsetExactAndAllowWhileIdle()を使う
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         alarmManager.setExactAndAllowWhileIdle(

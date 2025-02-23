@@ -65,19 +65,19 @@ fun NumberPicker(value: Int, onValueChange: (Int) -> Unit, range: IntRange) {
 }
 
 
-@Composable
-private fun ScrollBoxes() {
-    Column(
-        modifier = Modifier
-            .background(Color.LightGray)
-            .size(100.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
-        repeat(10) {
-            Text("Item $it", modifier = Modifier.padding(2.dp))
-        }
-    }
-}
+//@Composable
+//private fun ScrollBoxes() {
+//    Column(
+//        modifier = Modifier
+//            .background(Color.LightGray)
+//            .size(100.dp)
+//            .verticalScroll(rememberScrollState())
+//    ) {
+//        repeat(10) {
+//            Text("Item $it", modifier = Modifier.padding(2.dp))
+//        }
+//    }
+//}
 
 
 
