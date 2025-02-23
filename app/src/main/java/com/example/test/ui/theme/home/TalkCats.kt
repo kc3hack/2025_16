@@ -20,12 +20,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role.Companion.Image
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.test.R
 import com.example.test.ui.theme.home.*
 
 @Composable
 fun TalkCats(modifier: Modifier = Modifier) {
+        var workCatLevel = 2
+        var sleepCatLevel = 2
+        var workText = makeCatText(workCatLevel, "work")
+        var sleepText = makeCatText(sleepCatLevel, "sleep")
+
         Row(
                 modifier =
                         modifier.fillMaxWidth()
@@ -34,7 +41,12 @@ fun TalkCats(modifier: Modifier = Modifier) {
         ) {
                 Box(modifier.weight(1f).fillMaxWidth()) {
                         Image(
-                                painter = painterResource(id = R.drawable.workcat),
+                                painter =
+                                        (if (workCatLevel == 1)
+                                                painterResource(id = R.drawable.workcat)
+                                        else if (workCatLevel == 2)
+                                                painterResource(id = R.drawable.workcat2)
+                                        else painterResource(id = R.drawable.workcat)),
                                 contentDescription = "working cat",
                                 modifier = Modifier.offset(y = (-70).dp).size(200.dp),
                                 contentScale = ContentScale.Fit
@@ -55,12 +67,17 @@ fun TalkCats(modifier: Modifier = Modifier) {
                                         .height(20.dp)
                                         .align(Alignment.Center),
                                 contentAlignment = Alignment.Center
-                        ) { Text("ごはん") }
+                        ) { Text(text = workText, style = TextStyle(fontSize = 10.sp)) }
                 }
                 Spacer(modifier = Modifier.width(20.dp).height(50.dp))
                 Box(modifier.weight(1f).fillMaxWidth()) {
                         Image(
-                                painter = painterResource(id = R.drawable.sleepcat),
+                                painter =
+                                        (if (sleepCatLevel == 1)
+                                                painterResource(id = R.drawable.sleepcat)
+                                        else if (sleepCatLevel == 2)
+                                                painterResource(id = R.drawable.sleepcat2)
+                                        else painterResource(id = R.drawable.workcat)),
                                 contentDescription = "sleeping cat",
                                 modifier = Modifier.offset(y = (-70).dp).size(200.dp),
                                 contentScale = ContentScale.Fit
@@ -81,7 +98,7 @@ fun TalkCats(modifier: Modifier = Modifier) {
                                         .height(20.dp)
                                         .align(Alignment.Center),
                                 contentAlignment = Alignment.Center
-                        ) { Text("・・・。") }
+                        ) { Text(text = sleepText, style = TextStyle(fontSize = 10.sp)) }
                 }
         }
 }
