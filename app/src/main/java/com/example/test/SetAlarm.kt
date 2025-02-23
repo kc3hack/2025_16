@@ -20,7 +20,7 @@ class AlarmReceiver : BroadcastReceiver() {
         private var ringtone: Ringtone? = null
 
         fun stopAlarm() {
-            ringtone?.stop()
+            ringtone?.takeIf { it.isPlaying }?.stop()
         }
     }
 
@@ -32,13 +32,10 @@ class AlarmReceiver : BroadcastReceiver() {
 
     private fun playAlarmSound(context: Context) {
         val ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-        val ringtone: Ringtone? = RingtoneManager.getRingtone(context, ringtoneUri)
+        ringtone = RingtoneManager.getRingtone(context, ringtoneUri)
 
-        if (ringtone != null) {
-            ringtone.play()
-        } else {
-            Toast.makeText(context, "アラーム音を再生できません", Toast.LENGTH_SHORT).show()
-        }
+        ringtone?.let { it.play() }
+                ?: run { Toast.makeText(context, "アラーム音を再生できません", Toast.LENGTH_SHORT).show() }
     }
 }
 
