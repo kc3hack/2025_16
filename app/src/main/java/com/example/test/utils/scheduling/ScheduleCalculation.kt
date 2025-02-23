@@ -322,7 +322,7 @@ class ScheduleCalculation() {
     /**
      * スケジュールを更新して、返す。
      */
-    fun updateTaskTimeList(scheduleList: MutableList<TaskModel>, sleepDebt: Int = 0): List<TaskTime> {
+    fun updateTaskTimeList(scheduleList: MutableList<TaskModel>, sleepDebt: Int): List<TaskTime> {
         this.scheduleList = scheduleList
         this.sleepDebt = sleepDebt
         currentTime = dateFormatToDay.parse(dateFormatToDay.format(Date()))

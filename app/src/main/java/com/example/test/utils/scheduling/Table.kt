@@ -2,6 +2,7 @@ package com.example.test.utils.scheduling
 
 import android.util.Log
 import com.example.test.data.model.*
+import com.example.test.utils.Controller
 import com.example.test.utils.scheduleing.ScheduleCalculation
 import com.example.test.utils.scheduleing.TaskTime
 import java.util.Date
@@ -60,8 +61,7 @@ class Table {
     fun calculateTimeLine() {
         Log.d("updateLog",scheduleList.toString())
         val TasksList = scheduleList.filter { !it.isEnd }.toMutableList()
-        Log.d("updateLog",TasksList.toString())
-        this.taskTimeLine = scheduleCalculation.updateTaskTimeList(TasksList)
+        this.taskTimeLine = scheduleCalculation.updateTaskTimeList(TasksList,-1*Controller.sleepManager.getSleepDebt(Date()).toInt())
         Log.d("updateLog",taskTimeLine.joinToString { it.toString()+"\n" })
     }
 
