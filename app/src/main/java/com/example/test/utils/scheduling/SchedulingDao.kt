@@ -1,10 +1,12 @@
 package com.example.test.utils.scheduling
 
 import android.content.Context
+import android.util.Log
 import com.example.test.data.db.*
 import com.example.test.data.model.TaskModel
 import com.example.test.data.model.TaskTimeEntity
 import com.example.test.utils.scheduleing.TaskTime
+import java.text.ParseException
 import java.util.Date
 import java.util.Locale
 
@@ -47,11 +49,14 @@ class SchedulingDao(context: Context) {
 //    }
 
     //[タスクの開始時刻(String),終了時刻(String),task名(String),詳細(String)]のリストを返す
-    fun getDayTasks(day:String = dateFormatToDay.format(Date())): List<Array<String>>{
+    fun getDayTasks(day:String = ""): Array<Array<String>>{
         val returnList = mutableListOf<Array<String>>()
-        var dayDate = dateFormatToHour.parse(day)
-        if (dayDate == null){
-            dayDate = dateFormatToDay.parse(dateFormatToDay.format(Date()))
+        // `dateFormatToDay` で解析する（日付フォーマットを揃える）
+        var dayDate: Date = try {
+            dateFormatToDay.parse(day)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+            dateFormatToDay.parse(dateFormatToDay.format(Date()))
         }
         val dayTasks = table.getDayTasks(dayDate).filter { it.id!=-1 }
         for (dayTask in dayTasks){
@@ -71,7 +76,7 @@ class SchedulingDao(context: Context) {
             }
             returnList.add(arrayOf(startTime,endTime,taskName,detail))
         }
-        return returnList
+        return returnList.toTypedArray()
     }
 
     /**

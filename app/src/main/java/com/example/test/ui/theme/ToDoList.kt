@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.test.ui.theme.*
+import com.example.test.utils.Controller
 import java.time.format.TextStyle
 
 @Composable
@@ -53,11 +54,11 @@ fun ToDoList(modifier: Modifier = Modifier) {
                                     .clip(RoundedCornerShape(8.dp))
             )
         }
-        val tasks =
-                arrayOf(
-                        arrayOf("10:00", "13:00", "KC3HACK meeting", "meeting with teammates"),
-                        arrayOf("10:00", "13:00", "KC3HACK meeting", "meeting with teammates")
-                )
+        val tasks = Controller.schedulingDao.getDayTasks()
+//                arrayOf(
+//                        arrayOf("10:00", "13:00", "KC3HACK meeting", "meeting with teammates"),
+//                        arrayOf("10:00", "13:00", "KC3HACK meeting", "meeting with teammates")
+//                )
         tasks.forEach { task -> ToDoBox(Modifier, task[0], task[1], task[2], task[3]) }
 
         Spacer(Modifier.padding(top = 10.dp))
