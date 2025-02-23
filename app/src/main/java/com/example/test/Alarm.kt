@@ -27,20 +27,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.FabPosition
-import androidx.compose.material3.BottomAppBarDefaults
-import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,12 +34,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.*
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
@@ -70,17 +51,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.graphics.PathFillType
 import android.graphics.drawable.shapes.Shape
 import android.util.Size
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import kotlinx.coroutines.delay
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx. compose. foundation. pager. rememberPagerState
-import androidx. compose. foundation. pager. HorizontalPager
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -89,7 +61,6 @@ import androidx.compose.ui.geometry.Rect
 import androidx. compose. ui. geometry. Offset
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalDensity
-
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -98,7 +69,6 @@ import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.verticalScroll
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -112,6 +82,8 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx. compose. foundation. clickable
 import androidx. compose. foundation. ScrollState
+import androidx. compose. foundation. lazy. LazyColumn
+import androidx. compose. foundation. lazy. rememberLazyListState
 import java.util.Calendar
 
 
@@ -154,13 +126,19 @@ fun SetAlarm(context: Context, hour: Int, minute: Int, isAm: Boolean)  {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
             Toast.makeText(context, "アラームがセットされました", Toast.LENGTH_SHORT).show()
 }
-@Composable
-private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit, selectedHour: Int?) {
-    val scrollState = rememberScrollState()
-    val context = LocalContext.current
-    val density = LocalDensity.current
-    val itemHeight = with(LocalDensity.current) {25.dp.toPx() }
 
+@Composable
+private fun HHScrollBoxes(onHourSelected: (hour: Int) -> Unit, selectedHour: Int?) {
+    val scrollState = rememberScrollState()
+    val density = LocalDensity.current
+    val itemHeightPx = with(density) { 55.dp.toPx() }
+
+    LaunchedEffect(scrollState.value) {
+        val index = (scrollState.value / itemHeightPx).toInt()
+        if (index in 0..12 && index != selectedHour) {
+            onHourSelected(index)
+        }
+    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(0.dp),
@@ -185,36 +163,34 @@ private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit, selectedHour: Int
             }
             .verticalScroll(scrollState)
     ) {
-        Spacer(modifier = Modifier.height(20.dp))
+       Spacer(modifier = Modifier.height(53.dp))
         for (i in 0..12) {
             Text(
                 text = String.format("%02d", i),
-                modifier = Modifier
-                    .padding(vertical = 4.dp)
-                    .height(48.dp)
+                modifier = Modifier.padding(bottom=2.dp)
+                    .height(53.dp)
                     .fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 color = if (selectedHour == i) Color.White else Color.Gray,
                 fontSize = 20.sp,
-                fontFamily = FontFamily(
-                    Font(R.font.inter_24pt_semibold)
-                )
+                fontFamily = FontFamily(Font(R.font.inter_24pt_semibold))
             )
         }
+        Spacer(modifier = Modifier.height(30.dp))
     }
-        LaunchedEffect(scrollState.value) {
-            val index = (scrollState.value / itemHeight).toInt()
-            if (index in 0..13 && index != selectedHour) {
-                onHourSelected(index)
-            }
-        }
 }
 @Composable
-private fun mmScrollBoxes(onMinuteSelected: (minute: Int) -> Unit, selectedMinute: Int?) {
+private fun MMScrollBoxes(onMinuteSelected: (minute: Int) -> Unit, selectedMinute: Int?) {
     val scrollState = rememberScrollState()
-    val context = LocalContext.current
     val density = LocalDensity.current
-    val itemHeightPx = with(LocalDensity.current) { 25.dp.toPx()}
+    val itemHeightPx = with(density) { 55.dp.toPx() }
+
+    LaunchedEffect(scrollState.value) {
+        val index = (scrollState.value / itemHeightPx).toInt()
+        if (index in 0..59 && index != selectedMinute) {
+            onMinuteSelected(index)
+        }
+    }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -242,26 +218,20 @@ private fun mmScrollBoxes(onMinuteSelected: (minute: Int) -> Unit, selectedMinut
             .verticalScroll(scrollState)
 
     ) {
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(53.dp))
         for (i in 0..59) {
             Text(
                 text = String.format("%02d", i),
-                modifier = Modifier.padding(top = 15.dp)
+                modifier = Modifier.padding(bottom=2.dp)
+                    .height(53.dp)
                 ,textAlign = TextAlign.Center,
                 color = if (selectedMinute == i) Color.White else Color.Gray,
                 fontSize = 20.sp,
                 fontFamily = FontFamily(Font(R.font.inter_24pt_semibold))
             )
         }
+        Spacer(modifier = Modifier.height(31.dp))
     }
-        LaunchedEffect(scrollState.value) {
-            val index = (scrollState.value / itemHeightPx) .toInt()
-            if (index in 0..59 && index != selectedMinute) {
-               onMinuteSelected(index)
-                Toast.makeText(context, "Minute selected: $index", Toast.LENGTH_SHORT).show()
-
-            }
-        }
 }
 
 @Composable
@@ -332,7 +302,6 @@ fun AmPmScrollSelector(onAmPmSelected: (Boolean) -> Unit, isAmSelected: Boolean?
     }
 }
 
-
 @Composable
 public fun AlarmScreen(onSwitch: () -> Unit) {
     var buttonClicked by remember { mutableStateOf(false) }
@@ -366,17 +335,18 @@ public fun AlarmScreen(onSwitch: () -> Unit) {
                 {
                 Box(
                     modifier = Modifier
-                        .size(width = 343.dp, height = 346.dp),
+                        .size(width = 343.dp, height = 346.dp)
+                        .offset(y = 50.dp),
                     ) {
                     val hour by viewModel.hour.observeAsState()
                     val minute by viewModel.minute.observeAsState()
                     val isAm by viewModel.isAm.observeAsState()
 
-                    hhScrollBoxes(
+                    HHScrollBoxes(
                         onHourSelected = { hour -> viewModel.setHour(hour) },
                         selectedHour = hour
                     )
-                    mmScrollBoxes(
+                    MMScrollBoxes(
                         onMinuteSelected = { minute -> viewModel.setMinute(minute) },
                         selectedMinute = minute
                     )
