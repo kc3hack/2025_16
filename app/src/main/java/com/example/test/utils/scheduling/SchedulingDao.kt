@@ -83,6 +83,7 @@ class SchedulingDao(context: Context) {
      * 指定した日のタスクの数を調べる
      */
     fun getDayTasksCount(day:String = ""): Int{
+        Log.d("getDayTasksCount",day)
         return getDayTasks(day).size
     }
     /**

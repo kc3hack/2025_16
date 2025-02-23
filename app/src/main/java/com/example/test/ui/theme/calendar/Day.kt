@@ -22,13 +22,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.test.utils.Controller
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
+import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.util.Locale
 
 @Composable
 fun Day(day: CalendarDay) {
-        val eventCount= 3 /*ここにその日のイベント数を代入*/
+        val dayToString = day.date.toString().replace("-","/")
+        Log.d("getDayTasksCount",dayToString)
+        val eventCount= Controller.schedulingDao.getDayTasksCount(dayToString)
         Box(
                 modifier =
                         Modifier.aspectRatio(1f)
