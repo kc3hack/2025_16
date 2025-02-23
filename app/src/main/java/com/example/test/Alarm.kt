@@ -158,8 +158,8 @@ fun SetAlarm(context: Context, hour: Int, minute: Int, isAm: Boolean)  {
 private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit, selectedHour: Int?) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
-    val itemHeight = 48.dp
-    val itemHeightPx = with(LocalDensity.current) { itemHeight.toPx() }
+    val density = LocalDensity.current
+    val itemHeight = with(LocalDensity.current) {25.dp.toPx() }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -169,7 +169,7 @@ private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit, selectedHour: Int
             .size(width = 100.dp, height = 138.dp)
             .drawWithContent {
                 drawContent()
-                val strokeWidth = 2.dp.toPx()
+                val strokeWidth = with(density) { 2.dp.toPx()}
                 drawLine(
                     color = Color(0xFF8B8B8B),
                     start = Offset(0f, 0f),
@@ -185,35 +185,36 @@ private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit, selectedHour: Int
             }
             .verticalScroll(scrollState)
     ) {
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         for (i in 0..12) {
             Text(
                 text = String.format("%02d", i),
-                modifier = Modifier.padding(top = 15.dp)
-                    .height(itemHeight)
-                    .fillMaxWidth()
-                ,textAlign = TextAlign.Center,
-                    color = if (selectedHour == i)Color.White else Color.Gray,
-                    fontSize = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.inter_24pt_semibold)
-                    )
+                modifier = Modifier
+                    .padding(vertical = 4.dp)
+                    .height(48.dp)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                color = if (selectedHour == i) Color.White else Color.Gray,
+                fontSize = 20.sp,
+                fontFamily = FontFamily(
+                    Font(R.font.inter_24pt_semibold)
                 )
-        }
-        LaunchedEffect(scrollState.value) {
-            val index = ((scrollState.value /  + 0.5f).toInt()
-            if (index != selectedHour) {
-                onHourSelected(index)
-                Toast.makeText(context, "Hour selected: $index", Toast.LENGTH_SHORT).show()
-
-            }
+            )
         }
     }
+        LaunchedEffect(scrollState.value) {
+            val index = (scrollState.value / itemHeight).toInt()
+            if (index in 0..13 && index != selectedHour) {
+                onHourSelected(index)
+            }
+        }
 }
 @Composable
 private fun mmScrollBoxes(onMinuteSelected: (minute: Int) -> Unit, selectedMinute: Int?) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
-    val itemHeightPx = with(LocalDensity.current) { 30.dp.toPx()}
+    val density = LocalDensity.current
+    val itemHeightPx = with(LocalDensity.current) { 25.dp.toPx()}
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -224,7 +225,7 @@ private fun mmScrollBoxes(onMinuteSelected: (minute: Int) -> Unit, selectedMinut
             .size(width = 100.dp, height = 138.dp)
             .drawWithContent {
                 drawContent()
-                val strokeWidth = 2.dp.toPx()
+                val strokeWidth = with(density) { 2.dp.toPx()}
                 drawLine(
                     color = Color(0xFF8B8B8B),
                     start = Offset(0f, 0f),
@@ -244,24 +245,23 @@ private fun mmScrollBoxes(onMinuteSelected: (minute: Int) -> Unit, selectedMinut
         Spacer(modifier = Modifier.height(40.dp))
         for (i in 0..59) {
             Text(
-                text = String.format("%02d",i),
+                text = String.format("%02d", i),
                 modifier = Modifier.padding(top = 15.dp)
-
                 ,textAlign = TextAlign.Center,
-                color = if (selectedMinute == i)Color.White else Color.Gray,
+                color = if (selectedMinute == i) Color.White else Color.Gray,
                 fontSize = 20.sp,
                 fontFamily = FontFamily(Font(R.font.inter_24pt_semibold))
             )
         }
+    }
         LaunchedEffect(scrollState.value) {
-            val index = ((scrollState.value / (scrollState.maxValue / 60)).toFloat() + 0.5f).toInt()
-            if (index != selectedMinute) {
+            val index = (scrollState.value / itemHeightPx) .toInt()
+            if (index in 0..59 && index != selectedMinute) {
                onMinuteSelected(index)
                 Toast.makeText(context, "Minute selected: $index", Toast.LENGTH_SHORT).show()
 
             }
         }
-    }
 }
 
 @Composable

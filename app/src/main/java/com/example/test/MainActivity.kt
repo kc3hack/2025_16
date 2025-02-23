@@ -40,7 +40,8 @@ class MainActivity : ComponentActivity() {
 
                 }
                 Surface() {
-                    BottomAppBarExample(screenState)}
+                    ScreenSwitcher()
+                }
             }
         }
     }
