@@ -383,6 +383,40 @@ public fun AlarmScreen(onSwitch: () -> Unit) {
                                 text = "に設定されています",
                                 style = TextStyle(color = Color.White, fontSize = 20.sp)
                         )
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
+                            Button(
+                                    onClick = { onSwitch() },
+                                    modifier =
+                                            Modifier.size(width = 148.dp, height = 56.dp)
+
+                                                    .border(
+                                                            1.dp,
+                                                            Color(color = 0xFF4E4E4E),
+                                                            RoundedCornerShape(12.dp)
+                                                    )
+                                                    .clip(RoundedCornerShape(12.dp))
+                                                    .background(Color(color = 0xFF343835)),
+                                    colors =
+                                            ButtonDefaults.buttonColors(
+                                                    containerColor = Color(0xFF343835)
+                                            )
+                            ) { Text(text = "Cancel", color = Color.White, fontSize = 16.sp) }
+
+                            Button(
+                                    onClick = {
+                                        AlarmReceiver.stopAlarm()
+                                    },
+                                    modifier =
+                                            Modifier.size(width = 148.dp, height = 56.dp)
+
+                                                    .clip(RoundedCornerShape(12.dp))
+                                                    .background(Color(color = 0xFF349053)),
+                                    colors =
+                                            ButtonDefaults.buttonColors(
+                                                    containerColor = Color(0xFF349053)
+                                            )
+                            ) { Text(text = "起床", color = Color.White, fontSize = 16.sp) }
+                        }
                     }
                 }
             }

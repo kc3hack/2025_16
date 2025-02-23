@@ -16,6 +16,14 @@ private var alarmMgr: AlarmManager? = null
 private lateinit var alarmIntent: PendingIntent
 
 class AlarmReceiver : BroadcastReceiver() {
+    companion object {
+        private var ringtone: Ringtone? = null
+
+        fun stopAlarm() {
+            ringtone?.stop()
+        }
+    }
+
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context != null) {
             playAlarmSound(context)
@@ -59,15 +67,14 @@ fun SetAlarm(context: Context, hour: Int, minute: Int, isAm: Boolean) {
 
     val calendar =
             Calendar.getInstance().apply {
-                if (timeInMillis <= System.currentTimeMillis()) {
-                    add(Calendar.DAY_OF_YEAR, 1)
-                }
-
                 set(Calendar.HOUR_OF_DAY, hour24)
                 set(Calendar.MINUTE, minute)
                 set(Calendar.SECOND, 0)
+                if (timeInMillis <= System.currentTimeMillis()) {
+                    add(Calendar.DAY_OF_YEAR, 1)
+                }
             }
-    Log.d("SetAlarm", "Calendar Time: ${calendar.timeInMillis}")
+    Log.d("SetAlarm", "Calendar Time: ${calendar}")
     //    Log.d("SetAlarmMIli", "Calendar Time: ${calendar.timeInMillis}")
     // Android 12以降はsetExactAndAllowWhileIdle()を使う
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
