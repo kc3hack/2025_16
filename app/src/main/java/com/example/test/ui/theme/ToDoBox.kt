@@ -24,11 +24,10 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun ToDoBox(
-        modifier: Modifier = Modifier,
-        beginTime: String,
-        endTime: String,
-        taskName: String,
-        description: String
+    beginTime: String,
+    endTime: String,
+    taskName: String,
+    description: String
 ) {
     Box(Modifier.fillMaxWidth().height(75.dp)) {
         Row(Modifier.padding(top = 10.dp)) {
@@ -56,12 +55,12 @@ fun ToDoBox(
                 )
                 Spacer(Modifier.height(3.dp))
                 Text(
-                        text = "${taskName}",
+                        text = taskName,
                         style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp)
                 )
                 Spacer(Modifier.height(3.dp))
                 Text(
-                        text = "${description}",
+                        text = description,
                         style =
                                 TextStyle(
                                         color = Color(0xFF8F9BB3),
