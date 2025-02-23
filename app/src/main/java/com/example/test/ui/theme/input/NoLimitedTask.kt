@@ -166,8 +166,6 @@ fun NoLimitedTask() {
                                                 Log.e("addTasks", "タスク追加失敗")
                                         }
                                 }
-                                screenViewModel.navigateTo(ScreenState.Second)
-
                         },
                         modifier =
                                 Modifier.clip(RoundedCornerShape(27.dp))

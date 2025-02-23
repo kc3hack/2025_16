@@ -1,5 +1,6 @@
 package com.example.test.ui.theme.input
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -41,7 +42,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.test.ScreenState
 import com.example.test.ScreenViewModel
+import com.example.test.data.model.ScheduleType
+import com.example.test.utils.Controller
 import java.time.format.TextStyle
+import java.util.Calendar
+import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -203,7 +208,26 @@ fun Schedule() {
                         }
                 }
                 TextButton(
-                        onClick = { /*ここに値を渡す設定を追加 */screenViewModel.navigateTo(ScreenState.Second)},
+                        onClick = { /*ここに値を渡す設定を追加 */
+                                Controller.addTask.addTask(
+                                        title = name.value,
+                                        type = ScheduleType.FIXED_TASK,
+                                        startTime = convertTimePickerStateToDate(selectedDate.value, startTime.value) ,
+                                        endTime = convertTimePickerStateToDate(selectedDate.value, endTime.value),
+                                        intervalTime = null,
+                                        workedTime = 0,
+                                        remainingWorkTime = null,
+                                        memo = taskDetail.value,
+                                )
+                                { success ->
+                                        if (success) {
+                                                Log.d("addTasks", "タスク追加成功")
+                                                screenViewModel.navigateTo(ScreenState.Second)
+                                        } else {
+                                                Log.e("addTasks", "タスク追加失敗")
+                                        }
+                                }
+                        },
                         modifier =
                                 Modifier.clip(RoundedCornerShape(27.dp))
                                         .width(100.dp)
@@ -220,4 +244,19 @@ fun Schedule() {
                 }
                 Spacer(Modifier.height(30.dp))
         }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+fun convertTimePickerStateToDate(selectedDate: Long?, timeState: TimePickerState?): Date? {
+        if (selectedDate == null || timeState == null) return null
+
+        val calendar = Calendar.getInstance().apply {
+                timeInMillis = selectedDate
+                set(Calendar.HOUR_OF_DAY, timeState.hour)
+                set(Calendar.MINUTE, timeState.minute)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+        }
+
+        return calendar.time
 }
