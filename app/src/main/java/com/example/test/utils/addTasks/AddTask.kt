@@ -5,6 +5,7 @@ import android.util.Log
 import com.example.test.data.db.DatabaseManager
 import com.example.test.data.model.ScheduleType
 import com.example.test.data.model.TaskModel
+import com.example.test.utils.Controller
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -70,6 +71,7 @@ class AddTask(context: Context) {
 
                 withContext(Dispatchers.Main) {
                     callback(true) // 成功時に true を返す
+                    Controller.schedulingDao.update()
                 }
             } catch (e: Exception) {
                 Log.e("AddTask", e.toString())

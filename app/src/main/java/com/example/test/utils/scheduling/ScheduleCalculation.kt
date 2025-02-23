@@ -14,9 +14,9 @@ class ScheduleCalculation() {
      */
     private var tasks: MutableList<TaskTime> = mutableListOf()
     /**
-     * 現在時刻(嘘)
+     * 現在時刻
      */
-    private val currentTime = Date()
+    private var currentTime = Date()
     /**
      * 空き時間のid
      */
@@ -325,6 +325,7 @@ class ScheduleCalculation() {
     fun updateTaskTimeList(scheduleList: MutableList<TaskModel>, sleepDebt: Int = 0): List<TaskTime> {
         this.scheduleList = scheduleList
         this.sleepDebt = sleepDebt
+        currentTime = dateFormatToDay.parse(dateFormatToDay.format(Date()))
         val tenYearsLater = Date(currentTime.time + 10L * 365 * 24 * 60 * 60 * 1000)
         tasks.clear()
         tasks.add(TaskTime(-1, currentTime, tenYearsLater))

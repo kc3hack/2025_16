@@ -1,5 +1,6 @@
 package com.example.test.utils.scheduling
 
+import android.util.Log
 import com.example.test.data.model.*
 import com.example.test.utils.scheduleing.ScheduleCalculation
 import com.example.test.utils.scheduleing.TaskTime
@@ -57,8 +58,11 @@ class Table {
      * ScheduleCalculation クラスを利用して、スケジュールを計算・抽出します。
      */
     fun calculateTimeLine() {
+        Log.d("updateLog",scheduleList.toString())
         val TasksList = scheduleList.filter { !it.isEnd }.toMutableList()
+        Log.d("updateLog",TasksList.toString())
         this.taskTimeLine = scheduleCalculation.updateTaskTimeList(TasksList)
+        Log.d("updateLog",taskTimeLine.joinToString { it.toString()+"\n" })
     }
 
     /**
