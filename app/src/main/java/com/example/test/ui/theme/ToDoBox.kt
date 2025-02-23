@@ -21,18 +21,39 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.test.utils.Controller
+import java.time.Duration
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun ToDoBox(
     beginTime: String,
     endTime: String,
     taskName: String,
-    description: String
+    description: String,
+    id: Int
 ) {
     Box(Modifier.fillMaxWidth().height(75.dp)) {
         Row(Modifier.padding(top = 10.dp)) {
             FloatingActionButton(
-                    onClick = { println("clicked!") },
+                    onClick = {
+                        println("clicked!")
+                        // beginTimeとendTimeは、HH:mmの形でくるので、それの差分をdidTimeとしたい(日を跨ぐ場合がある)
+                        val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+
+                        val beginLocalTime = LocalTime.parse(beginTime, timeFormatter)
+                        val endLocalTime = LocalTime.parse(endTime, timeFormatter)
+
+                        val durationMinutes = Duration.between(beginLocalTime, endLocalTime).toMinutes()
+
+                        val didTime = if (durationMinutes < 0) durationMinutes + 1440 else durationMinutes
+
+                        Controller.schedulingDao.updateRemainingWorkTime(
+                            id,
+                            didTime = didTime.toInt(),
+                        )
+                              },
                     elevation = FloatingActionButtonDefaults.elevation(0.dp),
                     modifier = Modifier.background(color = Color.White)
             ) {

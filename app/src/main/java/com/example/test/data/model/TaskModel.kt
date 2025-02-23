@@ -16,5 +16,5 @@ data class TaskModel(
     var remainingWorkTime: Int,// 残りの作業工数
     val creationDate: Date,     // 作成日（TypeConverterが必要）
     val memo: String,           // タスクに追加するメモを保存
-    val isEnd: Boolean = false // タスクが終わったか否か
+    var isEnd: Boolean = false // タスクが終わったか否か
 )

@@ -76,7 +76,7 @@ class SchedulingDao(context: Context) {
                     detail = task.memo
                 }
             }
-            returnList.add(arrayOf(startTime,endTime,taskName,detail))
+            returnList.add(arrayOf(startTime,endTime,taskName,detail,dayTask.id.toString()))
         }
         return returnList.toTypedArray()
     }
@@ -98,5 +98,20 @@ class SchedulingDao(context: Context) {
             time += task.workedTime
         }
         return time
+    }
+
+    /**
+     * idから、taskを更新する
+     */
+    fun updateRemainingWorkTime(id: Int, didTime: Int){
+        val task = tasksDao.getTaskById(id)
+        if (task is TaskModel) {
+            task.workedTime += didTime
+            task.remainingWorkTime -= didTime
+            if (task.remainingWorkTime <= 0){
+                task.isEnd = true
+            }
+            tasksDao.insert(task)
+        }
     }
 }
