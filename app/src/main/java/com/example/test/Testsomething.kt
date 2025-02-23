@@ -86,13 +86,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx. compose. material3.Text
 
-@OptIn(ExperimentalFoundationApi::class)
+//@OptIn(ExperimentalFoundationApi::class)
 
 
-class AlarmReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        // アラームが鳴った時のアクションをここに実装
-        Toast.makeText(context, "アラームが鳴りました！", Toast.LENGTH_SHORT).show()
-    }
-}
 /* <receiver android:name=".AlarmReceiver" /> をAndroidManifest.xmlに入れる*/

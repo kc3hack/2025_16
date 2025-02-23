@@ -34,6 +34,8 @@ import android. widget. NumberPicker
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx. compose. ui. tooling. preview. Preview
 
 
@@ -92,25 +94,8 @@ public fun testAlarmScreen(onTimeSelected: (hour: Int, minute: Int) -> Unit) {
     }
 }
 
-fun testAlarm(context: Context, hour: Int, minute: Int) {
-    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val intent = Intent(context, AlarmReceiver::class.java)
-    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
 
-    val calendar = Calendar.getInstance().apply {
-        set(Calendar.HOUR_OF_DAY, hour)
-        set(Calendar.MINUTE, minute)
-        set(Calendar.SECOND, 0)
-    }
 
-    alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
-}
-class testAlarmReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
-        // アラームが鳴った時の処理をここに記述
-        Toast.makeText(context, "Alarm ringing!", Toast.LENGTH_SHORT).show()
-    }
-}
 
 @Composable
 private fun ScrollBoxes() {

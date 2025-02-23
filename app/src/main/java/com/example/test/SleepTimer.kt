@@ -374,19 +374,19 @@ public fun TAlarmScreen(onTimeSelected: (hour: Int, minute: Int) -> Unit,
     }
 }
 
-fun setAlarm(context: Context, hour: Int, minute: Int) {
-    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val intent = Intent(context, AlarmReceiver::class.java)
-    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
-
-    val calendar = Calendar.getInstance().apply {
-        set(Calendar.HOUR_OF_DAY, hour)
-        set(Calendar.MINUTE, minute)
-        set(Calendar.SECOND, 0)
-    }
-
-    alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
-}
+//fun setAlarm(context: Context, hour: Int, minute: Int) {
+//    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//    val intent = Intent(context, AlarmReceiver::class.java)
+//    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+//
+//    val calendar = Calendar.getInstance().apply {
+//        set(Calendar.HOUR_OF_DAY, hour)
+//        set(Calendar.MINUTE, minute)
+//        set(Calendar.SECOND, 0)
+//    }
+//
+//    alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+//}
 
 
 
