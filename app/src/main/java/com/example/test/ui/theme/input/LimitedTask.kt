@@ -55,7 +55,7 @@ fun LimitedTask() {
         var taskDetail = remember { mutableStateOf("") }
         var selectedDate = remember { mutableStateOf<Long?>(null) }
         var showModal = remember { mutableStateOf(false) }
-        var endTime = remember { mutableStateOf<TimePickerState?>(null) }
+        var endTime = remember { mutableStateOf<Pair<Int, Int>?>(null) }
         var showDialEnd = remember { mutableStateOf(false) }
         var taskNeedTime = remember { mutableStateOf("0") }
         var taskWorkTime = remember { mutableStateOf("0") }
@@ -155,8 +155,8 @@ fun LimitedTask() {
                                 DialUseStateExample(
                                         onDismiss = { showDialEnd.value = false },
                                         onConfirm = { time ->
-                                                endTime.value = time
-                                                showDialEnd.value = false
+                                                endTime.value = Pair(time.hour, time.minute)
+                                                Log.d("endTime", "endTime: $endTime")
                                         }
                                 )
                         }
@@ -194,25 +194,44 @@ fun LimitedTask() {
 
                 TextButton(
                         onClick = { /*ここに値を渡す設定を追加 */
-                                Log.d("addTasks", "add_DEADLINED_ASSIGNMENT_Tasks")
-                                val format = SimpleDateFormat("yyyy/mm/dd HH:mm")
-                                Log.d("addTasks" , "selectedDate:${selectedDate.value.toString()}\nendTime:${ endTime.value.toString() }\nshowDialEnd:${showDialEnd.value.toString()}")
-                                Controller.addTask.addTask(
-                                        title = name.value,
-                                        type = ScheduleType.DEADLINED_ASSIGNMENT,
-                                        startTime = null,
-                                        endTime = null,
-                                        intervalTime = taskNeedTime.value.toIntOrNull() ?: 30,
-                                        workedTime = 0,
-                                        remainingWorkTime = taskNeedTime.value.toIntOrNull() ?: 0,
-                                        memo = taskDetail.value,
+                                Log.d(
+                                        "addTasks",
+                                        "selectedDate:${selectedDate.value.toString()}\nendTime:${endTime.value.toString()}\nshowDialEnd:${showDialEnd.value.toString()}"
                                 )
-                                { success ->
-                                        if (success) {
-                                                Log.d("addTasks", "タスク追加成功")
-                                                screenViewModel.navigateTo(ScreenState.Second)
-                                        } else {
-                                                Log.e("addTasks", "タスク追加失敗")
+                                selectedDate.value?.let { dateMillis ->
+                                        val calendar = Calendar.getInstance().apply {
+                                                timeInMillis = dateMillis // `selectedDate` から日付を取得
+                                                set(Calendar.SECOND, 0)
+                                                set(Calendar.MILLISECOND, 0)
+                                        }
+                                        // endTime の時・分を適用
+                                        val endDate: Date? = endTime.value?.let { (hour, minute) ->
+                                                val endCalendar = calendar.clone() as Calendar
+                                                endCalendar.apply {
+                                                        set(Calendar.HOUR_OF_DAY, hour)
+                                                        set(Calendar.MINUTE, minute)
+                                                }
+                                                endCalendar.time // 修正ポイント
+                                        }
+                                        Controller.addTask.addTask(
+                                                title = name.value,
+                                                type = ScheduleType.DEADLINED_ASSIGNMENT,
+                                                startTime = null,
+                                                endTime = endDate,
+                                                intervalTime = taskNeedTime.value.toIntOrNull()
+                                                        ?: 30,
+                                                workedTime = 0,
+                                                remainingWorkTime = taskNeedTime.value.toIntOrNull()
+                                                        ?: 0,
+                                                memo = taskDetail.value,
+                                        )
+                                        { success ->
+                                                if (success) {
+                                                        Log.d("addTasks", "タスク追加成功")
+                                                        screenViewModel.navigateTo(ScreenState.Second)
+                                                } else {
+                                                        Log.e("addTasks", "タスク追加失敗")
+                                                }
                                         }
                                 }
                         },

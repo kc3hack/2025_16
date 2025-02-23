@@ -7,6 +7,7 @@ import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TimePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import java.util.Calendar
 
 @ExperimentalMaterial3Api
@@ -23,6 +24,7 @@ fun DialUseStateExample(
                     initialMinute = currentTime.get(Calendar.MINUTE),
                     is24Hour = true,
             )
+    LaunchedEffect(timePickerState.hour, timePickerState.minute) { onConfirm(timePickerState) }
 
     Column {
         TimeInput(

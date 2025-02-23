@@ -55,9 +55,9 @@ fun Schedule() {
         var taskDetail = remember { mutableStateOf("") }
         var selectedDate = remember { mutableStateOf<Long?>(null) }
         var showModal = remember { mutableStateOf(false) }
-        var startTime = remember { mutableStateOf<TimePickerState?>(null) }
+        var startTime = remember { mutableStateOf<Pair<Int, Int>?>(null) }
         var showDialStart = remember { mutableStateOf(false) }
-        var endTime = remember { mutableStateOf<TimePickerState?>(null) }
+        var endTime = remember { mutableStateOf<Pair<Int, Int>?>(null) }
         var showDialEnd = remember { mutableStateOf(false) }
 
         var checked = remember { mutableStateOf(false) }
@@ -146,11 +146,10 @@ fun Schedule() {
                                         modifier = Modifier.padding(bottom = 10.dp)
                                 )
                                 DialUseStateExample(
-                                        onDismiss = { showDialStart.value = false },
+                                        onDismiss = { showDialEnd.value = false },
                                         onConfirm = { time ->
-                                                startTime.value = time
-                                                showDialStart.value = false
-                                        },
+                                                startTime.value = Pair(time.hour, time.minute)
+                                        }
                                 )
                         }
                 }
@@ -175,9 +174,9 @@ fun Schedule() {
                                 DialUseStateExample(
                                         onDismiss = { showDialEnd.value = false },
                                         onConfirm = { time ->
-                                                endTime.value = time
-                                                showDialEnd.value = false
-                                        },
+                                                endTime.value = Pair(time.hour, time.minute)
+                                                Log.d("endTime", "endTime: $endTime")
+                                        }
                                 )
                         }
                 }
@@ -209,22 +208,51 @@ fun Schedule() {
                 }
                 TextButton(
                         onClick = { /*ここに値を渡す設定を追加 */
-                                Controller.addTask.addTask(
-                                        title = name.value,
-                                        type = ScheduleType.FIXED_TASK,
-                                        startTime = convertTimePickerStateToDate(selectedDate.value, startTime.value) ,
-                                        endTime = convertTimePickerStateToDate(selectedDate.value, endTime.value),
-                                        intervalTime = null,
-                                        workedTime = 0,
-                                        remainingWorkTime = null,
-                                        memo = taskDetail.value,
-                                )
-                                { success ->
-                                        if (success) {
-                                                Log.d("addTasks", "タスク追加成功")
-                                                screenViewModel.navigateTo(ScreenState.Second)
-                                        } else {
-                                                Log.e("addTasks", "タスク追加失敗")
+                                selectedDate.value?.let { dateMillis ->
+                                        val calendar = Calendar.getInstance().apply {
+                                                timeInMillis = dateMillis // `selectedDate` から日付を取得
+                                                set(Calendar.SECOND, 0)
+                                                set(Calendar.MILLISECOND, 0)
+                                        }
+
+                                        // startTime の時・分を適用
+                                        val startDate: Date? =
+                                                startTime.value?.let { (hour, minute) ->
+                                                        val startCalendar =
+                                                                calendar.clone() as Calendar // カレンダーのコピーを作成
+                                                        startCalendar.apply {
+                                                                set(Calendar.HOUR_OF_DAY, hour)
+                                                                set(Calendar.MINUTE, minute)
+                                                        }
+                                                        startCalendar.time // 修正ポイント: apply の戻り値ではなく .time を取得
+                                                }
+
+                                        // endTime の時・分を適用
+                                        val endDate: Date? = endTime.value?.let { (hour, minute) ->
+                                                val endCalendar = calendar.clone() as Calendar
+                                                endCalendar.apply {
+                                                        set(Calendar.HOUR_OF_DAY, hour)
+                                                        set(Calendar.MINUTE, minute)
+                                                }
+                                                endCalendar.time // 修正ポイント
+                                        }
+                                        Controller.addTask.addTask(
+                                                title = name.value,
+                                                type = ScheduleType.FIXED_TASK,
+                                                startTime = startDate,
+                                                endTime = endDate,
+                                                intervalTime = null,
+                                                workedTime = 0,
+                                                remainingWorkTime = null,
+                                                memo = taskDetail.value,
+                                        )
+                                        { success ->
+                                                if (success) {
+                                                        Log.d("addTasks", "タスク追加成功")
+                                                        screenViewModel.navigateTo(ScreenState.Second)
+                                                } else {
+                                                        Log.e("addTasks", "タスク追加失敗")
+                                                }
                                         }
                                 }
                         },
@@ -244,19 +272,4 @@ fun Schedule() {
                 }
                 Spacer(Modifier.height(30.dp))
         }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-fun convertTimePickerStateToDate(selectedDate: Long?, timeState: TimePickerState?): Date? {
-        if (selectedDate == null || timeState == null) return null
-
-        val calendar = Calendar.getInstance().apply {
-                timeInMillis = selectedDate
-                set(Calendar.HOUR_OF_DAY, timeState.hour)
-                set(Calendar.MINUTE, timeState.minute)
-                set(Calendar.SECOND, 0)
-                set(Calendar.MILLISECOND, 0)
-        }
-
-        return calendar.time
 }
