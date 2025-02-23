@@ -1,4 +1,4 @@
-package com.example.test
+package com.example.test.example
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.test.ScreenSwitcher
 import com.example.test.ui.theme.TestTheme
 
 class MainActivity : ComponentActivity() {

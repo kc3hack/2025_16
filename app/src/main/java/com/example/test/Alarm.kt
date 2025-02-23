@@ -385,7 +385,7 @@ public fun AlarmScreen(onSwitch: () -> Unit) {
                         )
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
                             Button(
-                                    onClick = { onSwitch() },
+                                    onClick = { cancelAlarm(context) },
                                     modifier =
                                             Modifier.size(width = 148.dp, height = 56.dp)
 
