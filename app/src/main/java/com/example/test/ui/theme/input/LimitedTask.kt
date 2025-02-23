@@ -1,5 +1,6 @@
 package com.example.test.ui.theme.input
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -40,7 +41,12 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.test.ScreenState
 import com.example.test.ScreenViewModel
+import com.example.test.data.model.ScheduleType
+import com.example.test.utils.Controller
+import java.text.SimpleDateFormat
 import java.time.format.TextStyle
+import java.util.Calendar
+import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,7 +61,9 @@ fun LimitedTask() {
         var taskWorkTime = remember { mutableStateOf("0") }
         val screenViewModel:ScreenViewModel = viewModel()
         Column(
-                Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
+                Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
@@ -69,7 +77,9 @@ fun LimitedTask() {
                         label = { Text("タスク名") },
                         placeholder = { Text("タスク名を入力") },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f).background(color = Color(0xFFF9D981))
+                        modifier = Modifier
+                                .fillMaxWidth(0.8f)
+                                .background(color = Color(0xFFF9D981))
                 )
                 TextField(
                         value = taskDetail.value,
@@ -81,7 +91,9 @@ fun LimitedTask() {
                         label = { Text("タスク詳細") },
                         placeholder = { Text("タスクの詳細を入力") },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f).background(color = Color(0xFFF9D981))
+                        modifier = Modifier
+                                .fillMaxWidth(0.8f)
+                                .background(color = Color(0xFFF9D981))
                 )
 
                 OutlinedTextField(
@@ -93,25 +105,27 @@ fun LimitedTask() {
                                 Icon(Icons.Default.DateRange, contentDescription = "Select date")
                         },
                         modifier =
-                                Modifier.fillMaxWidth(0.8f).pointerInput(selectedDate) {
-                                        awaitEachGesture {
-                                                // Modifier.clickable doesn't work for text fields,
-                                                // so we use
-                                                // Modifier.pointerInput
-                                                // in the Initial pass to observe events before the
-                                                // text field
-                                                // consumes them
-                                                // in the Main pass.
-                                                awaitFirstDown(pass = PointerEventPass.Initial)
-                                                val upEvent =
-                                                        waitForUpOrCancellation(
-                                                                pass = PointerEventPass.Initial
-                                                        )
-                                                if (upEvent != null) {
-                                                        showModal.value = true
+                                Modifier
+                                        .fillMaxWidth(0.8f)
+                                        .pointerInput(selectedDate) {
+                                                awaitEachGesture {
+                                                        // Modifier.clickable doesn't work for text fields,
+                                                        // so we use
+                                                        // Modifier.pointerInput
+                                                        // in the Initial pass to observe events before the
+                                                        // text field
+                                                        // consumes them
+                                                        // in the Main pass.
+                                                        awaitFirstDown(pass = PointerEventPass.Initial)
+                                                        val upEvent =
+                                                                waitForUpOrCancellation(
+                                                                        pass = PointerEventPass.Initial
+                                                                )
+                                                        if (upEvent != null) {
+                                                                showModal.value = true
+                                                        }
                                                 }
                                         }
-                                }
                 )
                 if (showModal.value) {
                         DatePickerModal(
@@ -121,7 +135,8 @@ fun LimitedTask() {
                 }
 
                 Box(
-                        Modifier.fillMaxWidth(0.8f)
+                        Modifier
+                                .fillMaxWidth(0.8f)
                                 .clip(RoundedCornerShape(20.dp))
                                 .background(color = Color(0xFFF9D981))
                                 .padding(start = 40.dp, end = 40.dp, top = 10.dp),
@@ -157,7 +172,9 @@ fun LimitedTask() {
                         label = { Text("工数") },
                         placeholder = { Text("タスクにかかる時間を入力(整数)") },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f).background(color = Color(0xFFF9D981))
+                        modifier = Modifier
+                                .fillMaxWidth(0.8f)
+                                .background(color = Color(0xFFF9D981))
                 )
 
                 TextField(
@@ -170,14 +187,38 @@ fun LimitedTask() {
                         label = { Text("一回の作業時間") },
                         placeholder = { Text("一度の作業の最大の作業時間を設定(時間)") },
                         singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f).background(color = Color(0xFFF9D981))
+                        modifier = Modifier
+                                .fillMaxWidth(0.8f)
+                                .background(color = Color(0xFFF9D981))
                 )
 
                 TextButton(
-                        onClick = { /*ここに値を渡す設定を追加 */screenViewModel.navigateTo(
-                                ScreenState.Second)},
+                        onClick = { /*ここに値を渡す設定を追加 */
+                                Log.d("addTasks", "add_DEADLINED_ASSIGNMENT_Tasks")
+                                val format = SimpleDateFormat("yyyy/mm/dd HH:mm")
+                                Log.d("addTasks" , "selectedDate:${selectedDate.value.toString()}\nendTime:${ endTime.value.toString() }\nshowDialEnd:${showDialEnd.value.toString()}")
+                                Controller.addTask.addTask(
+                                        title = name.value,
+                                        type = ScheduleType.DEADLINED_ASSIGNMENT,
+                                        startTime = null,
+                                        endTime = null,
+                                        intervalTime = taskNeedTime.value.toIntOrNull() ?: 30,
+                                        workedTime = 0,
+                                        remainingWorkTime = taskNeedTime.value.toIntOrNull() ?: 0,
+                                        memo = taskDetail.value,
+                                )
+                                { success ->
+                                        if (success) {
+                                                Log.d("addTasks", "タスク追加成功")
+                                                screenViewModel.navigateTo(ScreenState.Second)
+                                        } else {
+                                                Log.e("addTasks", "タスク追加失敗")
+                                        }
+                                }
+                        },
                         modifier =
-                                Modifier.clip(RoundedCornerShape(27.dp))
+                                Modifier
+                                        .clip(RoundedCornerShape(27.dp))
                                         .width(100.dp)
                                         .height(50.dp)
                                         .background(color = Color(0xFFFFBB00))
