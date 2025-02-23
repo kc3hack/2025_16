@@ -209,23 +209,3 @@ fun SleepTimer(onNavigateBack: () -> Unit) {
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun SecondScreenPreview() {
-    SleepTimer(onNavigateBack = {})
-    val screenState = remember { mutableStateOf(ScreenState.First) }
-    ScreenSwitcher()
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CalendarScreenPreview() {
-    val screenState = remember { mutableStateOf(ScreenState.Third) }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CatsScreenPreview() {
-    val screenState = remember { mutableStateOf(ScreenState.Forth) }
-}

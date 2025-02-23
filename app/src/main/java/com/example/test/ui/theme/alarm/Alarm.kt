@@ -459,9 +459,3 @@ public fun AlarmScreen(onSwitch: () -> Unit) {
         )
     }
 }
-
-@Preview(showBackground = true, backgroundColor = 0xFF000000)
-@Composable
-fun AlarmScreenPreview() {
-    AlarmScreen(onSwitch = {})
-}

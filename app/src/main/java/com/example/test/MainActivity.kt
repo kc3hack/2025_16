@@ -50,27 +50,3 @@ class MainActivity : ComponentActivity() {
                 }
         }
 }
-
-
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-        val context = LocalContext.current
-        TestTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                        Column(
-                                modifier = Modifier.fillMaxSize().padding(innerPadding),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.spacedBy(-40.dp)
-                        ) {
-                                // TalkCatsのUI
-                                TalkCats(modifier = Modifier.padding(top = 5.dp))
-                                LevelList(modifier = Modifier) // LevelListのUI
-                                Spacer(modifier = Modifier.height(80.dp))
-                                SleepInfo(modifier = Modifier)
-                                ToDoList(modifier = Modifier)
-                        }
-                }
-        }
-}
