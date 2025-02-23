@@ -1,5 +1,6 @@
 package com.example.test.ui.theme.input
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -37,6 +38,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.test.ScreenState
 import com.example.test.ScreenViewModel
+import com.example.test.data.model.ScheduleType
+import com.example.test.utils.Controller
 import java.time.format.TextStyle
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -144,7 +147,26 @@ fun NoLimitedTask() {
                 )
 
                 TextButton(
-                        onClick = { /*ここに値を渡す設定を追加 */screenViewModel.navigateTo(ScreenState.Second)
+                        onClick = { /*ここに値を渡す設定を追加 */
+                                Controller.addTask.addTask(
+                                        title = name.value,
+                                        type = ScheduleType.NON_DEADLINED_ASSIGNMENT,
+                                        startTime = null,
+                                        endTime = null,
+                                        intervalTime = taskNeedTime.value.toIntOrNull(),
+                                        workedTime = 0,
+                                        remainingWorkTime = taskNeedTime.value.toIntOrNull(),
+                                        memo = taskDetail.value,
+                                )
+                                { success ->
+                                        if (success) {
+                                                Log.d("addTasks", "タスク追加成功")
+                                                screenViewModel.navigateTo(ScreenState.Second)
+                                        } else {
+                                                Log.e("addTasks", "タスク追加失敗")
+                                        }
+                                }
+                                screenViewModel.navigateTo(ScreenState.Second)
 
                         },
                         modifier =
