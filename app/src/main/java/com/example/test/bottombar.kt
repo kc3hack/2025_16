@@ -35,6 +35,8 @@ import com.example.test.ui.theme.input.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.test.ui.theme.alarm.AlarmScreen
+
 // @Composable
 // fun WatchScreen(onSwitch: () -> Unit) {
 //     Text(text = "this is second screen!")
@@ -55,7 +57,8 @@ fun Cats(onSwitch: () -> Unit) {
      Second,
      Third,
      Forth,
-     Fifth
+     Fifth,
+     Sixth
  }
 class ScreenViewModel : ViewModel() {
     private val _screenState = MutableStateFlow(ScreenState.First)
@@ -106,6 +109,8 @@ fun ScreenSwitcher(viewModel: ScreenViewModel= androidx.lifecycle.viewmodel.comp
                                 Cats /*ページ名*/ { viewModel.navigateTo(ScreenState.Forth) }
                         ScreenState.Fifth ->
                                 InputScreen /*ページ名*/ { viewModel.navigateTo(ScreenState.Fifth) }
+                        ScreenState.Sixth ->
+                                AlarmScreen /*ページ名*/ { viewModel.navigateTo(ScreenState.Sixth) }
                     }
                 }
             }
@@ -128,7 +133,7 @@ fun BottomAppBarExample(viewModel: ScreenViewModel) {
                     Icon(Icons.Filled.DateRange, contentDescription = "Localized description")
                 }
                 Spacer(modifier = Modifier.width(60.dp))
-                IconButton(onClick = { viewModel.navigateTo(ScreenState.Third) }) {
+                IconButton(onClick = { viewModel.navigateTo(ScreenState.Sixth) }) {
                     Icon(Icons.Filled.Notifications, contentDescription = "Localized description")
                 }
                 IconButton(onClick = { viewModel.navigateTo(ScreenState.Forth) }) {
