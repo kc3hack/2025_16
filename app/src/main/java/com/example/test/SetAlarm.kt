@@ -13,20 +13,7 @@ import java.util.Calendar
 
 private var alarmMgr: AlarmManager? = null
 private lateinit var alarmIntent: PendingIntent
-// class AlarmReceiver : BroadcastReceiver() {
-//    override fun onReceive(context: Context?, intent: Intent?) {
-//        if (context != null) {
-//            // 音を鳴らす
-//            playAlarmSound(context)
-//        }
-//    }
-//
-//    private fun playAlarmSound(context: Context) {
-//        val ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-//        val ringtone = RingtoneManager.getRingtone(context, ringtoneUri)
-//        ringtone.play()
-//    }
-// }
+
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context != null) {

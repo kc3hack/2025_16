@@ -90,11 +90,7 @@ import androidx.compose.ui.platform.LocalContext
 
 
 
-public val inFFamily = FontFamily(
-    Font(R.font.inter_24pt_medium),
-    Font(R.font.inter_24pt_extralight,FontWeight.ExtraLight),
-    Font(R.font.inter_24pt_semibold,FontWeight.SemiBold)
-)
+
 
 @Composable
 fun LevelCounter(modifier:Modifier = Modifier,name:String,level:Int,time:Int,expBar:Float){
@@ -373,20 +369,6 @@ public fun TAlarmScreen(onTimeSelected: (hour: Int, minute: Int) -> Unit,
         }
     }
 }
-
-//fun setAlarm(context: Context, hour: Int, minute: Int) {
-//    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//    val intent = Intent(context, AlarmReceiver::class.java)
-//    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
-//
-//    val calendar = Calendar.getInstance().apply {
-//        set(Calendar.HOUR_OF_DAY, hour)
-//        set(Calendar.MINUTE, minute)
-//        set(Calendar.SECOND, 0)
-//    }
-//
-//    alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
-//}
 
 
 

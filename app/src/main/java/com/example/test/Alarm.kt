@@ -1,11 +1,9 @@
 package com.example.test
 
 import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.widget.Toast
+import android.provider.Settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -56,9 +54,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import java.util.Calendar
-import android.provider.Settings
-import com.example.test.SetAlarm
+
 class TimeViewModel : ViewModel() {
     private val _hour = MutableLiveData<Int>()
     private val _minute = MutableLiveData<Int>()
@@ -79,8 +75,6 @@ class TimeViewModel : ViewModel() {
     }
 }
 
-
-
 @Composable
 private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit, selectedHour: Int?) {
     val scrollState = rememberScrollState()
@@ -93,22 +87,22 @@ private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit, selectedHour: Int
             modifier =
                     Modifier.background(color = Color(0xFF252B26))
                             .size(width = 100.dp, height = 138.dp)
-                            .drawWithContent {
-                                drawContent()
-                                val strokeWidth = 2.dp.toPx()
-                                drawLine(
-                                        color = Color(0xFF8B8B8B),
-                                        start = Offset(0f, 0f),
-                                        end = Offset(size.width, 0f),
-                                        strokeWidth = strokeWidth
-                                )
-                                drawLine(
-                                        color = Color(0xFF8B8B8B),
-                                        start = Offset(0f, size.height),
-                                        end = Offset(size.width, size.height),
-                                        strokeWidth = strokeWidth
-                                )
-                            }
+                        .drawWithContent {
+                            drawContent()
+                            val strokeWidth = 2.dp.toPx()
+                            drawLine(
+                                color = Color(0xFF8B8B8B),
+                                start = Offset(0f, 0f),
+                                end = Offset(size.width+50, 0f),
+                                strokeWidth = strokeWidth
+                            )
+                            drawLine(
+                                color = Color(0xFF8B8B8B),
+                                start = Offset(0f, size.height),
+                                end = Offset(size.width+50, size.height),
+                                strokeWidth = strokeWidth
+                            )
+                        }
                             .verticalScroll(scrollState)
     ) {
         Spacer(modifier = Modifier.height(40.dp))
@@ -126,7 +120,8 @@ private fun hhScrollBoxes(onHourSelected: (hour: Int) -> Unit, selectedHour: Int
             val index = ((scrollState.value / (scrollState.maxValue / 13)).toFloat() + 0.5f).toInt()
             if (index != selectedHour) {
                 onHourSelected(index)
-                Toast.makeText(context, "Hour selected: $index", Toast.LENGTH_SHORT).show()
+                //                Toast.makeText(context, "Hour selected: $index",
+                // Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -142,25 +137,24 @@ private fun mmScrollBoxes(onMinuteSelected: (minute: Int) -> Unit, selectedMinut
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(0.dp),
             modifier =
-                    Modifier.offset(x = 100.dp)
-                            .background(color = Color(0xFF252B26))
+                    Modifier.background(color = Color(0xFF252B26))
                             .size(width = 100.dp, height = 138.dp)
-                            .drawWithContent {
-                                drawContent()
-                                val strokeWidth = 2.dp.toPx()
-                                drawLine(
-                                        color = Color(0xFF8B8B8B),
-                                        start = Offset(0f, 0f),
-                                        end = Offset(size.width, 0f),
-                                        strokeWidth = strokeWidth
-                                )
-                                drawLine(
-                                        color = Color(0xFF8B8B8B),
-                                        start = Offset(0f, size.height),
-                                        end = Offset(size.width, size.height),
-                                        strokeWidth = strokeWidth
-                                )
-                            }
+                        .drawWithContent {
+                            drawContent()
+                            val strokeWidth = 2.dp.toPx()
+                            drawLine(
+                                color = Color(0xFF8B8B8B),
+                                start = Offset(0f, 0f),
+                                end = Offset(size.width+50, 0f),
+                                strokeWidth = strokeWidth
+                            )
+                            drawLine(
+                                color = Color(0xFF8B8B8B),
+                                start = Offset(0f, size.height),
+                                end = Offset(size.width+50, size.height),
+                                strokeWidth = strokeWidth
+                            )
+                        }
                             .verticalScroll(scrollState)
     ) {
         Spacer(modifier = Modifier.height(40.dp))
@@ -178,7 +172,8 @@ private fun mmScrollBoxes(onMinuteSelected: (minute: Int) -> Unit, selectedMinut
             val index = ((scrollState.value / (scrollState.maxValue / 60)).toFloat() + 0.5f).toInt()
             if (index != selectedMinute) {
                 onMinuteSelected(index)
-                Toast.makeText(context, "Minute selected: $index", Toast.LENGTH_SHORT).show()
+                //                Toast.makeText(context, "Minute selected: $index",
+                // Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -194,24 +189,23 @@ fun AmPmScrollSelector(onAmPmSelected: (Boolean) -> Unit, isAmSelected: Boolean?
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier =
                     Modifier.size(width = 70.dp, height = 138.dp)
-                            .offset(x = 180.dp)
                             .background(Color(0xFF252B26))
-                            .drawWithContent {
-                                drawContent()
-                                val strokeWidth = 2.dp.toPx()
-                                drawLine(
-                                        color = Color(0xFF8B8B8B),
-                                        start = Offset(0f, 0f),
-                                        end = Offset(size.width, 0f),
-                                        strokeWidth = strokeWidth
-                                )
-                                drawLine(
-                                        color = Color(0xFF8B8B8B),
-                                        start = Offset(0f, size.height),
-                                        end = Offset(size.width, size.height),
-                                        strokeWidth = strokeWidth
-                                )
-                            }
+                        .drawWithContent {
+                            drawContent()
+                            val strokeWidth = 2.dp.toPx()
+                            drawLine(
+                                color = Color(0xFF8B8B8B),
+                                start = Offset(0f, 0f),
+                                end = Offset(size.width, 0f),
+                                strokeWidth = strokeWidth
+                            )
+                            drawLine(
+                                color = Color(0xFF8B8B8B),
+                                start = Offset(0f, size.height),
+                                end = Offset(size.width, size.height),
+                                strokeWidth = strokeWidth
+                            )
+                        }
                             .verticalScroll(scrollState)
     ) {
         Spacer(modifier = Modifier.height(40.dp))
@@ -266,7 +260,7 @@ public fun AlarmScreen(onSwitch: () -> Unit) {
                         Modifier.size(width = 343.dp, height = 346.dp)
                                 .clip(RoundedCornerShape(12.dp))
                                 .background(color = Color(0xFF252B26))
-                                .align(alignment = Alignment.CenterHorizontally)
+                                .align(Alignment.CenterHorizontally)
         ) {
             Text(
                     text = "アラームをセット",
@@ -277,32 +271,37 @@ public fun AlarmScreen(onSwitch: () -> Unit) {
             )
             Column(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Box(modifier = Modifier.size(width = 182.dp, height = 138.dp).offset(y = 70.dp)) {
+                Box(modifier = Modifier.size(width = 300.dp, height = 138.dp).offset(y = 70.dp)) {
                     val hour by viewModel.hour.observeAsState()
                     val minute by viewModel.minute.observeAsState()
                     val isAm by viewModel.isAm.observeAsState()
 
-                    hhScrollBoxes(
-                            onHourSelected = { hour -> viewModel.setHour(hour) },
-                            selectedHour = hour
-                    )
-                    mmScrollBoxes(
-                            onMinuteSelected = { minute -> viewModel.setMinute(minute) },
-                            selectedMinute = minute
-                    )
-                    AmPmScrollSelector(
-                            onAmPmSelected = { isAm -> viewModel.setAmPm(isAm) },
-                            isAmSelected = isAm
-                    )
-                    Text(
-                            ":",
-                            color = Color.White,
-                            fontSize = 20.sp,
-                            fontFamily = FontFamily(Font(R.font.inter_24pt_semibold)),
-                            modifier = Modifier.offset(x = 100.dp).padding(top = 53.dp)
-                    )
+                    Row(Modifier.fillMaxWidth()) {
+                        hhScrollBoxes(
+                                onHourSelected = { hour -> viewModel.setHour(hour) },
+                                selectedHour = hour
+                        )
+                        Text(
+                                ":",
+                                color = Color.White,
+                                fontSize = 20.sp,
+                                fontFamily = FontFamily(Font(R.font.inter_24pt_semibold)),
+                                modifier = Modifier.padding(top = 53.dp)
+                        )
+
+                        mmScrollBoxes(
+                                onMinuteSelected = { minute -> viewModel.setMinute(minute) },
+                                selectedMinute = minute
+                        )
+
+                        AmPmScrollSelector(
+                                onAmPmSelected = { isAm -> viewModel.setAmPm(isAm) },
+                                isAmSelected = isAm
+                        )
+                    }
+
                 }
             }
             Button(
@@ -326,9 +325,14 @@ public fun AlarmScreen(onSwitch: () -> Unit) {
                             viewModel.minute.value?.let { minute ->
                                 viewModel.isAm.value?.let { isAm ->
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                        if (!context.getSystemService(AlarmManager::class.java).canScheduleExactAlarms()) {
+                                        if (!context.getSystemService(AlarmManager::class.java)
+                                                        .canScheduleExactAlarms()
+                                        ) {
                                             // 権限がない場合、ユーザーに設定画面を表示してもらう
-                                            val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+                                            val intent =
+                                                    Intent(
+                                                            Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+                                                    )
                                             context.startActivity(intent)
                                         } else {
                                             // アラームを設定する処理

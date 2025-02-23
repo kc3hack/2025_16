@@ -66,38 +66,6 @@ fun NumberPicker(value: Int, onValueChange: (Int) -> Unit, range: IntRange) {
 
 
 @Composable
-public fun testAlarmScreen(onTimeSelected: (hour: Int, minute: Int) -> Unit) {
-    val screenState = remember { mutableStateOf(ScreenState.Third) }
-    var hour by remember { mutableIntStateOf(0) }
-    var minute by remember { mutableIntStateOf(0) }
-
-    Column {
-        Text(text = "Set Alarm")
-        Spacer(modifier = Modifier.height(16.dp))
-        Row {
-            NumberPicker(
-                value = hour,
-                onValueChange = { hour = it },
-                range = 0..23
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            NumberPicker(
-                value = minute,
-                onValueChange = { minute = it },
-                range = 0..59
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { onTimeSelected(hour, minute) }) {
-            Text(text = "Set Alarm")
-        }
-    }
-}
-
-
-
-
-@Composable
 private fun ScrollBoxes() {
     Column(
         modifier = Modifier
@@ -112,10 +80,7 @@ private fun ScrollBoxes() {
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewAlarmScreen() {
-    testAlarmScreen { hour, minute -> Unit }}
+
 
 
 
