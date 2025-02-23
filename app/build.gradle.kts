@@ -41,12 +41,17 @@ android {
 }
 
 dependencies {
+    implementation("androidx.compose.runtime:runtime-livedata:1.1.0")
     implementation(libs.androidx.foundation.layout.android)
     implementation(libs.androidx.foundation.android)
     implementation(libs.androidx.foundation.layout.android)
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
     implementation("com.kizitonwose.calendar:view:2.6.2")
     implementation("com.kizitonwose.calendar:compose:2.6.2")
+    implementation("androidx.compose.ui:ui:1.3.0")
+    implementation("androidx.compose.material:material:1.3.0")
+    implementation("androidx.activity:activity-compose:1.6.0")
+    implementation("androidx.core:core-ktx:1.9.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
