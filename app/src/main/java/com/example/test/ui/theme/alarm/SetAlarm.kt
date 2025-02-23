@@ -10,6 +10,7 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
+import com.example.test.utils.Controller
 import java.util.Calendar
 
 private var alarmMgr: AlarmManager? = null
@@ -20,6 +21,7 @@ class AlarmReceiver : BroadcastReceiver() {
         private var ringtone: Ringtone? = null
 
         fun stopAlarm() {
+            Controller.sleepManager.wakeUp()
             ringtone?.takeIf { it.isPlaying }?.stop()
         }
     }
@@ -97,6 +99,6 @@ fun SetAlarm(context: Context, hour: Int, minute: Int, isAm: Boolean) {
                 alarmIntent
         )
     }
-
+    Controller.sleepManager.setSleepStartTime()
     Toast.makeText(context, "アラームが設定されました", Toast.LENGTH_SHORT).show()
 }

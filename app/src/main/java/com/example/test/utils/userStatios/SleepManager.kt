@@ -83,4 +83,8 @@ class SleepManager(context: Context) {
     fun getSleepDebtToHour(date: Date = Date()):Float {
         return (getSleepDebt(date).toFloat() / 60)
     }
+
+    fun cancel() {
+        sharedPrefs.saveStatus(ScheduleType.FREE_TIME)
+    }
 }
