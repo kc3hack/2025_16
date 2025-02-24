@@ -148,6 +148,7 @@ fun NoLimitedTask() {
 
                 TextButton(
                         onClick = { /*ここに値を渡す設定を追加 */
+                                Controller.sleepManager.setup()
                                 Controller.addTask.addTask(
                                         title = name.value,
                                         type = ScheduleType.NON_DEADLINED_ASSIGNMENT,

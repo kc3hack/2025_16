@@ -1,6 +1,7 @@
 package com.example.test.utils.userStatus
 
 import android.content.Context
+import android.util.Log
 import com.example.test.data.db.AppDatabase
 import com.example.test.data.db.DatabaseManager
 import com.example.test.data.db.SleepTimeDao
@@ -10,6 +11,7 @@ import com.example.test.data.model.ScheduleType
 import com.example.test.data.model.SleepTimeModel
 import com.example.test.utils.scheduleing.SettingData
 import com.example.test.utils.userStatios.SharedPreferencesHelper
+import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
@@ -44,6 +46,33 @@ class SleepManager(context: Context) {
         }
     }
 
+    fun setup() {
+        Log.d("moveTest","moved")
+        if (getSleepDebtToHour().toInt() == -49) {
+            Log.d("moveTest","moved2")
+            val sleepTimeFormatter = SimpleDateFormat("HH:mm")
+            for (i in 0 until 7) {
+                // i 日前の日付を取得
+                val calendar = java.util.Calendar.getInstance()
+                calendar.add(java.util.Calendar.DAY_OF_YEAR, -i)
+
+                // `SettingData.sleepStartTime` を適用した `startSleepDate`
+                val sleepStartTime = sleepTimeFormatter.parse("22:00")
+                calendar.set(java.util.Calendar.HOUR_OF_DAY, sleepStartTime.hours)
+                calendar.set(java.util.Calendar.MINUTE, sleepStartTime.minutes)
+                val startSleepDate = calendar.time
+
+                // `SleepTimeModel` を作成し、Roomに保存
+                val sleepRecord = SleepTimeModel(
+                    startSleepDate = startSleepDate,
+                    sleepTime = SettingData().sleepDuration.toLong()
+                )
+                sleepTimeDao.insert(sleepRecord)
+            }
+        }
+    }
+
+
     fun getSleepTimeSum(): Long{
         var sleepTimeSum = 0L
         for (sleepTime in sleepTimeDao.getAllSleepTimes()) {
@@ -63,10 +92,10 @@ class SleepManager(context: Context) {
     fun getSleepDebt(date: Date): Long {
         // sleepDebtRange日前の日付を取得
         val recentDate = Date(date.time - sleepDebtRange * 24 * 60 * 60 * 1000)
-
+        Log.d("sleepedTimeDebt",sleepTimeDao.getAllSleepTimes().toString())
         // sleepDebtRange日間の睡眠データを取得
         val recentSleepedTime = sleepTimeDao.getAllSleepTimes().filter { it.startSleepDate.after(recentDate) }
-
+        Log.d("sleepedTimeDebtGetter",recentSleepedTime.toString())
         // 睡眠時間の合計（ミリ秒）
         var recentSleepedSum = 0L
         for (sleepedTime in recentSleepedTime) {
@@ -74,7 +103,7 @@ class SleepManager(context: Context) {
         }
 
         // 分単位に変換して返す
-        return (recentSleepedSum / (1000 * 60))-(SettingData().sleepDuration * sleepDebtRange)
+        return (recentSleepedSum)-(SettingData().sleepDuration * sleepDebtRange)
     }
 
     /**
