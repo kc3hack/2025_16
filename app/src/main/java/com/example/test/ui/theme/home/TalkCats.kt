@@ -43,9 +43,9 @@ fun TalkCats(modifier: Modifier = Modifier) {
                 Box(modifier.weight(1f).fillMaxWidth()) {
                         Image(
                                 painter =
-                                        (if (workCatLevel == 1)
+                                        (if (workCatLevel == 0||workCatLevel == 1)
                                                 painterResource(id = R.drawable.workcat)
-                                        else if (workCatLevel == 2)
+                                        else if (workCatLevel >= 2)
                                                 painterResource(id = R.drawable.workcat2)
                                         else painterResource(id = R.drawable.workcat)),
                                 contentDescription = "working cat",
@@ -74,9 +74,9 @@ fun TalkCats(modifier: Modifier = Modifier) {
                 Box(modifier.weight(1f).fillMaxWidth()) {
                         Image(
                                 painter =
-                                        (if (sleepCatLevel == 1)
+                                        (if (sleepCatLevel == 1||sleepCatLevel == 0)
                                                 painterResource(id = R.drawable.sleepcat)
-                                        else if (sleepCatLevel == 2)
+                                        else if (sleepCatLevel >= 2)
                                                 painterResource(id = R.drawable.sleepcat2)
                                         else painterResource(id = R.drawable.workcat)),
                                 contentDescription = "sleeping cat",
