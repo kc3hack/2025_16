@@ -25,11 +25,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.test.R
 import com.example.test.ui.theme.home.*
+import com.example.test.utils.Controller
 
 @Composable
 fun TalkCats(modifier: Modifier = Modifier) {
-        var workCatLevel = 2
-        var sleepCatLevel = 2
+        var workCatLevel = Controller.catLevels.getWorkCatLevel()
+        var sleepCatLevel = Controller.catLevels.getSleepCatLevel()
         var workText = makeCatText(workCatLevel, "work")
         var sleepText = makeCatText(sleepCatLevel, "sleep")
 
