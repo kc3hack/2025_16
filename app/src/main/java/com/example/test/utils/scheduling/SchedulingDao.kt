@@ -50,7 +50,6 @@ class SchedulingDao(context: Context) {
 
     //[タスクの開始時刻(String),終了時刻(String),task名(String),詳細(String)]のリストを返す
     fun getDayTasks(day:String = ""): Array<Array<String>>{
-        Log.d("database",tasksDao.getAllTasks().toString())
         val returnList = mutableListOf<Array<String>>()
         // `dateFormatToDay` で解析する（日付フォーマットを揃える）
         var dayDate: Date = try {
@@ -60,7 +59,6 @@ class SchedulingDao(context: Context) {
             dateFormatToDay.parse(dateFormatToDay.format(Date()))
         }
         val dayTasks = table.getDayTasks(dayDate).filter { it.id!=-1 }
-        Log.d("getDayTasks",dayTasks.toString())
         for (dayTask in dayTasks){
             val startTime = dateFormatToHour.format(dayTask.startTime)
             val endTime = dateFormatToHour.format(dayTask.endTime)

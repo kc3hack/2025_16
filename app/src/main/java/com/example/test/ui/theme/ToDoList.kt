@@ -49,9 +49,16 @@ fun ToDoList(modifier: Modifier = Modifier) {
             )
         }
         val tasks = Controller.schedulingDao.getDayTasks()
-        tasks.forEach { task -> ToDoBox(task[0], task[1], task[2], task[3], task[4].toInt()) }
+        tasks.forEach { task -> /*ToDoBox(task[0], task[1], task[2], task[3], task[4].toInt())*/
+            if(task[4].toInt() == -2){
+                Spacer(Modifier.padding(top = 10.dp))
+                ToDoSleep(Modifier, task[0],task[1])
+            }else{
+                ToDoBox(task[0], task[1], task[2], task[3], task[4].toInt())
+            }
+        }
 
-        Spacer(Modifier.padding(top = 10.dp))
-        ToDoSleep(Modifier, "22:00", "7:00")
+//        Spacer(Modifier.padding(top = 10.dp))
+//        ToDoSleep(Modifier, "22:00", "7:00")
     }
 }
